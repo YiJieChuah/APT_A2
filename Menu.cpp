@@ -14,7 +14,8 @@ public:
     ~Menu();
     int mainMenu();
 
-    string *presentOption1();
+    string selectPlayer1();
+    string selectPlayer2();
 };
 
 Menu::Menu()
@@ -58,10 +59,31 @@ int Menu::mainMenu()
 }
 
 /**
- * @return a pointer to a string array with the two users.
+ * @return a player one's username.
  */
-string *Menu::presentOption1()
+string Menu::selectPlayer1()
 {
-    string stuff[2] = {"miao", "cow"};
-    return stuff;
+    string player1;
+    cout << "Starting a New Game" << endl;
+    cout << "\nEnter a name for player 1 (uppercase characters only)" << endl;
+    cout << ">";
+    cin >> player1;
+
+    // ADD FUNCTIONALITY: EITHER check for upper case or just make the usernames uppercase ourselves.
+    return player1;
+}
+
+/**
+ * @return a player two's username.
+ */
+string Menu::selectPlayer2()
+{
+    string player2;
+    cout << "\nEnter a name for player 2 (uppercase characters only)" << endl;
+    cout << ">";
+    cin >> player2;
+
+    cout << "\nLet's Play!\n"
+         << endl;
+    return player2;
 }
