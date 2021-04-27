@@ -1,29 +1,13 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
-/**
- * Present the user with the iterface. Also process user input here?
- */
-class Menu
-{
-
-public:
-    Menu();
-    ~Menu();
-    void mainMenu();
-
-    std::string selectPlayer1();
-    std::string selectPlayer2();
-    std::string createFileDir();
-    void printCredits();
-};
+#include "Menu.h"
 
 Menu::Menu()
 {
-}
-
-Menu::~Menu()
-{
+    std::cout << "Welcome to Qwirkle" << std::endl;
+    std::cout << "-------------------" << std::endl;
 }
 
 /**
@@ -32,7 +16,6 @@ Menu::~Menu()
 void Menu::mainMenu()
 {
     int selection;
-    std::string strSelection;
     // Presenting the menu.
     std::cout << "Menu" << std::endl;
     std::cout << "----" << std::endl;
@@ -41,30 +24,35 @@ void Menu::mainMenu()
     std::cout << "3. Credits (Show student information)" << std::endl;
     std::cout << "4. Quit" << std::endl;
 
-    // Getting the users choice.
     bool inputValid = false;
-    while (!inputValid)
+    do
     {
         std::cout << "\n> ";
-        std::cin >> strSelection;
-        if (strSelection == "q")
-        {
-            // EXIT THE GAME.
-        }
+        std::cin >> selection;
+
         try
         {
-            selection = stoi(strSelection);
-            if (selection > 4)
+            if (!std::cin.good()) {
+                std::cin.clear();
+                std::cin.ignore();
+                throw std::domain_error("Error: Not a number");
+            }
+            if (selection <= 0 || selection > 4)
             {
-                throw 20;
+                throw std::out_of_range("Error: No such option");
             }
             inputValid = true;
         }
-        catch (...)
+        catch (std::out_of_range& e)
         {
-            std::cout << "Invalid Input";
+            std::cout << e.what() << std::endl;
         }
-    }
+        catch (std::domain_error& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    } while (!inputValid || !std::cin.good());
+    // cin will return a failbit if selection was not an int
 
     // Performing operations based on the users choice.
     std::string player1;
@@ -82,10 +70,15 @@ void Menu::mainMenu()
     }
     else if (selection == 2)
     {
-        fileDirectory = createFileDir();
-
-        // FOR TESTING ONLY!
-        std::cout << fileDirectory << std::endl;
+        std::string filePath;
+        std::cout << "\nEnter the filename from which to load a game" << std::endl;
+        std::cout << "> ";
+        std::cin >> filePath;
+        if (loadFile(filePath)) {
+            std::cout << "Qwirkle game successfully loaded" << std::endl;
+            //TODO: Replace when gameplay is implemented
+            std::cout << "<Gameplay continues here>" << std::endl;
+        }
     }
     else if (selection == 3)
     {
@@ -94,7 +87,7 @@ void Menu::mainMenu()
     }
     else if (selection == 4)
     {
-        // MAJOR FUNCTIONALITY MISSING! NEED TO CLEAR MEMORY HERE!!!!
+        // TODO: clear memory
         std::cout << "\nGoodbye" << std::endl;
     }
 }
@@ -129,20 +122,41 @@ std::string Menu::selectPlayer2()
     return player2;
 }
 
-/**
- * Difficult to check if file exists with current config. Maybe return
- * actual file instead?
- */
-std::string Menu::createFileDir()
-{
-    std::cout << "Enter a filename from which load a game" << std::endl;
-    std::cout << "> ";
-    std::string fileDirectory = "saves/";
-    std::string input;
-    std::cin >> input;
-    fileDirectory += input;
-    return fileDirectory;
+bool Menu::loadFile(std::string filePath) {
+    bool fileIsValid = false;
+    std::ifstream myFile;
+    std::string fileContents = "";
+    myFile.open(filePath, std::ios::in);
+
+    if (!myFile) {
+        std::cout << "Error: No such file exists" << std::endl;
+    }
+    else {
+        fileIsValid = true;
+        std::string line;
+        int lineIdx = 0;
+        while (!getline(myFile, line).eof()) {
+            //TODO: check if a line is valid
+            ++lineIdx;
+            // fileLineIsValid(int lineIdx);
+            fileContents += line + '\n';
+        }
+    }
+    std::cout << fileContents << std::endl;
+    return fileIsValid;
 }
+
+
+// std::string Menu::createFileDir()
+// {
+//     std::cout << "Enter a filename from which load a game" << std::endl;
+//     std::cout << "> ";
+//     std::string fileDirectory = "saves/";
+//     std::string input;
+//     std::cin >> input;
+//     fileDirectory += input;
+//     return fileDirectory;
+// }
 
 void Menu::printCredits()
 {
