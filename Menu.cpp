@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 /**
  * Present the user with the iterface. Also process user input here?
  */
@@ -14,9 +12,9 @@ public:
     ~Menu();
     void mainMenu();
 
-    string selectPlayer1();
-    string selectPlayer2();
-    string createFileDir();
+    std::string selectPlayer1();
+    std::string selectPlayer2();
+    std::string createFileDir();
     void printCredits();
 };
 
@@ -34,21 +32,21 @@ Menu::~Menu()
 void Menu::mainMenu()
 {
     int selection;
-    string strSelection;
+    std::string strSelection;
     // Presenting the menu.
-    cout << "Menu" << endl;
-    cout << "----" << endl;
-    cout << "1. New Game" << endl;
-    cout << "2. Load Game" << endl;
-    cout << "3. Credits (Show student information)" << endl;
-    cout << "4. Quit" << endl;
+    std::cout << "Menu" << std::endl;
+    std::cout << "----" << std::endl;
+    std::cout << "1. New Game" << std::endl;
+    std::cout << "2. Load Game" << std::endl;
+    std::cout << "3. Credits (Show student information)" << std::endl;
+    std::cout << "4. Quit" << std::endl;
 
     // Getting the users choice.
     bool inputValid = false;
     while (!inputValid)
     {
-        cout << "\n> ";
-        cin >> strSelection;
+        std::cout << "\n> ";
+        std::cin >> strSelection;
         if (strSelection == "q")
         {
             // EXIT THE GAME.
@@ -64,14 +62,14 @@ void Menu::mainMenu()
         }
         catch (...)
         {
-            cout << "Invalid Input";
+            std::cout << "Invalid Input";
         }
     }
 
     // Performing operations based on the users choice.
-    string player1;
-    string player2;
-    string fileDirectory;
+    std::string player1;
+    std::string player2;
+    std::string fileDirectory;
 
     if (selection == 1)
     {
@@ -79,15 +77,15 @@ void Menu::mainMenu()
         player2 = selectPlayer2();
 
         // FOR TESTING ONLY!
-        cout << player1 << endl;
-        cout << player2 << endl;
+        std::cout << player1 << std::endl;
+        std::cout << player2 << std::endl;
     }
     else if (selection == 2)
     {
         fileDirectory = createFileDir();
 
         // FOR TESTING ONLY!
-        cout << fileDirectory << endl;
+        std::cout << fileDirectory << std::endl;
     }
     else if (selection == 3)
     {
@@ -97,20 +95,20 @@ void Menu::mainMenu()
     else if (selection == 4)
     {
         // MAJOR FUNCTIONALITY MISSING! NEED TO CLEAR MEMORY HERE!!!!
-        cout << "\nGoodbye" << endl;
+        std::cout << "\nGoodbye" << std::endl;
     }
 }
 
 /**
  * @return a player one's username.
  */
-string Menu::selectPlayer1()
+std::string Menu::selectPlayer1()
 {
-    string player1;
-    cout << "Starting a New Game" << endl;
-    cout << "\nEnter a name for player 1 (uppercase characters only)" << endl;
-    cout << "> ";
-    cin >> player1;
+    std::string player1;
+    std::cout << "Starting a New Game" << std::endl;
+    std::cout << "\nEnter a name for player 1 (uppercase characters only)" << std::endl;
+    std::cout << "> ";
+    std::cin >> player1;
 
     // ADD FUNCTIONALITY: EITHER check for upper case or just make the usernames uppercase ourselves.
     return player1;
@@ -119,29 +117,29 @@ string Menu::selectPlayer1()
 /**
  * @return a player two's username.
  */
-string Menu::selectPlayer2()
+std::string Menu::selectPlayer2()
 {
-    string player2;
-    cout << "\nEnter a name for player 2 (uppercase characters only)" << endl;
-    cout << "> ";
-    cin >> player2;
+    std::string player2;
+    std::cout << "\nEnter a name for player 2 (uppercase characters only)" << std::endl;
+    std::cout << "> ";
+    std::cin >> player2;
 
-    cout << "\nLet's Play!\n"
-         << endl;
+    std::cout << "\nLet's Play!\n"
+        << std::endl;
     return player2;
 }
 
-/** 
+/**
  * Difficult to check if file exists with current config. Maybe return
  * actual file instead?
  */
-string Menu::createFileDir()
+std::string Menu::createFileDir()
 {
-    cout << "Enter a filename from which load a game" << endl;
-    cout << "> ";
-    string fileDirectory = "saves/";
-    string input;
-    cin >> input;
+    std::cout << "Enter a filename from which load a game" << std::endl;
+    std::cout << "> ";
+    std::string fileDirectory = "saves/";
+    std::string input;
+    std::cin >> input;
     fileDirectory += input;
     return fileDirectory;
 }
@@ -149,25 +147,25 @@ string Menu::createFileDir()
 void Menu::printCredits()
 {
 
-    string names[4] = {"Seth Danford", "Simon Dean", "Jeremy West", "Yi Jie Chuah"};
-    string studentIDs[4] = {"s3845408", "s3599190", "s3869546", "s3847905"};
-    string emails[4] = {"s3845408@student.rmit.edu.au", "s3599190@student.rmit.edu.au", "s3869546@student.rmit.edu.au", "s3847905@student.rmit.edu.au"};
+    std::string names[4] = { "Seth Danford", "Simon Dean", "Jeremy West", "Yi Jie Chuah" };
+    std::string studentIDs[4] = { "s3845408", "s3599190", "s3869546", "s3847905" };
+    std::string emails[4] = { "s3845408@student.rmit.edu.au", "s3599190@student.rmit.edu.au", "s3869546@student.rmit.edu.au", "s3847905@student.rmit.edu.au" };
 
-    cout << "-----------------------------------" << endl;
+    std::cout << "-----------------------------------" << std::endl;
     for (int i = 0; i < 4; i++)
     {
-        cout << "Name: " + names[i] << endl;
-        cout << "Student ID: " + studentIDs[i] << endl;
+        std::cout << "Name: " + names[i] << std::endl;
+        std::cout << "Student ID: " + studentIDs[i] << std::endl;
         if (i != 3)
         {
-            cout << "Email: " + emails[i] + "\n"
-                 << endl;
+            std::cout << "Email: " + emails[i] + "\n"
+                << std::endl;
         }
         else
         {
-            cout << "Email: " + emails[i] << endl;
+            std::cout << "Email: " + emails[i] << std::endl;
         }
     }
-    cout << "-----------------------------------\n"
-         << endl;
+    std::cout << "-----------------------------------\n"
+        << std::endl;
 }
