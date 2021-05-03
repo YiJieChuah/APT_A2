@@ -3,6 +3,7 @@
 
 LinkedList::LinkedList() {
    head = nullptr;
+   tail = nullptr;
    currSize = 0;
 }
 
@@ -42,22 +43,21 @@ Tile* LinkedList::get(int index) {
 }
 
 void LinkedList::add_front(Tile* tile) {
-   Node* node = new Node(tile, head);
+   Node* node = new Node(tile, head, nullptr);
    head = node;
    ++currSize;
 }
 void LinkedList::add_back(Tile* tile) {
-   Node* node = new Node(tile, nullptr);
+   Node* node = new Node(tile, nullptr, tail);
 
    if (head == nullptr) {
       head = node;
+      tail = node;
    }
    else {
-      Node* current = head;
-      while (current->next != nullptr) {
-         current = current->next;
-      }
-      current->next = node;
+      tail->next = node;
+      node->prev = tail;
+      tail = node;
    }
    ++currSize;
 }
@@ -66,6 +66,7 @@ void LinkedList::remove_front() {
    if (head != nullptr) {
       Node* toDelete = head;
       head = head->next;
+      head->prev = nullptr;
 
       delete toDelete->tile;
       delete toDelete;
@@ -78,24 +79,15 @@ void LinkedList::remove_front() {
 void LinkedList::remove_back() {
 
    if (head != nullptr) {
-      Node* current = head;
-      //pre should point to node before current;
-      Node* prev = nullptr;
+      Node* toDelete = tail;
+      tail = tail->prev;
+      tail->next = nullptr;
 
-      while (current->next != nullptr) {
-         prev = current;
-         current = current->next;
-      }
-
-      if (prev == nullptr) {
-         head = nullptr;
-      }
-      else {
-         prev->next = nullptr;
-      }
-
-      delete current->tile;
-      delete current;
+      delete toDelete->tile;
+      delete toDelete;
+   }
+   else {
+      throw std::runtime_error("Nothing to remove");
    }
    --currSize;
 }
@@ -105,25 +97,25 @@ void LinkedList::remove(int index) {
       if (head != nullptr) {
          int counter = 0;
          Node* current = head;
-         //pre should point to node before current;
-         Node* prev = nullptr;
+         Node* prevNode = nullptr;
 
          while (counter != index) {
             ++counter;
-            prev = current;
+            prevNode = current;
             current = current->next;
          }
 
-         if (prev == nullptr) {
+         if (prevNode == nullptr) {
             head = current->next;
          }
          else {
-            prev->next = current->next;
+            prevNode->next = current->next;
+            current->next->prev = prevNode;
          }
-         --currSize;
-
          delete current->tile;
          delete current;
+         --currSize;
+
       }
    }
 }
