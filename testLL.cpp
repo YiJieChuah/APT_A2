@@ -17,6 +17,7 @@ int main() {
     list->add_back(t5);
     std::cout << list->size() << std::endl;
     std::cout << list->toString() << std::endl;
+    delete list;
 
     // list->remove_front();
     // std::cout << list->size() << std::endl;

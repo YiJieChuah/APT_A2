@@ -66,6 +66,7 @@ void LinkedList::remove_front() {
    if (head != nullptr) {
       Node* toDelete = head;
       head = head->next;
+      //TODO: Second node's prev is not present
       head->prev = nullptr;
 
       delete toDelete->tile;
@@ -124,6 +125,7 @@ void LinkedList::clear() {
    while (head != nullptr) {
       remove_front();
    }
+
    currSize = 0;
 }
 
