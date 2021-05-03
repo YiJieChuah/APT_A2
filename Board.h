@@ -1,7 +1,7 @@
 #include "Tile.h"
 #include <vector>
 
-#define NEIGHBORSMAXDISTANCE 52
+#define NEIGHBORSMAXDISTANCE 26
 
 // This is crude but much faster access to the values than if we used an array.
 #include "Alphabet.h"
@@ -10,8 +10,8 @@ using namespace std;
 
 class Board
 {
-private:
-    vector<vector<Tile> > vect;
+protected:
+    vector<std::vector<Tile> > board;
 
 public:
     Board();

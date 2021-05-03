@@ -1,6 +1,16 @@
 {
     "files.associations": {
         "*.py": "python",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "vector": "cpp",
+        "__config": "cpp",
+        "__functional_03": "cpp",
+        "__hash_table": "cpp",
+        "algorithm": "cpp",
+        "functional": "cpp",
+        "locale": "cpp",
+        "memory": "cpp",
+        "ostream": "cpp",
+        "unordered_map": "cpp"
     }
 }
