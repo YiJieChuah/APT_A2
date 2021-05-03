@@ -21,11 +21,13 @@ public:
    void remove_back();
 
    void remove(int index);
+   std::string toString();
 
    void clear();
 
 private:
    Node* head;
+   int currSize;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

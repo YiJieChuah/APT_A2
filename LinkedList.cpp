@@ -3,10 +3,12 @@
 
 LinkedList::LinkedList() {
    head = nullptr;
+   currSize = 0;
 }
 
 LinkedList::LinkedList(LinkedList& other) {
    head = nullptr;
+   this->currSize = other.size();
    for (int i = 0; i < other.size(); ++i) {
       Tile* tile = new Tile(*other.get(i));
       add_back(tile);
@@ -17,15 +19,7 @@ LinkedList::~LinkedList() {
 }
 
 int LinkedList::size() {
-   //TODO: Modify so that LL keeps a size field
-   int length = 0;
-
-   Node* current = head;
-   while (current != nullptr) {
-      ++length;
-      current = current->next;
-   }
-   return length;
+   return currSize;
 }
 
 Tile* LinkedList::get(int index) {
@@ -50,6 +44,7 @@ Tile* LinkedList::get(int index) {
 void LinkedList::add_front(Tile* tile) {
    Node* node = new Node(tile, head);
    head = node;
+   ++currSize;
 }
 void LinkedList::add_back(Tile* tile) {
    Node* node = new Node(tile, nullptr);
@@ -64,7 +59,7 @@ void LinkedList::add_back(Tile* tile) {
       }
       current->next = node;
    }
-
+   ++currSize;
 }
 
 void LinkedList::remove_front() {
@@ -78,7 +73,7 @@ void LinkedList::remove_front() {
    else {
       throw std::runtime_error("Nothing to remove");
    }
-
+   --currSize;
 }
 void LinkedList::remove_back() {
 
@@ -102,7 +97,7 @@ void LinkedList::remove_back() {
       delete current->tile;
       delete current;
    }
-
+   --currSize;
 }
 
 void LinkedList::remove(int index) {
@@ -125,6 +120,7 @@ void LinkedList::remove(int index) {
          else {
             prev->next = current->next;
          }
+         --currSize;
 
          delete current->tile;
          delete current;
@@ -136,4 +132,18 @@ void LinkedList::clear() {
    while (head != nullptr) {
       remove_front();
    }
+   currSize = 0;
+}
+
+std::string LinkedList::toString() {
+   std::string retStr = "";
+   if (head != nullptr) {
+      Node* current = head;
+
+      while (current != nullptr) {
+         retStr += current->tile->toString() + " ";
+         current = current->next;
+      }
+   }
+   return retStr;
 }
