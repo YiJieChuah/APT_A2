@@ -16,7 +16,7 @@ Board::Board()
         vector<Tile> temp;
         for (int j = 0; j < NEIGHBORSMAXDISTANCE; j++)
         {
-            std::unique_ptr<Tile> tile(new Tile('Z', 1));
+            std::unique_ptr<Tile> tile(new Tile('Z', 0));
 
             temp.push_back(*tile);
         }
@@ -27,9 +27,14 @@ Board::~Board()
 {
 }
 
-bool Board::addTile(Tile tile, int positionX, int positionY)
+/**
+ * There cannot be duplicate tiles in a line.
+ * Minimum number of point a player can score is 2.
+ */
+int Board::addTile(Tile tile, int positionX, int positionY)
 {
-    bool added = true;
+
+    int score = 0;
 
     //TODO: Use getters and setters for color and shape?
     if (board.at(positionX).at(positionY).colour == 'Z')
@@ -37,13 +42,14 @@ bool Board::addTile(Tile tile, int positionX, int positionY)
         board.at(positionX).at(positionY).colour = tile.colour;
         board.at(positionX).at(positionY).shape = tile.shape;
         this->nearestNeighbors(tile);
-        cout << "OPTION 1" << endl;
+
+        score = this->calculateScore();
     }
     else
     {
-        added = false;
+        score = 0;
     }
-    return added;
+    return score;
 }
 
 Tile Board::getTile(int row, int col)
@@ -78,60 +84,141 @@ void Board::nearestNeighbors(Tile tile)
         }
     }
 
+    Tile *tile1 = new Tile('Z', 0);
+
     int i = 0;
-    for (int x = mainTileX; x < mainTileX + 6; x++)
+    for (int x = mainTileX; x < mainTileX + MAXCOMBO; x++)
     {
+        //delete &potentialCombos[0][i];
+        potentialCombos[0][i] = *tile1;
         if (x != NEIGHBORSMAXDISTANCE)
         {
-            cout << "GOT HERE!  2.0" << endl;
-            *potentialCombos[0][0] = this->getTile(x, mainTileY);
-            cout << "GOT HERE!  3.0" << endl;
+            potentialCombos[0][i] = this->getTile(x, mainTileY);
             i++;
         }
     }
 
     i = 0;
-    for (int x = mainTileX; x > mainTileX - 6; x--)
+    for (int x = mainTileX; x > mainTileX - MAXCOMBO; x--)
     {
-        if (x < 0)
+        potentialCombos[1][i] = *tile1;
+        if (x > 0)
         {
-            *potentialCombos[1][i] = this->getTile(x, mainTileY);
+            potentialCombos[1][i] = this->getTile(x, mainTileY);
+            i++;
         }
     }
 
-    for (int y = mainTileY; y < mainTileY + 6; y++)
+    i = 0;
+    for (int y = mainTileY; y < mainTileY + MAXCOMBO; y++)
     {
+        potentialCombos[2][i] = *tile1;
         if (y != NEIGHBORSMAXDISTANCE)
         {
-            *potentialCombos[2][i] = this->getTile(mainTileX, y);
+            potentialCombos[2][i] = this->getTile(mainTileX, y);
+            i++;
         }
     }
 
-    for (int y = mainTileY; y < mainTileY - 6; y--)
+    i = 0;
+    for (int y = mainTileY; y > mainTileY - MAXCOMBO; y--)
     {
-        if (y < 0)
+        potentialCombos[3][i] = *tile1;
+        if (y > 0)
         {
-            *potentialCombos[3][i] = this->getTile(mainTileX, y);
-        }
-    }
-
-    // FOR TESTING ONLY!!!!
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 6; j++)
-        {
-            cout << potentialCombos[i][j]->colour << endl;
+            potentialCombos[3][i] = this->getTile(mainTileX, y);
+            i++;
         }
     }
 }
 
 /**
+     * TODO: THIS METHOD NEEDS TESTING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * 
      * The max number of combos is 4.
      * The max number of tiles to make a combo is 6.
+     * 
+     * If this method returns 0 points then the tile was not placed on
+     * the board.
      */
-int Board::calculateScore(Tile *combo[4][6])
+int Board::calculateScore()
 {
-    return 0;
+    int score = 0;
+    int qwirkle = 0;
+
+    char currentColour;
+    int currentShape;
+    bool scoreStreakBroken = false;
+    bool cantPlaceTile = false;
+
+    for (int x = 0; x < 4; x++)
+    {
+        qwirkle = 0;
+        for (int y = 0; y < MAXCOMBO; y++)
+        {
+            if (y == 0)
+            {
+                currentColour = potentialCombos[x][y].colour;
+                currentShape = potentialCombos[x][y].shape;
+            }
+            else if (y == 1)
+            {
+                if (potentialCombos[x][y].colour == currentColour)
+                {
+                    currentShape = 0;
+                    score++;
+                    qwirkle++;
+                }
+                else if (potentialCombos[x][y].shape == currentShape)
+                {
+                    currentColour = 'Z';
+                    score++;
+                    qwirkle++;
+                }
+                else if (potentialCombos[x][y].colour != 'Z')
+                {
+                    cantPlaceTile = true;
+                }
+                else
+                {
+                    scoreStreakBroken = true;
+                }
+            }
+            else if (scoreStreakBroken == false)
+            {
+                if (potentialCombos[x][y].colour == currentColour)
+                {
+                    score++;
+                    qwirkle++;
+                }
+                else if (potentialCombos[x][y].shape == currentShape)
+                {
+                    score++;
+                    qwirkle++;
+                }
+                else
+                {
+                    scoreStreakBroken = true;
+                }
+            }
+            if (scoreStreakBroken == true && potentialCombos[x][y].colour != 'Z')
+            {
+                cantPlaceTile = true;
+            }
+        }
+        // TODO: I dont think we are supposed to print "QWIRKLE!!!" here.
+        if (qwirkle == 6)
+        {
+            cout << "\nQWIRKLE!!!\n"
+                 << endl;
+        }
+        if (cantPlaceTile)
+        {
+            x = 5;
+            score = 0;
+        }
+    }
+    return score;
 }
 
 void Board::printBoard()
@@ -151,7 +238,7 @@ void Board::printBoard()
         }
     }
     cout << endl
-         << "  ";
+         << "  -";
 
     // Printing the line below the comlumn numbers.
     for (int i = 0; i < board.size(); i++)
