@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
 
 using namespace std;
 
@@ -12,11 +13,10 @@ Board::Board()
         vector<Tile> temp;
         for (int j = 0; i < NEIGHBORSMAXDISTANCE; i++)
         {
-            Tile *tempTile = new Tile('Z', 0);
 
             std::unique_ptr<Tile> tile(new Tile('Z', 1));
 
-            temp.push_back(*tempTile);
+            temp.push_back(*tile);
         }
         board.push_back(temp);
     }
@@ -52,13 +52,27 @@ int Board::calculateScore(Tile *combo[6][4])
 
 void Board::printBoard()
 {
+    cout << "   ";
+
+    // Printing the column numbers.
+    for (int i = 0; i < board.size(); i++) {
+        cout << i << "  ";
+    }
+    cout << endl << "  ";
+
+    // Printing the line below the comlumn numbers.
+    for (int i = 0; i < board.size(); i++) {
+        cout << "---";
+    }
+    cout << endl;
+
+
     for (int i = 0; i < board.size(); i++)
     {
         vector<Tile> temp;
         for (int j = 0; i < board.size(); i++)
         {
-            Tile *tempTile = new Tile('Z', 0);
-            temp.push_back(*tempTile);
+           cout << 
         }
         board.push_back(temp);
     }
