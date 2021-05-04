@@ -1,5 +1,6 @@
 #include "LinkedList.h"
 #include <stdexcept>
+#include <iostream>
 
 LinkedList::LinkedList() {
    head = nullptr;
@@ -44,32 +45,34 @@ Tile* LinkedList::get(int index) {
 
 void LinkedList::add_front(Tile* tile) {
    Node* node = new Node(tile, head, nullptr);
+   head->prev = node;
    head = node;
    ++currSize;
 }
 void LinkedList::add_back(Tile* tile) {
    Node* node = new Node(tile, nullptr, tail);
 
-   if (head == nullptr) {
+   if (tail == nullptr) {
       head = node;
       tail = node;
    }
    else {
       tail->next = node;
-      node->prev = tail;
       tail = node;
    }
    ++currSize;
 }
 
 void LinkedList::remove_front() {
-   if (head != nullptr) {
+   if (head == tail) { //one element in list
+      delete head;
+      head = nullptr;
+      tail = nullptr;
+   }
+   else if (head != tail) {
       Node* toDelete = head;
       head = head->next;
-      //TODO: Second node's prev is not present
       head->prev = nullptr;
-
-      delete toDelete->tile;
       delete toDelete;
    }
    else {
@@ -84,7 +87,6 @@ void LinkedList::remove_back() {
       tail = tail->prev;
       tail->next = nullptr;
 
-      delete toDelete->tile;
       delete toDelete;
    }
    else {
@@ -107,15 +109,17 @@ void LinkedList::remove(int index) {
          }
 
          if (prevNode == nullptr) {
-            head = current->next;
+            remove_front();
+         }
+         else if (current->next == nullptr) {
+            remove_back();
          }
          else {
             prevNode->next = current->next;
             current->next->prev = prevNode;
+            delete current;
+            --currSize;
          }
-         delete current->tile;
-         delete current;
-         --currSize;
 
       }
    }
@@ -125,8 +129,6 @@ void LinkedList::clear() {
    while (head != nullptr) {
       remove_front();
    }
-
-   currSize = 0;
 }
 
 std::string LinkedList::toString() {

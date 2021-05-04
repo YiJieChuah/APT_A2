@@ -15,4 +15,3 @@ Tile::~Tile() {}
 std::string Tile::toString() {
     return colour + std::to_string(shape);
 };
-

@@ -14,3 +14,8 @@ Node::Node(Node& other)
    this->next = other.next;
    this->prev = other.prev;
 }
+
+Node::~Node()
+{
+   delete tile;
+}
