@@ -8,6 +8,7 @@ using namespace std;
 
 Board::Board()
 {
+    // Adding empty tiles to a 2d vecotr that reperesents the board.
     for (int i = 0; i < NEIGHBORSMAXDISTANCE; i++)
     {
         vector<Tile> temp;
@@ -69,12 +70,18 @@ void Board::printBoard()
 
     for (int i = 0; i < board.size(); i++)
     {
-        vector<Tile> temp;
+        // Print the the first letter.
+        cout << alphabet[i] << " |";
         for (int j = 0; i < board.size(); i++)
         {
-           cout << 
+            // If the tile is a exists, print it, otherwise print an empty space.
+            if (board.at(i).at(j).colour != 'Z') {
+                cout << board.at(i).at(j).getColour() << board.at(i).at(j).getShape() << "|";
+            } else {
+                cout << "  |";
+            }
         }
-        board.push_back(temp);
+        cout << endl;
     }
 }
 string Board::getSaveFormat()
