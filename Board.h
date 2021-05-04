@@ -12,27 +12,26 @@ class Board
 {
 protected:
     vector<std::vector<Tile> > board;
-
-    string alphabet[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    Tile *potentialCombos[4][6];
 
 public:
     Board();
     ~Board();
-    int addTile(Tile);
-    Tile getTile(int *row, int *col);
+    bool addTile(Tile tile, int positionX, int positionY);
+    Tile getTile(int row, int col);
     int getTile(Tile);
 
     /**
      * The nearest neighbors will just be added to a in class array instead of
      * being returned.
      */
-    void nearestNeighbors(Tile);
+    void nearestNeighbors(Tile tile);
 
     /**
      * The max number of combos is 4.
      * The max number of tiles to make a combo is 6.
      */
-    int calculateScore(Tile *combo[6][4]);
+    int calculateScore(Tile *combo[4][6]);
 
     void printBoard();
     string getSaveFormat();

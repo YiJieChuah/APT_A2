@@ -11,6 +11,7 @@
         "locale": "cpp",
         "memory": "cpp",
         "ostream": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "__nullptr": "cpp"
     }
 }

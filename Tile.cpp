@@ -11,4 +11,8 @@ Tile::Tile()
 {
 }
 
+Tile::~Tile()
+{
+}
+
 // Empty... for now?
