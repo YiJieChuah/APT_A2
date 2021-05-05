@@ -17,16 +17,6 @@ public:
    Tile(Colour colour, Shape shape);
    Tile();
    ~Tile();
-
-   Colour getColour()
-   {
-      return this->colour;
-   }
-
-   Shape getShape()
-   {
-      return this->shape;
-   }
 };
 
 #endif // ASSIGN2_TILE_H
