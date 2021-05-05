@@ -1,7 +1,8 @@
 #include "Tile.h"
 #include <vector>
 
-#define NEIGHBORSMAXDISTANCE 52
+#define NEIGHBORSMAXDISTANCE 26
+#define MAXCOMBO 6
 
 // This is crude but much faster access to the values than if we used an array.
 #include "Alphabet.h"
@@ -10,27 +11,28 @@ using namespace std;
 
 class Board
 {
-private:
-    vector<vector<Tile> > vect;
+protected:
+    vector<std::vector<Tile> > board;
+    Tile potentialCombos[4][6];
 
 public:
     Board();
     ~Board();
-    int addTile(Tile);
-    Tile getTile(int *row, int *col);
+    int addTile(Tile tile, int positionX, int positionY);
+    Tile getTile(int row, int col);
     int getTile(Tile);
 
     /**
      * The nearest neighbors will just be added to a in class array instead of
      * being returned.
      */
-    void nearestNeighbors(Tile);
+    void nearestNeighbors(Tile tile);
 
     /**
      * The max number of combos is 4.
      * The max number of tiles to make a combo is 6.
      */
-    int calculateScore(Tile *combo[6][4]);
+    int calculateScore();
 
     void printBoard();
     string getSaveFormat();

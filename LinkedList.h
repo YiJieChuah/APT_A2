@@ -4,14 +4,14 @@
 
 #include "Node.h"
 
-class LinkedList {
+class LinkedList
+{
 public:
-
    LinkedList();
    ~LinkedList();
 
 private:
-   Node* head;
+   // Node* head;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
