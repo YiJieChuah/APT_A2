@@ -256,7 +256,7 @@ void Board::printBoard()
             // If the tile is a exists, print it, otherwise print an empty space.
             if (board.at(i).at(j).colour != 'Z')
             {
-                cout << board.at(i).at(j).getColour() << board.at(i).at(j).getShape() << "|";
+                cout << board.at(i).at(j).colour << board.at(i).at(j).colour << "|";
             }
             else
             {
