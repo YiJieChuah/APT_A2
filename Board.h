@@ -1,18 +1,28 @@
 #include "Tile.h"
 #include <vector>
-
-#define BOARD_DIMENSIONS 26
-#define MAX_COMBO 6
-
 // This is crude but much faster access to the values than if we used an array.
 #include "Alphabet.h"
 
+#define BOARD_DIMENSIONS 26
+#define MAX_COMBO 6
+#define NUM_DIRECTIONS 4
+
+enum Direction {
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
+};
+
 class Board
 {
-protected:
+private:
     //2D Vector
     std::vector<std::vector<Tile>> board;
     Tile potentialCombos[4][6];
+
+    bool addTileIsValid(Tile tileToAdd, int posX, int posY);
+    std::vector<Tile> getCombo(int posX, int posY, Direction dir);
 
 public:
     Board();
@@ -26,6 +36,8 @@ public:
      * being returned.
      */
     void nearestNeighbors(Tile tile);
+
+    std::vector<Tile> getTileNearestNeighbors(int posX, int posY);
 
     /**
      * The max number of combos is 4.

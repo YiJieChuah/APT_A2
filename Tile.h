@@ -15,11 +15,13 @@ public:
    Colour colour;
    Shape shape;
 
+
+   Tile();
    Tile(Colour colour, Shape shape);
    Tile(const Tile& other);
-   Tile();
    ~Tile();
    std::string toString();
+   bool isEmpty();
 
 }
 ;
