@@ -58,6 +58,7 @@ Tile Board::getTile(int row, int col)
     return tile;
 }
 
+// TODO: Do we still want this method???
 int Board::getTile(Tile)
 {
     return 0;
@@ -266,7 +267,22 @@ void Board::printBoard()
         cout << endl;
     }
 }
+
 string Board::getSaveFormat()
 {
+
+    string saveString = "";
+    for (int x = 0; x < NEIGHBORSMAXDISTANCE; x++)
+    {
+        for (int y = 0; y < NEIGHBORSMAXDISTANCE; y++)
+        {
+            if (board.at(x).at(y).colour != 'Z')
+            {
+                saveString.append(board.at(x).at(y).colour + "@" + board.at(x).at(y).shape);
+                saveString.append(", ");
+            }
+        }
+    }
+
     return "";
 }
