@@ -1,18 +1,17 @@
 #include "Tile.h"
 #include <vector>
 
-#define NEIGHBORSMAXDISTANCE 26
-#define MAXCOMBO 6
+#define BOARD_DIMENSIONS 26
+#define MAX_COMBO 6
 
 // This is crude but much faster access to the values than if we used an array.
 #include "Alphabet.h"
 
-using namespace std;
-
 class Board
 {
 protected:
-    vector<std::vector<Tile> > board;
+    //2D Vector
+    std::vector<std::vector<Tile>> board;
     Tile potentialCombos[4][6];
 
 public:
@@ -35,5 +34,5 @@ public:
     int calculateScore();
 
     void printBoard();
-    string getSaveFormat();
+    std::string getSaveFormat();
 };

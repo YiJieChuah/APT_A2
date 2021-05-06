@@ -5,7 +5,7 @@ Tile::Tile(Colour colour, Shape shape) {
     this->colour = colour;
     this->shape = shape;
 };
-Tile::Tile(Tile& other) {
+Tile::Tile(const Tile& other) {
     this->colour = other.colour;
     this->shape = other.shape;
 };

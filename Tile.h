@@ -12,12 +12,11 @@ typedef int Shape;
 class Tile
 {
 public:
-   //TODO: Private or not private?
    Colour colour;
    Shape shape;
 
    Tile(Colour colour, Shape shape);
-   Tile(Tile& other);
+   Tile(const Tile& other);
    Tile();
    ~Tile();
    std::string toString();

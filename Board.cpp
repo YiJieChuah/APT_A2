@@ -6,15 +6,15 @@
 
 using namespace std;
 
-string alphabet[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+string alphabet[26] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
 Board::Board()
 {
     // Adding empty tiles to a 2d vecotr that reperesents the board.
-    for (int i = 0; i < NEIGHBORSMAXDISTANCE; i++)
+    for (int i = 0; i < BOARD_DIMENSIONS; i++)
     {
         vector<Tile> temp;
-        for (int j = 0; j < NEIGHBORSMAXDISTANCE; j++)
+        for (int j = 0; j < BOARD_DIMENSIONS; j++)
         {
             std::unique_ptr<Tile> tile(new Tile('Z', 0));
 
@@ -70,11 +70,11 @@ int Board::getTile(Tile)
 void Board::nearestNeighbors(Tile tile)
 {
 
-    int mainTileX;
-    int mainTileY;
-    for (int i = 0; i < board.size(); i++)
+    int mainTileX = 0;
+    int mainTileY = 0;
+    for (unsigned int i = 0; i < board.size(); i++)
     {
-        for (int j = 0; j < board.size(); j++)
+        for (unsigned int j = 0; j < board.size(); j++)
         {
             if (board.at(i).at(j).colour == tile.colour && board.at(i).at(j).shape == tile.shape)
             {
@@ -84,14 +84,14 @@ void Board::nearestNeighbors(Tile tile)
         }
     }
 
-    Tile *tile1 = new Tile('Z', 0);
+    Tile* tile1 = new Tile('Z', 0);
 
     int i = 0;
-    for (int x = mainTileX; x < mainTileX + MAXCOMBO; x++)
+    for (int x = mainTileX; x < mainTileX + MAX_COMBO; x++)
     {
         //delete &potentialCombos[0][i];
         potentialCombos[0][i] = *tile1;
-        if (x != NEIGHBORSMAXDISTANCE)
+        if (x != BOARD_DIMENSIONS)
         {
             potentialCombos[0][i] = this->getTile(x, mainTileY);
             i++;
@@ -99,7 +99,7 @@ void Board::nearestNeighbors(Tile tile)
     }
 
     i = 0;
-    for (int x = mainTileX; x > mainTileX - MAXCOMBO; x--)
+    for (int x = mainTileX; x > mainTileX - MAX_COMBO; x--)
     {
         potentialCombos[1][i] = *tile1;
         if (x > 0)
@@ -110,10 +110,10 @@ void Board::nearestNeighbors(Tile tile)
     }
 
     i = 0;
-    for (int y = mainTileY; y < mainTileY + MAXCOMBO; y++)
+    for (int y = mainTileY; y < mainTileY + MAX_COMBO; y++)
     {
         potentialCombos[2][i] = *tile1;
-        if (y != NEIGHBORSMAXDISTANCE)
+        if (y != BOARD_DIMENSIONS)
         {
             potentialCombos[2][i] = this->getTile(mainTileX, y);
             i++;
@@ -121,7 +121,7 @@ void Board::nearestNeighbors(Tile tile)
     }
 
     i = 0;
-    for (int y = mainTileY; y > mainTileY - MAXCOMBO; y--)
+    for (int y = mainTileY; y > mainTileY - MAX_COMBO; y--)
     {
         potentialCombos[3][i] = *tile1;
         if (y > 0)
@@ -134,10 +134,10 @@ void Board::nearestNeighbors(Tile tile)
 
 /**
      * TODO: THIS METHOD NEEDS TESTING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     * 
+     *
      * The max number of combos is 4.
      * The max number of tiles to make a combo is 6.
-     * 
+     *
      * If this method returns 0 points then the tile was not placed on
      * the board.
      */
@@ -146,15 +146,15 @@ int Board::calculateScore()
     int score = 0;
     int qwirkle = 0;
 
-    char currentColour;
-    int currentShape;
+    char currentColour = '\0';
+    int currentShape = 0;
     bool scoreStreakBroken = false;
     bool cantPlaceTile = false;
 
     for (int x = 0; x < 4; x++)
     {
         qwirkle = 0;
-        for (int y = 0; y < MAXCOMBO; y++)
+        for (int y = 0; y < MAX_COMBO; y++)
         {
             if (y == 0)
             {
@@ -210,7 +210,7 @@ int Board::calculateScore()
         if (qwirkle == 6)
         {
             cout << "\nQWIRKLE!!!\n"
-                 << endl;
+                << endl;
         }
         if (cantPlaceTile)
         {
@@ -226,7 +226,7 @@ void Board::printBoard()
     cout << "   ";
 
     // Printing the column numbers.
-    for (int i = 0; i < board.size(); i++)
+    for (unsigned int i = 0; i < board.size(); i++)
     {
         if (i > 9)
         {
@@ -238,20 +238,20 @@ void Board::printBoard()
         }
     }
     cout << endl
-         << "  -";
+        << "  -";
 
     // Printing the line below the comlumn numbers.
-    for (int i = 0; i < board.size(); i++)
+    for (unsigned int i = 0; i < board.size(); i++)
     {
         cout << "---";
     }
     cout << endl;
 
-    for (int i = 0; i < board.size(); i++)
+    for (unsigned int i = 0; i < board.size(); i++)
     {
         // Print the the first letter.
         cout << alphabet[i] << " |";
-        for (int j = 0; j < board.size(); j++)
+        for (unsigned int j = 0; j < board.size(); j++)
         {
             // If the tile is a exists, print it, otherwise print an empty space.
             if (board.at(i).at(j).colour != 'Z')
@@ -266,7 +266,7 @@ void Board::printBoard()
         cout << endl;
     }
 }
-string Board::getSaveFormat()
+std::string Board::getSaveFormat()
 {
     return "";
 }
