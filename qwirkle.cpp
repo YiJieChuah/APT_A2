@@ -1,8 +1,8 @@
 
-#include "LinkedList.h"
+// #include "LinkedList.h"
 
 #include "Board.cpp"
-
+#include "LinkedList.h"
 #include "Alphabet.h"
 
 #include <iostream>
@@ -11,11 +11,11 @@
 
 int main(void)
 {
-   LinkedList *list = new LinkedList();
+   LinkedList* list = new LinkedList();
    delete list;
 
-   Board *board1 = new Board();
-   Tile *tile = new Tile('R', 4);
+   Board* board1 = new Board();
+   Tile* tile = new Tile('R', 4);
    board1->addTile(*tile, E, 4);
    board1->printBoard();
 

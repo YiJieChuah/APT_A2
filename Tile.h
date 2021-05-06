@@ -17,10 +17,12 @@ public:
    Shape shape;
 
    Tile(Colour colour, Shape shape);
-   Tile(Tile &other);
+   Tile(Tile& other);
    Tile();
    ~Tile();
    std::string toString();
-};
+
+}
+;
 
 #endif // ASSIGN2_TILE_H
