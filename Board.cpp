@@ -26,8 +26,8 @@ void Board::addTile(Tile tile, int posX, int posY)
 {
     if (tileIsValid(tile, posX, posY))
     {
-        board.at(posX).at(posY).colour = tile.colour;
-        board.at(posX).at(posY).shape = tile.shape;
+        board.at(posY).at(posX).colour = tile.colour;
+        board.at(posY).at(posX).shape = tile.shape;
     }
 }
 
@@ -46,7 +46,7 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
     bool isValid = true;
 
     // Check if position already has a tile
-    if (!board.at(posX).at(posY).isEmpty()) {
+    if (!board.at(posY).at(posX).isEmpty()) {
         isValid = false;
     }
     // Explore combos to see if any duplicates present
@@ -84,10 +84,10 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
  */
 std::vector<Tile> Board::getTileNearestNeighbors(int posX, int posY) {
     std::vector<Tile> neighbours(4);
-    neighbours.push_back(board.at(posX).at(posY - 1)); //NORTH
-    neighbours.push_back(board.at(posX + 1).at(posY)); //EAST
-    neighbours.push_back(board.at(posX).at(posY - 1)); //SOUTH
-    neighbours.push_back(board.at(posX - 1).at(posY)); //WEST
+    neighbours.push_back(board.at(posY - 1).at(posX)); //NORTH
+    neighbours.push_back(board.at(posY).at(posX + 1)); //EAST
+    neighbours.push_back(board.at(posY - 1).at(posX)); //SOUTH
+    neighbours.push_back(board.at(posY).at(posX - 1)); //WEST
 
     return neighbours;
 };
@@ -100,11 +100,11 @@ std::vector<Tile> Board::getCombo(int posX, int posY, bool comboIsVertical) {
 
     if (comboIsVertical) {
         int currPosY = posY;
-        Tile currTile = board.at(posX).at(currPosY);
+        Tile currTile = board.at(currPosY).at(posX);
         //Traverse upwards to find combo
         while (!currTile.isEmpty()) {
             ++currPosY;
-            currTile = board.at(posX).at(currPosY);
+            currTile = board.at(currPosY).at(posX);
             combo.push_back(currTile);
         }
 
@@ -113,19 +113,19 @@ std::vector<Tile> Board::getCombo(int posX, int posY, bool comboIsVertical) {
         //Traverse downwards to find combo
         while (!currTile.isEmpty()) {
             --currPosY;
-            currTile = board.at(posX).at(currPosY);
+            currTile = board.at(currPosY).at(posX);
             combo.push_back(currTile);
         }
     }
 
     else if (!comboIsVertical) {
         int currPosX = posX;
-        Tile currTile = board.at(currPosX).at(posY);
+        Tile currTile = board.at(posY).at(currPosX);
         //Traverse right to find combo
 
         while (!currTile.isEmpty()) {
             ++currPosX;
-            currTile = board.at(posX).at(currPosX);
+            currTile = board.at(posY).at(currPosX);
             combo.push_back(currTile);
         }
 
@@ -134,7 +134,7 @@ std::vector<Tile> Board::getCombo(int posX, int posY, bool comboIsVertical) {
         //Traverse left to find combo
         while (!currTile.isEmpty()) {
             --currPosX;
-            currTile = board.at(posX).at(currPosX);
+            currTile = board.at(posY).at(currPosX);
             combo.push_back(currTile);
         }
     }
