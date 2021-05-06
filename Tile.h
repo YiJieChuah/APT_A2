@@ -22,6 +22,8 @@ public:
    ~Tile();
    std::string toString();
    bool isEmpty();
+   bool equals(Tile& other);
+   bool hasMatchingAttribute(Tile& other);
 
 }
 ;

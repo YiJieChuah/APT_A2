@@ -15,7 +15,6 @@ Tile::Tile(const Tile& other) {
     this->colour = other.colour;
     this->shape = other.shape;
 };
-Tile::Tile() {};
 Tile::~Tile() {}
 
 std::string Tile::toString() {
@@ -24,8 +23,26 @@ std::string Tile::toString() {
 
 bool Tile::isEmpty() {
     bool isEmptyTile = false;
-    if (this->shape == 'Z' && this->shape == 0) {
+    if (this->colour == 'Z' && this->shape == 0) {
         isEmptyTile = true;
     }
     return isEmptyTile;
+}
+
+bool Tile::equals(Tile& other) {
+    bool isEqual = false;
+    if (this->colour == other.colour &&
+        this->shape == other.shape) {
+        isEqual = true;
+    }
+    return isEqual;
+}
+
+bool Tile::hasMatchingAttribute(Tile& other) {
+    bool hasMatchingAttribute = false;
+    if (this->colour == other.colour ||
+        this->shape == other.shape) {
+        hasMatchingAttribute = true;
+    }
+    return hasMatchingAttribute;
 }
