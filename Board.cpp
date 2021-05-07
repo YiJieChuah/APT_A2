@@ -1,4 +1,3 @@
-
 #include "Board.h"
 
 #include <iostream>
@@ -226,16 +225,16 @@ std::string Board::getSaveFormat()
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
                 saveString.append(colour + "@" + shape);
-                firstLoop = false;
             }
             else if (board.at(x).at(y).colour != 'Z')
             {
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
                 saveString.append(colour + "@" + shape);
+                firstLoop = false;
             }
         }
     }
-
+    saveString.append("\n");
     return saveString;
 }
