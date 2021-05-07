@@ -53,31 +53,32 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
         isValid = false;
     }
 
-    //temp tile addition to accomodate for testing if tile is valid
+    //temporary tile addition to accomodate for validation
     board[posY][posX] = tileToAdd;
 
     std::vector<Tile> vertLine = getLine(posX, posY, true);
-
-    if (vertLine.size() > 0) {
-        if (checkLineForDuplicates(vertLine, tileToAdd)) {
+    if (vertLine.size() > 1) {
+        if (checkLineForDuplicates(vertLine, tileToAdd) || !(hasMatchingAttr(vertLine, tileToAdd))) {
             isValid = false;
-        };
+        }
     }
 
     std::vector<Tile> horiLine = getLine(posX, posY, false);
-    if (horiLine.size() > 0) {
-        if (checkLineForDuplicates(horiLine, tileToAdd)) {
+    if (horiLine.size() > 1) {
+        if (checkLineForDuplicates(horiLine, tileToAdd) || !(hasMatchingAttr(horiLine, tileToAdd))) {
             isValid = false;
-        };
+        }
     }
 
+    //Check if tile has matching attributes with line
 
 
+    //Reset tile after tests are done
+    clearTile(posX, posY);
     return isValid;
 }
 
 Tile Board::getTileNeighbour(int posX, int posY, Direction dir) {
-
     Tile neighbour;
 
     if ((dir == NORTH) && (posY != 0)) {
@@ -89,7 +90,7 @@ Tile Board::getTileNeighbour(int posX, int posY, Direction dir) {
     else if ((dir == SOUTH) && (posY != BOARD_DIMENSIONS - 1)) {
         neighbour = board[posY + 1][posX];
     }
-    else if ((dir == EAST) && (posX != 0)) {
+    else if ((dir == WEST) && (posX != 0)) {
         neighbour = board[posY][posX - 1];
     }
 
@@ -134,7 +135,7 @@ bool Board::checkLineForDuplicates(std::vector<Tile> line, Tile tileToCheck) {
     int count = 0;
     for (Tile tile : line) {
         if (tileToCheck.equals(tile))
-            count = 1;
+            ++count;
     }
     if (count > 1)
         dupsExist = true;
@@ -142,7 +143,27 @@ bool Board::checkLineForDuplicates(std::vector<Tile> line, Tile tileToCheck) {
     return dupsExist;
 };
 
+void Board::clearTile(int posX, int posY) {
+    board[posY][posX].colour = 'Z';
+    board[posY][posX].shape = 0;
+}
 
+bool Board::hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck) {
+    bool isMatching = true;
+
+    for (Tile tile : line) {
+        //Cannot compare againts a duplicate
+        if (!tileToCheck.equals(tile)) {
+            if (tile.colour != tileToCheck.colour &&
+                tile.shape != tileToCheck.shape)
+            {
+                isMatching = false;
+            }
+        }
+    }
+    return isMatching;
+
+}
 
 
 void Board::printBoard()

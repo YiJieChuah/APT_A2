@@ -21,24 +21,29 @@ int main(void)
    std::unique_ptr<Tile> tile3(new Tile(GREEN, CLOVER));
 
    board->addTile(*tile1, 0, 0);
-   board->addTile(*tile2, 1, 0);
-   board->addTile(*tile3, 0, 1);
+   board->addTile(*tile3, 0, 2);
+   // board->addTile(*tile2, 0, 1);
+   // board->addTile(*tile2, 0, 2);
 
+   //TODO: try..catch.. we must use when calling addTile
    // try {
-      // board1->addTile(*tile2, 2, 4); //Adding a pre-occupied tile
+   //    board->addTile(*tile2, 0, 2); //Adding a pre-occupied tile
    // }
    // catch (const char* message) {
    //    std::cerr << message << std::endl;
    // }
+
    std::vector<Tile> vertline = board->getLine(0, 0, true);
-   for (Tile tile : vertline)
+   for (Tile tile : vertline) {
       std::cout << tile.toString() << std::endl;
+   }
    std::cout << vertline.size() << std::endl;
    std::cout << "" << std::endl;
 
    std::vector<Tile> horline = board->getLine(0, 0, false);
-   for (Tile tile : horline)
+   for (Tile tile : horline) {
       std::cout << tile.toString() << std::endl;
+   }
    std::cout << horline.size() << std::endl;
 
 

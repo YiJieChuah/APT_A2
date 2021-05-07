@@ -37,6 +37,11 @@ private:
 public:
     Board();
     ~Board();
+
+    /**
+     * Throws an "instance of char*"" error which needs to be caught if tile
+     * add is invalid
+     */
     void addTile(Tile tile, int positionX, int positionY);
     Tile getTile(int row, int col);
     int getTile(Tile);
@@ -58,6 +63,10 @@ public:
      * exist.
      */
     bool checkLineForDuplicates(std::vector<Tile> line, Tile tileToCheck);
+
+    bool hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck);
+
+    void clearTile(int posX, int posY);
 
     /**
      * The max number of combos is 4.
