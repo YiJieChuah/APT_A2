@@ -62,17 +62,16 @@ public:
      * Checks a series of tiles to see if duplicates of the specified tile
      * exist.
      */
-    bool checkLineForDuplicates(std::vector<Tile> line, Tile tileToCheck);
+    bool checkLineForDuplicates(std::vector<Tile> line);
 
     bool hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck);
-
-    void clearTile(int posX, int posY);
 
     /**
      * The max number of combos is 4.
      * The max number of tiles to make a combo is 6.
      */
-    int calculateScore();
+    int calculateScore(int posX, int posY);
+
     void printBoard();
     std::string getSaveFormat();
 };

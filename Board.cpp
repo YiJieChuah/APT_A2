@@ -24,12 +24,18 @@ Board::~Board() {}
  */
 void Board::addTile(Tile tile, int posX, int posY)
 {
-    if (tileIsValid(tile, posX, posY))
-    {
-        board[posY][posX] = tile;
+    try {
+        if (tileIsValid(tile, posX, posY))
+        {
+            board[posY][posX] = tile;
+            std::cout << "Score : " << calculateScore(posX, posY) << std::endl;;
+        }
+        else {
+            throw "Invalid tile placement. Try another.";
+        }
     }
-    else {
-        throw "Invalid tile placement. Try another.";
+    catch (const char* message) {
+        std::cerr << message << std::endl;
     }
 }
 
@@ -47,7 +53,10 @@ int Board::getTile(Tile)
 bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
     bool isValid = true;
 
-    Tile currTile = board[posY][posX];
+    // Keep original tile for later reset
+    Tile origTile = board[posY][posX];
+
+    Tile currTile = origTile;
     // Check if position already has a tile
     if (!currTile.isEmpty()) {
         isValid = false;
@@ -58,23 +67,21 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
 
     std::vector<Tile> vertLine = getLine(posX, posY, true);
     if (vertLine.size() > 1) {
-        if (checkLineForDuplicates(vertLine, tileToAdd) || !(hasMatchingAttr(vertLine, tileToAdd))) {
+        if (checkLineForDuplicates(vertLine) ||
+            !(hasMatchingAttr(vertLine, tileToAdd))) {
             isValid = false;
         }
     }
 
     std::vector<Tile> horiLine = getLine(posX, posY, false);
     if (horiLine.size() > 1) {
-        if (checkLineForDuplicates(horiLine, tileToAdd) || !(hasMatchingAttr(horiLine, tileToAdd))) {
+        if (checkLineForDuplicates(horiLine) ||
+            !(hasMatchingAttr(horiLine, tileToAdd))) {
             isValid = false;
         }
     }
-
-    //Check if tile has matching attributes with line
-
-
-    //Reset tile after tests are done
-    clearTile(posX, posY);
+    //Reset tile after validations are done
+    board[posY][posX] = origTile;
     return isValid;
 }
 
@@ -130,23 +137,21 @@ std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert) {
     return line;
 }
 
-bool Board::checkLineForDuplicates(std::vector<Tile> line, Tile tileToCheck) {
+bool Board::checkLineForDuplicates(std::vector<Tile> line) {
     bool dupsExist = false;
-    int count = 0;
-    for (Tile tile : line) {
-        if (tileToCheck.equals(tile))
-            ++count;
+
+    for (unsigned int i = 0; i < line.size(); i++) {
+        Tile currTile = line[i];
+        for (unsigned int j = i + 1; j < line.size(); j++) {
+            if (currTile.equals(line[j])) {
+                dupsExist = true;
+            }
+        }
     }
-    if (count > 1)
-        dupsExist = true;
 
     return dupsExist;
 };
 
-void Board::clearTile(int posX, int posY) {
-    board[posY][posX].colour = 'Z';
-    board[posY][posX].shape = 0;
-}
 
 bool Board::hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck) {
     bool isMatching = true;
@@ -164,6 +169,24 @@ bool Board::hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck) {
     return isMatching;
 
 }
+
+int Board::calculateScore(int posX, int posY) {
+    Tile addedTile = board[posY][posX];
+    int totalScore = 0;
+
+    std::vector<Tile> vertLine = getLine(posX, posY, true);
+    std::vector<Tile> horiLine = getLine(posX, posY, false);
+
+    if (vertLine.size() > 1) {
+        totalScore += vertLine.size();
+    }
+    if (horiLine.size() > 1) {
+        totalScore += horiLine.size();
+    }
+
+    return totalScore;
+};
+
 
 
 void Board::printBoard()
