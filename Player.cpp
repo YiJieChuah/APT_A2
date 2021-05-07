@@ -7,8 +7,8 @@ Player::~Player()
     //TODO
 }
 
-Player::Player() {
-
+Player::Player()
+{
 }
 Player::Player(std::string name)
 {
@@ -31,12 +31,32 @@ void Player::draw(LinkedList bag)
     }
 }
 
-std::string Player::getName() {
+std::string Player::getName()
+{
     return this->name;
 }
-LinkedList Player::getHand() {
+
+void Player::setName(std::string name)
+{
+    this->name = name;
+}
+
+LinkedList Player::getHand()
+{
     return this->hand;
 }
-int Player::getScore() {
+
+void Player::setHand(LinkedList hand)
+{
+    this->hand = hand;
+}
+
+int Player::getScore()
+{
     return this->score;
+}
+
+void Player::setScore(int score)
+{
+    this->score = score;
 }

@@ -6,7 +6,6 @@
 class Player
 {
 public:
-
     Player();
     Player(std::string name);
     ~Player();
@@ -16,11 +15,14 @@ public:
     LinkedList getHand();
     int getScore();
 
+    void setName(std::string name);
+    void setHand(LinkedList hand);
+    void setScore(int score);
+
 private:
     std::string name;
     LinkedList hand;
     int score;
-
 };
 
 #endif
