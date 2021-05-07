@@ -3,11 +3,10 @@
 
 #include "Tile.h"
 #include <vector>
-// This is crude but much faster access to the values than if we used an array.
-#include "Alphabet.h"
+
 
 #define BOARD_DIMENSIONS 26
-#define MAX_COMBO 6
+#define QWIRKLE_LEN 6
 #define NUM_DIMENSIONS 2
 
 enum Direction {
@@ -43,21 +42,28 @@ public:
     int getTile(Tile);
 
     /**
-     * The nearest neighbors will just be added to a in class array instead of
-     * being returned.
+     * Returns false if a neighbour is not found in the specified direction.
+     * Neighbour tile passed in to be assigned.
      */
-    void nearestNeighbors(Tile tile);
+    Tile getTileNeighbour(int posX, int posY, Direction dir);
 
-    std::vector<Tile> getTileNearestNeighbors(int posX, int posY);
+    /**
+     * Returns the horizontal/vertical line which the tile at (posX,posY) is in.
+     * Toggle between horizontal/vertical depending on checkVert boolean.
+     */
+    std::vector<Tile> getLine(int posX, int posY, bool checkVert);
 
-    int convertDirToInt(Direction dir);
+    /**
+     * Checks a series of tiles to see if duplicates of the specified tile
+     * exist.
+     */
+    bool checkLineForDuplicates(std::vector<Tile> line, Tile tileToCheck);
 
     /**
      * The max number of combos is 4.
      * The max number of tiles to make a combo is 6.
      */
     int calculateScore();
-
     void printBoard();
     std::string getSaveFormat();
 };
