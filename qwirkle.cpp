@@ -11,15 +11,17 @@
 
 int main(void)
 {
-   LinkedList* list = new LinkedList();
+   LinkedList *list = new LinkedList();
    delete list;
 
-   Board* board1 = new Board();
-   Tile* tile1 = new Tile('R', 4);
-   Tile* tile2 = new Tile('R', 4);
+   Board *board1 = new Board();
+   Tile *tile1 = new Tile('R', 4);
+   Tile *tile2 = new Tile('R', 4);
    board1->addTile(*tile1, 2, 4);
    board1->addTile(*tile2, 2, 5);
    board1->printBoard();
+
+   std::cout << board1->getSaveFormat();
 
    delete board1;
 
