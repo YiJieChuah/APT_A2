@@ -12,15 +12,20 @@ typedef int Shape;
 class Tile
 {
 public:
-   //TODO: Private or not private?
    Colour colour;
    Shape shape;
 
-   Tile(Colour colour, Shape shape);
-   Tile(Tile &other);
+
    Tile();
+   Tile(Colour colour, Shape shape);
+   Tile(const Tile& other);
    ~Tile();
    std::string toString();
-};
+   bool isEmpty();
+   bool equals(Tile& other);
+   bool hasMatchingAttribute(Tile& other);
+
+}
+;
 
 #endif // ASSIGN2_TILE_H

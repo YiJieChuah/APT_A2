@@ -18,4 +18,8 @@
 #define STAR_6    5
 #define CLOVER    6
 
+// Default empty values
+#define EMPTY_COLOR 'Z'
+#define EMPTY_SHAPE 0
+
 #endif // ASSIGN1_TILECODES_H
