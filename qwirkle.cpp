@@ -4,6 +4,8 @@
 #include "Board.h"
 #include "LinkedList.h"
 #include "Alphabet.h"
+#include "Player.h"
+#include "SaveLoad.h"
 
 #include <iostream>
 
@@ -21,7 +23,12 @@ int main(void)
    board1->addTile(*tile2, 2, 5);
    board1->printBoard();
 
-   std::cout << board1->getSaveFormat();
+   Player *player1 = new Player("Player1");
+   Player *player2 = new Player("Player2");
+
+   SaveLoad *saver = new SaveLoad();
+
+   saver->save(*board1, "first", *player1, *player2);
 
    delete board1;
 

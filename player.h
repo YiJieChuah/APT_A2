@@ -3,16 +3,24 @@
 
 #include "LinkedList.h"
 
-class player
+class Player
 {
 public:
-    player();
-    ~player();
+
+    Player();
+    Player(std::string name);
+    ~Player();
     void draw(LinkedList bag);
 
+    std::string getName();
+    LinkedList getHand();
+    int getScore();
+
 private:
+    std::string name;
     LinkedList hand;
     int score;
+
 };
 
 #endif

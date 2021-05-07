@@ -211,6 +211,7 @@ void Board::printBoard()
     }
 }
 
+// EVERYTHING BELOW THIS LINE SETH HAS JUST ADDED ------------------------------
 std::string Board::getSaveFormat()
 {
     bool firstLoop = true;
@@ -235,6 +236,10 @@ std::string Board::getSaveFormat()
             }
         }
     }
-    saveString.append("\n");
     return saveString;
+}
+
+int Board::getBoardDimentions()
+{
+    return BOARD_DIMENSIONS;
 }

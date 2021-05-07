@@ -61,6 +61,8 @@ public:
 
     void printBoard();
     std::string getSaveFormat();
+
+    int getBoardDimentions();
 };
 
 #endif // BOARD_H
