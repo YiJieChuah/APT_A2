@@ -1,4 +1,3 @@
-
 #include "Board.h"
 
 #include <iostream>
@@ -15,7 +14,6 @@ Board::Board()
     }
 }
 
-
 Board::~Board() {}
 
 /**
@@ -24,17 +22,20 @@ Board::~Board() {}
  */
 void Board::addTile(Tile tile, int posX, int posY)
 {
-    try {
+    try
+    {
         if (tileIsValid(tile, posX, posY))
         {
             board[posY][posX] = tile;
-            std::cout << "Score : " << calculateScore(posX, posY) << std::endl;;
+            std::cout << "Score : " << calculateScore(posX, posY) << std::endl;
         }
-        else {
+        else
+        {
             throw "Invalid tile placement. Try another.";
         }
     }
-    catch (const char* message) {
+    catch (const char *message)
+    {
         std::cerr << message << std::endl;
     }
 }
@@ -50,7 +51,8 @@ int Board::getTile(Tile)
     return 0;
 }
 
-bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
+bool Board::tileIsValid(Tile tileToAdd, int posX, int posY)
+{
     bool isValid = true;
 
     // Keep original tile for later reset
@@ -58,7 +60,8 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
 
     Tile currTile = origTile;
     // Check if position already has a tile
-    if (!currTile.isEmpty()) {
+    if (!currTile.isEmpty())
+    {
         isValid = false;
     }
 
@@ -66,17 +69,21 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
     board[posY][posX] = tileToAdd;
 
     std::vector<Tile> vertLine = getLine(posX, posY, true);
-    if (vertLine.size() > 1) {
+    if (vertLine.size() > 1)
+    {
         if (checkLineForDuplicates(vertLine) ||
-            !(hasMatchingAttr(vertLine, tileToAdd))) {
+            !(hasMatchingAttr(vertLine, tileToAdd)))
+        {
             isValid = false;
         }
     }
 
     std::vector<Tile> horiLine = getLine(posX, posY, false);
-    if (horiLine.size() > 1) {
+    if (horiLine.size() > 1)
+    {
         if (checkLineForDuplicates(horiLine) ||
-            !(hasMatchingAttr(horiLine, tileToAdd))) {
+            !(hasMatchingAttr(horiLine, tileToAdd)))
+        {
             isValid = false;
         }
     }
@@ -85,65 +92,80 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY) {
     return isValid;
 }
 
-Tile Board::getTileNeighbour(int posX, int posY, Direction dir) {
+Tile Board::getTileNeighbour(int posX, int posY, Direction dir)
+{
     Tile neighbour;
 
-    if ((dir == NORTH) && (posY != 0)) {
+    if ((dir == NORTH) && (posY != 0))
+    {
         neighbour = board[posY - 1][posX];
     }
-    else if ((dir == EAST) && (posX != BOARD_DIMENSIONS - 1)) {
+    else if ((dir == EAST) && (posX != BOARD_DIMENSIONS - 1))
+    {
         neighbour = board[posY][posX + 1];
     }
-    else if ((dir == SOUTH) && (posY != BOARD_DIMENSIONS - 1)) {
+    else if ((dir == SOUTH) && (posY != BOARD_DIMENSIONS - 1))
+    {
         neighbour = board[posY + 1][posX];
     }
-    else if ((dir == WEST) && (posX != 0)) {
+    else if ((dir == WEST) && (posX != 0))
+    {
         neighbour = board[posY][posX - 1];
     }
 
     return neighbour;
 }
 
-std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert) {
+std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
+{
     std::vector<Tile> line(0);
     Tile currTile = board[posY][posX];
 
     //Gets the vector by traversing north and then adding as it goes down.
-    if (checkVert) {
+    if (checkVert)
+    {
         int currPosY = posY;
-        while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty()) {
+        while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty())
+        {
             --currPosY;
             currTile = board[currPosY][posX];
         }
-        while (!currTile.isEmpty()) {
+        while (!currTile.isEmpty())
+        {
             line.push_back(currTile);
             ++currPosY;
             currTile = board[currPosY][posX];
         }
     }
-    else {
+    else
+    {
         int currPosX = posX;
-        while (!getTileNeighbour(currPosX, posY, WEST).isEmpty()) {
+        while (!getTileNeighbour(currPosX, posY, WEST).isEmpty())
+        {
             --currPosX;
             currTile = board[posY][currPosX];
         }
-        while (!currTile.isEmpty()) {
+        while (!currTile.isEmpty())
+        {
             line.push_back(currTile);
             ++currPosX;
             currTile = board[posY][currPosX];
         }
-
     }
     return line;
 }
 
-bool Board::checkLineForDuplicates(std::vector<Tile> line) {
+bool Board::checkLineForDuplicates(std::vector<Tile> line)
+{
     bool dupsExist = false;
 
-    for (unsigned int i = 0; i < line.size(); i++) {
+    for (unsigned int i = 0; i < line.size(); i++)
+    {
         Tile currTile = line[i];
-        for (unsigned int j = i + 1; j < line.size(); j++) {
-            if (currTile.equals(line[j])) {
+        for (unsigned int j = i + 1; j < line.size(); j++)
+        {
+            if (currTile.equals(line[j]))
+            {
                 dupsExist = true;
             }
         }
@@ -152,13 +174,15 @@ bool Board::checkLineForDuplicates(std::vector<Tile> line) {
     return dupsExist;
 };
 
-
-bool Board::hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck) {
+bool Board::hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck)
+{
     bool isMatching = true;
 
-    for (Tile tile : line) {
+    for (Tile tile : line)
+    {
         //Cannot compare againts a duplicate
-        if (!tileToCheck.equals(tile)) {
+        if (!tileToCheck.equals(tile))
+        {
             if (tile.colour != tileToCheck.colour &&
                 tile.shape != tileToCheck.shape)
             {
@@ -167,27 +191,27 @@ bool Board::hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck) {
         }
     }
     return isMatching;
-
 }
 
-int Board::calculateScore(int posX, int posY) {
+int Board::calculateScore(int posX, int posY)
+{
     Tile addedTile = board[posY][posX];
     int totalScore = 0;
 
     std::vector<Tile> vertLine = getLine(posX, posY, true);
     std::vector<Tile> horiLine = getLine(posX, posY, false);
 
-    if (vertLine.size() > 1) {
+    if (vertLine.size() > 1)
+    {
         totalScore += vertLine.size();
     }
-    if (horiLine.size() > 1) {
+    if (horiLine.size() > 1)
+    {
         totalScore += horiLine.size();
     }
 
     return totalScore;
 };
-
-
 
 void Board::printBoard()
 {
@@ -205,7 +229,7 @@ void Board::printBoard()
         }
     }
     std::cout << std::endl
-        << "  -";
+              << "  -";
 
     // Printing the line below the comlumn numbers.
     for (int i = 0; i < BOARD_DIMENSIONS; i++)
@@ -213,7 +237,6 @@ void Board::printBoard()
         std::cout << "---";
     }
     std::cout << std::endl;
-
 
     char alphabet = 'A';
     for (int i = 0; i < BOARD_DIMENSIONS; i++)
@@ -234,4 +257,47 @@ void Board::printBoard()
         }
         std::cout << std::endl;
     }
+}
+
+// EVERYTHING BELOW THIS LINE SETH HAS JUST ADDED ------------------------------
+std::string Board::getSaveFormat()
+{
+    char alphabet = 'A';
+    bool firstLoop = true;
+    std::string saveString = "";
+    for (int x = 0; x < BOARD_DIMENSIONS; x++)
+    {
+        for (int y = 0; y < BOARD_DIMENSIONS; y++)
+        {
+            if (firstLoop == false && board.at(x).at(y).colour != 'Z')
+            {
+                saveString.append(", ");
+                std::string colour(1, board.at(x).at(y).colour);
+                std::string xPosition(1, alphabet);
+                std::string shape = std::to_string(board.at(x).at(y).shape);
+                saveString.append(colour + shape + "@" + xPosition + std::to_string(y));
+            }
+            else if (board.at(x).at(y).colour != 'Z')
+            {
+                std::string colour(1, board.at(x).at(y).colour);
+                std::string xPosition(1, alphabet);
+                std::string shape = std::to_string(board.at(x).at(y).shape);
+                saveString.append(colour + shape + "@" + xPosition + std::to_string(y));
+                firstLoop = false;
+            }
+        }
+        alphabet++;
+    }
+    return saveString;
+}
+
+int Board::getBoardDimentions()
+{
+    return BOARD_DIMENSIONS;
+}
+
+bool Board::addTileForLoad(Tile tile, int positionX, int postionY)
+{
+    board[postionY][positionX] = tile;
+    return false;
 }

@@ -72,8 +72,17 @@ public:
      */
     int calculateScore(int posX, int posY);
 
+    // Prints out the board.
     void printBoard();
+
+    // Returns the save format for the tiles on the board as a string.
     std::string getSaveFormat();
+
+    // gets the dimensions of the board.
+    int getBoardDimentions();
+
+    // This method is specifically used for adding tiles from a load file.
+    bool addTileForLoad(Tile tile, int positionX, int postionY);
 };
 
 #endif // BOARD_H
