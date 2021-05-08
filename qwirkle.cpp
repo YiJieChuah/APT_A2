@@ -23,12 +23,12 @@ int main(void)
    board1->addTile(*tile2, 2, 5);
    board1->printBoard();
 
-   Player *player1 = new Player("Player1");
-   Player *player2 = new Player("Player2");
+   // Player *player1 = new Player("Player1");
+   // Player *player2 = new Player("Player2");
 
-   SaveLoad *saver = new SaveLoad();
+   // SaveLoad *saver = new SaveLoad();
 
-   saver->save(*board1, "first", *player1, *player2);
+   // saver->save(*board1, "first", *player1, *player2);
 
    delete board1;
 

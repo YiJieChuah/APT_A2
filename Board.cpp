@@ -225,13 +225,13 @@ std::string Board::getSaveFormat()
                 saveString.append(", ");
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + "@" + shape);
+                saveString.append(colour + shape + "@");
             }
             else if (board.at(x).at(y).colour != 'Z')
             {
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + "@" + shape);
+                saveString.append(colour + shape + "@");
                 firstLoop = false;
             }
         }

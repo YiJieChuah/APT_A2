@@ -16,8 +16,9 @@ private:
 public:
     SaveLoad();
     ~SaveLoad();
-    bool save(Board board, std::string fileName, Player player1, Player player2);
+    bool save(Board board, std::string fileName, Player player1, Player player2, LinkedList tileBag, std::string currentPlayer);
     bool load(std::string fileName);
+    std::string createTileString(LinkedList list);
 
     Player getPlayer1();
     Player getPlayer2();
