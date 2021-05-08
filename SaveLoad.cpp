@@ -6,13 +6,9 @@
 #include <memory>
 #include <fstream>
 
-SaveLoad::SaveLoad()
-{
-}
+SaveLoad::SaveLoad() {}
 
-SaveLoad::~SaveLoad()
-{
-}
+SaveLoad::~SaveLoad() {}
 
 /**
  * Takes input from vaious places and puts it all into one .save file.
@@ -57,7 +53,7 @@ bool SaveLoad::save(Board board, std::string fileName, Player player1, Player pl
             saveFile << std::endl;
 
             // Inserting board details.
-            saveFile << board.getBoardDimentions() << "," << board.getBoardDimentions() << std::endl;
+            saveFile << board.getBoardDimensions() << "," << board.getBoardDimensions() << std::endl;
             saveFile << board.getSaveFormat() << std::endl;
             for (int i = 0; i < tileBag.size(); i++)
             {
@@ -75,7 +71,7 @@ bool SaveLoad::save(Board board, std::string fileName, Player player1, Player pl
             saved = true;
         }
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -113,7 +109,7 @@ bool SaveLoad::load(std::string fileName)
             else if (lineNum == 2)
             {
                 // Creating player1 hand.
-                int i = 0;
+                unsigned int i = 0;
                 while (i < line.length())
                 {
 
@@ -136,7 +132,7 @@ bool SaveLoad::load(std::string fileName)
             else if (lineNum == 5)
             {
                 // Creatig player2 hand.
-                int i = 0;
+                unsigned int i = 0;
                 while (i < line.length())
                 {
                     char color = line.at(i);
@@ -153,19 +149,19 @@ bool SaveLoad::load(std::string fileName)
             }
             else if (lineNum == 7)
             {
-                int i = 0;
+                unsigned int i = 0;
                 while (i < line.length())
                 {
 
                     // I got frustrated trying to solve a probelm and so this is my temp solution.
-                    char letters[BOARD_DIMENSIONS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+                    char letters[BOARD_DIMENSIONS] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
 
                     // Getting the x position.
                     char charPositionX = tolower(line.at(i + 3));
-                    int positionX;
+                    int positionX = 0;
                     for (int i = 0; i < BOARD_DIMENSIONS; i++)
                     {
                         if (charPositionX == letters[1])
@@ -178,7 +174,7 @@ bool SaveLoad::load(std::string fileName)
                     std::string strPositionY(1, line.at(i + 4));
                     int positionY = stoi(strPositionY);
 
-                    Tile *tile = new Tile(color, shape);
+                    Tile* tile = new Tile(color, shape);
 
                     board.addTileForLoad(*tile, positionX, positionY);
                     i += 7;
@@ -187,7 +183,7 @@ bool SaveLoad::load(std::string fileName)
             else if (lineNum == 8)
             {
                 // Creating tile bag.
-                int i = 0;
+                unsigned int i = 0;
                 while (i < line.length())
                 {
                     char color = line.at(i);
@@ -213,7 +209,7 @@ bool SaveLoad::load(std::string fileName)
 
         loaded = true;
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }

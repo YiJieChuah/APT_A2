@@ -34,7 +34,7 @@ void Board::addTile(Tile tile, int posX, int posY)
             throw "Invalid tile placement. Try another.";
         }
     }
-    catch (const char *message)
+    catch (const char* message)
     {
         std::cerr << message << std::endl;
     }
@@ -229,7 +229,7 @@ void Board::printBoard()
         }
     }
     std::cout << std::endl
-              << "  -";
+        << "  -";
 
     // Printing the line below the comlumn numbers.
     for (int i = 0; i < BOARD_DIMENSIONS; i++)
@@ -291,7 +291,7 @@ std::string Board::getSaveFormat()
     return saveString;
 }
 
-int Board::getBoardDimentions()
+int Board::getBoardDimensions()
 {
     return BOARD_DIMENSIONS;
 }
