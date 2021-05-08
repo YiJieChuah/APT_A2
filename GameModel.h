@@ -14,6 +14,7 @@ public:
 
     void addPlayerToGame(std::string name);
     unsigned int getNumPlayers();
+    Player getPlayer(int playerNum);
 
 private:
     std::vector<Player> players;

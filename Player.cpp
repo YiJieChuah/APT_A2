@@ -15,8 +15,15 @@ Player::Player(std::string name)
     score = 0;
 }
 
-Player::~Player() {}
+Player::Player(const Player& other) {
+    this->name = other.name;
+    this->score = other.score;
+    this->hand = new LinkedList(*other.hand);
+}
 
+Player::~Player() {
+    delete hand;
+}
 
 void Player::draw(LinkedList bag)
 {
@@ -53,6 +60,10 @@ std::string Player::getName()
 void Player::setName(std::string name)
 {
     this->name = name;
+}
+
+LinkedList Player::getHand() {
+    return *this->hand;
 }
 
 int Player::getScore()

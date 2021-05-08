@@ -10,9 +10,9 @@
 class GameView
 {
 private:
-    std::shared_ptr<GameModel> gameModelPtr;
+    GameModel* gameModelPtr;
 public:
-    GameView(std::shared_ptr<GameModel> gameModelPtr);
+    GameView(GameModel* gameModelPtr);
     ~GameView();
     void init();
     int getValidSelection();

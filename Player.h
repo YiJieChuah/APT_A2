@@ -1,8 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <memory>
-
+#include "Board.h"
 #include "LinkedList.h"
 
 class Player
@@ -10,6 +9,7 @@ class Player
 public:
     Player();
     Player(std::string name);
+    Player(const Player& other);
     ~Player();
     void draw(LinkedList bag);
     void play(Tile tile, Board board, int posX, int posY);
@@ -24,7 +24,7 @@ public:
 
 private:
     std::string name;
-    std::unique_ptr<LinkedList> hand;
+    LinkedList* hand;
     int score;
 };
 

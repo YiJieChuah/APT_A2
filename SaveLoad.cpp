@@ -235,14 +235,14 @@ std::string SaveLoad::createTileString(LinkedList list)
     return "";
 }
 
-Player SaveLoad::getPlayer1()
-{
-    return this->loadedPlayer1;
-}
-Player SaveLoad::getPlayer2()
-{
-    return this->loadedPlayer2;
-}
+// Player SaveLoad::getPlayer1()
+// {
+//     return this->loadedPlayer1;
+// }
+// Player SaveLoad::getPlayer2()
+// {
+//     return this->loadedPlayer2;
+// }
 
 Board SaveLoad::getLoadedBoard()
 {

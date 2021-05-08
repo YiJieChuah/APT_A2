@@ -9,10 +9,12 @@
 
 int main(void)
 {
-   std::shared_ptr<GameModel> gameModelPtr(new GameModel());
-   std::unique_ptr<GameView> gameViewPtr(new GameView(gameModelPtr));
+   GameModel* gameModelPtr = new GameModel();
+   GameView* gameViewPtr = new GameView(gameModelPtr);
 
    gameViewPtr->init();
 
+   delete gameModelPtr;
+   delete gameViewPtr;
    return EXIT_SUCCESS;
 }

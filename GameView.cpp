@@ -6,7 +6,7 @@
 /**
  * Present the user with the iterface. Also process user input here?
  */
-GameView::GameView(std::shared_ptr<GameModel> gameModelPtr) {
+GameView::GameView(GameModel* gameModelPtr) {
     this->gameModelPtr = gameModelPtr;
 }
 GameView::~GameView() {}
@@ -99,7 +99,8 @@ void GameView::processSelection(int input) {
 void GameView::startNewGame() {
     std::cout << "Starting a New Game" << std::endl;
 
-    //Setup players
+    //Setup 2 players
+    newPlayer();
     newPlayer();
 }
 
