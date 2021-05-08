@@ -4,7 +4,15 @@
 #include <string>
 #include <memory>
 
-GameModel::GameModel() {}
+GameModel::GameModel() {
+    tileBag = new LinkedList();
+    board = new Board();
+}
+
+GameModel::~GameModel() {
+    delete tileBag;
+    delete board;
+}
 
 void GameModel::addPlayerToGame(std::string name) {
     players.push_back(Player(name));
@@ -12,6 +20,14 @@ void GameModel::addPlayerToGame(std::string name) {
 
 Player GameModel::getPlayer(int playerNum) {
     return players[playerNum];
+};
+
+std::vector<Player> GameModel::getPlayers() {
+    return players;
+};
+
+Board GameModel::getBoard() {
+    return *board;
 };
 
 unsigned int GameModel::getNumPlayers() {

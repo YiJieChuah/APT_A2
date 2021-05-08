@@ -40,13 +40,15 @@ void Player::draw(LinkedList bag)
     }
 }
 
-void Player::play(Tile tile, Board board, int posX, int posY)
+void Player::play(Tile tile, LinkedList tileBag, Board board, int posX, int posY)
 {
     for (int i = 0; i < hand->size(); i++)
     {
         if (hand->get(i)->equals(tile)) {
             if (board.addTile(tile, posX, posY)) {
                 hand->remove(i);
+                score += board.calculateScore(posX, posY);
+                draw(tileBag);
             }
         }
     }
@@ -65,6 +67,20 @@ void Player::setName(std::string name)
 
 LinkedList Player::getHand() {
     return *this->hand;
+}
+
+std::string Player::handToString() {
+    std::string handStr = "";
+    for (int i = 0; i < hand->size(); i++)
+    {
+        handStr += hand->get(i)->colour;
+        handStr += hand->get(i)->shape;
+        if (i != hand->size())
+        {
+            handStr += ",";
+        }
+    }
+    return handStr;
 }
 
 int Player::getScore()

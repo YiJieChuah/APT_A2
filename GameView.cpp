@@ -65,9 +65,6 @@ int GameView::getValidSelection() {
 };
 
 void GameView::processSelection(int input) {
-
-    std::string player1;
-    std::string player2;
     std::string fileDirectory;
 
     if (input == 1)
@@ -102,6 +99,13 @@ void GameView::startNewGame() {
 
     std::cout << "\nLet's Play!\n"
         << std::endl;
+
+    //TODO: temp for testing
+    std::vector<Player> players = gameModelPtr->getPlayers();
+    for (Player player : players) {
+        playerTurn(player);
+    }
+
 }
 
 /**
@@ -120,6 +124,24 @@ void GameView::newPlayer()
     std::cin >> playerName;
     gameModelPtr->addPlayerToGame(playerName);
 }
+
+void GameView::playerTurn(Player player)
+{
+    std::cout << player.getName() << "it's your turn" << std::endl;
+    printScores();
+    gameModelPtr->getBoard().printBoard();
+    std::cout << player.handToString() << std::endl;
+
+}
+
+void GameView::printScores() {
+    std::vector<Player> players = gameModelPtr->getPlayers();
+    for (Player player : players) {
+        std::cout << "Score for " << player.getName() << ": "
+            << player.getScore() << std::endl;
+    }
+}
+
 
 /**
  * Difficult to check if file exists with current config. Maybe return

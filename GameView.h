@@ -18,6 +18,8 @@ public:
     int getValidSelection();
     void processSelection(int input);
     void startNewGame();
+    void playerTurn(Player player);
+    void printScores();
 
     void newPlayer();
     std::string createFileDir();

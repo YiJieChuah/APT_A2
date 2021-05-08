@@ -11,17 +11,20 @@ class GameModel
 {
 public:
     GameModel();
+    ~GameModel();
 
     void addPlayerToGame(std::string name);
     unsigned int getNumPlayers();
     Player getPlayer(int playerNum);
+    std::vector<Player> getPlayers();
+    Board getBoard();
 
 private:
     std::vector<Player> players;
 
     //TODO: Need wrapper class?
-    std::unique_ptr<LinkedList> tileBag;
-    std::unique_ptr<Board> board;
+    LinkedList* tileBag;
+    Board* board;
 };
 
 #endif // ASSIGN2_GAMEMODEL_H

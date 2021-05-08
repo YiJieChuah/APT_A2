@@ -12,10 +12,11 @@ public:
     Player(const Player& other);
     ~Player();
     void draw(LinkedList bag);
-    void play(Tile tile, Board board, int posX, int posY);
+    void play(Tile tile, LinkedList tileBag, Board board, int posX, int posY);
 
     std::string getName();
     LinkedList getHand();
+    std::string handToString();
     int getScore();
 
     void setName(std::string name);
