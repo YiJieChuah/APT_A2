@@ -22,16 +22,28 @@ Board::~Board() {}
  */
 void Board::addTile(Tile tile, int posX, int posY)
 {
-    if (tileIsValid(tile, posX, posY))
+    try
     {
-        board.at(posY).at(posX).colour = tile.colour;
-        board.at(posY).at(posX).shape = tile.shape;
+        if (tileIsValid(tile, posX, posY))
+        {
+            board[posY][posX] = tile;
+            std::cout << "Score : " << calculateScore(posX, posY) << std::endl;
+            ;
+        }
+        else
+        {
+            throw "Invalid tile placement. Try another.";
+        }
+    }
+    catch (const char *message)
+    {
+        std::cerr << message << std::endl;
     }
 }
 
 Tile Board::getTile(int row, int col)
 {
-    Tile tile = board.at(row).at(col);
+    Tile tile = board[row][col];
     return tile;
 }
 
@@ -44,125 +56,162 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY)
 {
     bool isValid = true;
 
+    // Keep original tile for later reset
+    Tile origTile = board[posY][posX];
+
+    Tile currTile = origTile;
     // Check if position already has a tile
-    if (!board.at(posY).at(posX).isEmpty())
-    {
-        isValid = false;
-    }
-    // Explore combos to see if any duplicates present
-    std::vector<Tile> horiCombo = getCombo(posX, posY, false);
-    std::vector<Tile> vertCombo = getCombo(posX, posY, true);
-    bool horiHasDup = checkDupTileInCombo(tileToAdd, horiCombo);
-    bool vertHasDup = checkDupTileInCombo(tileToAdd, vertCombo);
-    if (horiHasDup || vertHasDup)
+    if (!currTile.isEmpty())
     {
         isValid = false;
     }
 
-    //Check if matching adjacent nodes
-    if (horiCombo.size() > 0)
+    //temporary tile addition to accomodate for validation
+    board[posY][posX] = tileToAdd;
+
+    std::vector<Tile> vertLine = getLine(posX, posY, true);
+    if (vertLine.size() > 1)
     {
-        //TODO: Some magic numbers here.
-        if (!tileToAdd.hasMatchingAttribute(horiCombo.at(1)))
+        if (checkLineForDuplicates(vertLine) ||
+            !(hasMatchingAttr(vertLine, tileToAdd)))
         {
             isValid = false;
-        };
+        }
     }
 
-    if (vertCombo.size() > 0)
+    std::vector<Tile> horiLine = getLine(posX, posY, false);
+    if (horiLine.size() > 1)
     {
-        //TODO: Some magic numbers here.
-        if (!tileToAdd.hasMatchingAttribute(vertCombo.at(1)))
+        if (checkLineForDuplicates(horiLine) ||
+            !(hasMatchingAttr(horiLine, tileToAdd)))
         {
             isValid = false;
-        };
+        }
     }
-
+    //Reset tile after validations are done
+    board[posY][posX] = origTile;
     return isValid;
 }
 
-/**
- * Returns a vector of the tile's 4 nearest neighbours.
- * Vector is sequenced NORTH, EAST, SOUTH, WEST (clockwise)
- */
-std::vector<Tile> Board::getTileNearestNeighbors(int posX, int posY)
+Tile Board::getTileNeighbour(int posX, int posY, Direction dir)
 {
-    std::vector<Tile> neighbours(4);
-    neighbours.push_back(board.at(posY - 1).at(posX)); //NORTH
-    neighbours.push_back(board.at(posY).at(posX + 1)); //EAST
-    neighbours.push_back(board.at(posY - 1).at(posX)); //SOUTH
-    neighbours.push_back(board.at(posY).at(posX - 1)); //WEST
+    Tile neighbour;
 
-    return neighbours;
-};
-
-/**
- * Expects a value defined by the enum Direction for dir
- */
-std::vector<Tile> Board::getCombo(int posX, int posY, bool comboIsVertical)
-{
-    std::vector<Tile> combo;
-
-    if (comboIsVertical)
+    if ((dir == NORTH) && (posY != 0))
     {
-        int currPosY = posY;
-        Tile currTile = board.at(currPosY).at(posX);
-        //Traverse upwards to find combo
-        while (!currTile.isEmpty())
-        {
-            ++currPosY;
-            currTile = board.at(currPosY).at(posX);
-            combo.push_back(currTile);
-        }
-
-        //Reset position before traversing downwards
-        currPosY = posY;
-        //Traverse downwards to find combo
-        while (!currTile.isEmpty())
-        {
-            --currPosY;
-            currTile = board.at(currPosY).at(posX);
-            combo.push_back(currTile);
-        }
+        neighbour = board[posY - 1][posX];
+    }
+    else if ((dir == EAST) && (posX != BOARD_DIMENSIONS - 1))
+    {
+        neighbour = board[posY][posX + 1];
+    }
+    else if ((dir == SOUTH) && (posY != BOARD_DIMENSIONS - 1))
+    {
+        neighbour = board[posY + 1][posX];
+    }
+    else if ((dir == WEST) && (posX != 0))
+    {
+        neighbour = board[posY][posX - 1];
     }
 
-    else if (!comboIsVertical)
-    {
-        int currPosX = posX;
-        Tile currTile = board.at(posY).at(currPosX);
-        //Traverse right to find combo
-
-        while (!currTile.isEmpty())
-        {
-            ++currPosX;
-            currTile = board.at(posY).at(currPosX);
-            combo.push_back(currTile);
-        }
-
-        //Reset position before traversing downwards
-        currPosX = posX;
-        //Traverse left to find combo
-        while (!currTile.isEmpty())
-        {
-            --currPosX;
-            currTile = board.at(posY).at(currPosX);
-            combo.push_back(currTile);
-        }
-    }
-    return combo;
+    return neighbour;
 }
 
-bool Board::checkDupTileInCombo(Tile tile, std::vector<Tile> combo)
+std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
 {
-    bool dupPresent = false;
-    for (unsigned int tileIdx = 0; tileIdx < combo.size(); tileIdx++)
+    std::vector<Tile> line(0);
+    Tile currTile = board[posY][posX];
+
+    //Gets the vector by traversing north and then adding as it goes down.
+    if (checkVert)
     {
-        if (tile.equals(combo.at(tileIdx)))
+        int currPosY = posY;
+        while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty())
         {
-            dupPresent = true;
+            --currPosY;
+            currTile = board[currPosY][posX];
+        }
+        while (!currTile.isEmpty())
+        {
+            line.push_back(currTile);
+            ++currPosY;
+            currTile = board[currPosY][posX];
         }
     }
-    return dupPresent;
+    else
+    {
+        int currPosX = posX;
+        while (!getTileNeighbour(currPosX, posY, WEST).isEmpty())
+        {
+            --currPosX;
+            currTile = board[posY][currPosX];
+        }
+        while (!currTile.isEmpty())
+        {
+            line.push_back(currTile);
+            ++currPosX;
+            currTile = board[posY][currPosX];
+        }
+    }
+    return line;
+}
+
+bool Board::checkLineForDuplicates(std::vector<Tile> line)
+{
+    bool dupsExist = false;
+
+    for (unsigned int i = 0; i < line.size(); i++)
+    {
+        Tile currTile = line[i];
+        for (unsigned int j = i + 1; j < line.size(); j++)
+        {
+            if (currTile.equals(line[j]))
+            {
+                dupsExist = true;
+            }
+        }
+    }
+
+    return dupsExist;
+};
+
+bool Board::hasMatchingAttr(std::vector<Tile> line, Tile tileToCheck)
+{
+    bool isMatching = true;
+
+    for (Tile tile : line)
+    {
+        //Cannot compare againts a duplicate
+        if (!tileToCheck.equals(tile))
+        {
+            if (tile.colour != tileToCheck.colour &&
+                tile.shape != tileToCheck.shape)
+            {
+                isMatching = false;
+            }
+        }
+    }
+    return isMatching;
+}
+
+int Board::calculateScore(int posX, int posY)
+{
+    Tile addedTile = board[posY][posX];
+    int totalScore = 0;
+
+    std::vector<Tile> vertLine = getLine(posX, posY, true);
+    std::vector<Tile> horiLine = getLine(posX, posY, false);
+
+    if (vertLine.size() > 1)
+    {
+        totalScore += vertLine.size();
+    }
+    if (horiLine.size() > 1)
+    {
+        totalScore += horiLine.size();
+    }
+
+    return totalScore;
 };
 
 void Board::printBoard()
@@ -193,14 +242,14 @@ void Board::printBoard()
     char alphabet = 'A';
     for (int i = 0; i < BOARD_DIMENSIONS; i++)
     {
-        // Print the the first letter.
+        //iterate through alphabets by adding to char
         std::cout << alphabet++ << " |";
         for (int j = 0; j < BOARD_DIMENSIONS; j++)
         {
             // If the tile is a exists, print it, otherwise print an empty space.
-            if (board.at(i).at(j).colour != 'Z')
+            if (!board[i][j].isEmpty())
             {
-                std::cout << board.at(i).at(j).colour << board.at(i).at(j).colour << "|";
+                std::cout << board[i][j].toString() << "|";
             }
             else
             {
@@ -214,6 +263,7 @@ void Board::printBoard()
 // EVERYTHING BELOW THIS LINE SETH HAS JUST ADDED ------------------------------
 std::string Board::getSaveFormat()
 {
+    char alphabet = 'A';
     bool firstLoop = true;
     std::string saveString = "";
     for (int x = 0; x < BOARD_DIMENSIONS; x++)
@@ -225,13 +275,13 @@ std::string Board::getSaveFormat()
                 saveString.append(", ");
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + shape + "@");
+                saveString.append(colour + shape + "@" + std::to_string(alphabet + x) + std::to_string(y));
             }
             else if (board.at(x).at(y).colour != 'Z')
             {
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + shape + "@");
+                saveString.append(colour + shape + "@" + std::to_string(alphabet + x) + std::to_string(y));
                 firstLoop = false;
             }
         }

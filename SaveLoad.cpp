@@ -112,6 +112,7 @@ bool SaveLoad::load(std::string fileName)
             }
             else if (lineNum == 2)
             {
+                // Creating player1 hand.
                 int i = 0;
                 while (i < line.length())
                 {
@@ -134,6 +135,7 @@ bool SaveLoad::load(std::string fileName)
             }
             else if (lineNum == 5)
             {
+                // Creatig player2 hand.
                 int i = 0;
                 while (i < line.length())
                 {
@@ -151,26 +153,39 @@ bool SaveLoad::load(std::string fileName)
             }
             else if (lineNum == 7)
             {
+                // Adding tiles to the board. --------------- NEED HELP
                 int i = 0;
                 while (i < line.length())
                 {
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    loadedPlayer2.getHand().add_back(new Tile(color, shape));
 
                     i += 7;
                 }
             }
             else if (lineNum == 8)
             {
-                // Create the tileBag LinkedList.
+                // Creating tile bag.
+                int i = 0;
+                while (i < line.length())
+                {
+                    char color = line.at(i);
+                    std::string strShape(1, line.at(i + 1));
+                    int shape = stoi(strShape);
+                    loadedTileBag.add_back(new Tile(color, shape));
+
+                    i += 3;
+                }
             }
             else if (lineNum == 9)
             {
                 currentPlayer = line;
             }
+
+            // TODO: TESTING.
             std::cout << line;
+
             lineNum++;
         }
 
@@ -200,6 +215,8 @@ std::string SaveLoad::createTileString(LinkedList list)
         }
     }
     tiles += "\n";
+
+    return "";
 }
 
 Player SaveLoad::getPlayer1()
