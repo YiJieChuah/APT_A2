@@ -4,12 +4,12 @@
 #include "Tile.h"
 #include <vector>
 
-
 #define BOARD_DIMENSIONS 26
 #define QWIRKLE_LEN 6
 #define NUM_DIMENSIONS 2
 
-enum Direction {
+enum Direction
+{
     NORTH,
     EAST,
     SOUTH,
@@ -20,7 +20,7 @@ class Board
 {
 private:
     //2D Vector
-    std::vector<std::vector<Tile>> board;
+    std::vector<std::vector<Tile> > board;
     Tile potentialCombos[4][6];
 
     /**
