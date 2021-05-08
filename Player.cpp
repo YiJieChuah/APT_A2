@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "Player.h"
 
 #define HAND_SIZE 6
@@ -10,11 +12,12 @@ Player::~Player()
 Player::Player()
 {
 }
+
 Player::Player(std::string name)
 {
     this->name = name;
-    // LinkedList *hand = new LinkedList();
-    // score = 0;
+    std::unique_ptr<LinkedList> hand();
+    score = 0;
 }
 
 void Player::draw(LinkedList bag)

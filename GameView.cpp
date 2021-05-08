@@ -1,18 +1,18 @@
 #include <iostream>
 #include <string>
 
-#include "MenuScene.h"
+#include "GameView.h"
 
 /**
  * Present the user with the iterface. Also process user input here?
  */
-View::View() {}
-View::~View() {}
+GameView::GameView() {}
+GameView::~GameView() {}
 
 /**
  * @return the users choice.
  */
-void View::init()
+void GameView::init()
 {
 
     // Presenting the menu.
@@ -23,11 +23,11 @@ void View::init()
     std::cout << "3. Credits (Show student information)" << std::endl;
     std::cout << "4. Quit" << std::endl;
 
-
+    processInput();
 }
 
-void View::processInput() {
-    std::string selection;
+void GameView::processInput() {
+    int selection;
     std::string player1;
     std::string player2;
     std::string fileDirectory;
@@ -35,16 +35,9 @@ void View::processInput() {
     std::cout << "\n> ";
     std::cin >> selection;
 
-
-
     if (selection == 1)
     {
-        player1 = selectPlayer1();
-        player2 = selectPlayer2();
-
-        // FOR TESTING ONLY!
-        std::cout << player1 << std::endl;
-        std::cout << player2 << std::endl;
+        startNewGame();
     }
     else if (selection == 2)
     {
@@ -65,58 +58,69 @@ void View::processInput() {
     }
 }
 
-bool View::validateMenuInput(int input) {
+int GameView::getValidInput(int input) {
     bool inputValid = false;
-    try
+    int selection;
+    do
     {
-        if (input > 4)
-        {
-            throw "Invalid Input";
-        }
-        inputValid = true;
-    }
-    catch (...)
-    {
-        std::cout << message;
-    }
+        std::cout << "\n> ";
+        std::cin >> selection;
 
+        try
+        {
+            if (!std::cin.good()) {
+                //Resets cin flags for next input attempt
+                std::cin.clear();
+                std::cin.ignore();
+                throw std::domain_error("Invalid Input");
+            }
+            if (selection <= 0 || selection > 4)
+            {
+                throw std::out_of_range("Invalid Input");
+            }
+            inputValid = true;
+        }
+        catch (std::out_of_range& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+        catch (std::domain_error& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    } while (!inputValid || !std::cin.good());
+
+    return input;
 };
 
-/**
- * @return a player one's username.
- */
-std::string View::selectPlayer1()
-{
-    std::string player1;
+void GameView::startNewGame() {
     std::cout << "Starting a New Game" << std::endl;
-    std::cout << "\nEnter a name for player 1 (uppercase characters only)" << std::endl;
-    std::cout << "> ";
-    std::cin >> player1;
 
-    // ADD FUNCTIONALITY: EITHER check for upper case or just make the usernames uppercase ourselves.
-    return player1;
+    //Setup players
+    newPlayer();
 }
 
 /**
  * @return a player two's username.
  */
-std::string View::selectPlayer2()
+std::string GameView::newPlayer()
 {
-    std::string player2;
-    std::cout << "\nEnter a name for player 2 (uppercase characters only)" << std::endl;
+    std::string player;
+    std::cout << "\nEnter a name for player 2 (uppercase characters only)"
+        << std::endl;
     std::cout << "> ";
-    std::cin >> player2;
+    std::cin >> player;
 
     std::cout << "\nLet's Play!\n"
         << std::endl;
-    return player2;
+    return player;
 }
 
 /**
  * Difficult to check if file exists with current config. Maybe return
  * actual file instead?
  */
-std::string View::createFileDir()
+std::string GameView::createFileDir()
 {
     std::cout << "Enter a filename from which load a game" << std::endl;
     std::cout << "> ";
@@ -127,7 +131,7 @@ std::string View::createFileDir()
     return fileDirectory;
 }
 
-void View::printCredits()
+void GameView::printCredits()
 {
 
     std::string names[4] = { "Seth Danford", "Simon Dean", "Jeremy West", "Yi Jie Chuah" };

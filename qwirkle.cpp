@@ -1,10 +1,6 @@
 
-// #include "LinkedList.h"
-
-#include "Board.h"
-#include "LinkedList.h"
-#include "Player.h"
-#include "SaveLoad.h"
+#include "GameModel.h"
+#include "GameView.h"
 
 #include <iostream>
 #include <memory>
@@ -13,7 +9,10 @@
 
 int main(void)
 {
+   std::unique_ptr<GameModel> gameModel;
+   std::unique_ptr<GameView> gameView;
 
+   gameView->init();
 
    return EXIT_SUCCESS;
 }
