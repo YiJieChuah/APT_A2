@@ -80,6 +80,9 @@ public:
 
     // gets the dimensions of the board.
     int getBoardDimentions();
+
+    // This method is specifically used for adding tiles from a load file.
+    bool addTileForLoad(Tile tile, int positionX, int postionY);
 };
 
 #endif // BOARD_H

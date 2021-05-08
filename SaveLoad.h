@@ -6,10 +6,11 @@
 class SaveLoad
 {
 private:
+    Board board;
+
     Player loadedPlayer1;
     Player loadedPlayer2;
 
-    std::vector<std::vector<Tile> > loadedBoard;
     LinkedList loadedTileBag;
     std::string currentPlayer;
 
@@ -23,7 +24,7 @@ public:
     Player getPlayer1();
     Player getPlayer2();
 
-    std::vector<std::vector<Tile> > getLoadedBoard();
+    Board getLoadedBoard();
     LinkedList getLoadedTileBag();
     std::string getCurrentPlayer();
 };

@@ -28,7 +28,6 @@ void Board::addTile(Tile tile, int posX, int posY)
         {
             board[posY][posX] = tile;
             std::cout << "Score : " << calculateScore(posX, posY) << std::endl;
-            ;
         }
         else
         {
@@ -274,17 +273,20 @@ std::string Board::getSaveFormat()
             {
                 saveString.append(", ");
                 std::string colour(1, board.at(x).at(y).colour);
+                std::string xPosition(1, alphabet);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + shape + "@" + std::to_string(alphabet + x) + std::to_string(y));
+                saveString.append(colour + shape + "@" + xPosition + std::to_string(y));
             }
             else if (board.at(x).at(y).colour != 'Z')
             {
                 std::string colour(1, board.at(x).at(y).colour);
+                std::string xPosition(1, alphabet);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + shape + "@" + std::to_string(alphabet + x) + std::to_string(y));
+                saveString.append(colour + shape + "@" + xPosition + std::to_string(y));
                 firstLoop = false;
             }
         }
+        alphabet++;
     }
     return saveString;
 }
@@ -292,4 +294,10 @@ std::string Board::getSaveFormat()
 int Board::getBoardDimentions()
 {
     return BOARD_DIMENSIONS;
+}
+
+bool Board::addTileForLoad(Tile tile, int positionX, int postionY)
+{
+    board[postionY][positionX] = tile;
+    return false;
 }

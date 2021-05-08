@@ -153,15 +153,34 @@ bool SaveLoad::load(std::string fileName)
             }
             else if (lineNum == 7)
             {
-                // Adding tiles to the board. --------------- NEED HELP
                 int i = 0;
                 while (i < line.length())
                 {
+
+                    // I got frustrated trying to solve a probelm and so this is my temp solution.
+                    char letters[BOARD_DIMENSIONS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    // Need special method for adding tiles for load file?
 
+                    // Getting the x position.
+                    char charPositionX = tolower(line.at(i + 3));
+                    int positionX;
+                    for (int i = 0; i < BOARD_DIMENSIONS; i++)
+                    {
+                        if (charPositionX == letters[1])
+                        {
+                            positionX = i;
+                            i = BOARD_DIMENSIONS;
+                        }
+                    }
+
+                    std::string strPositionY(1, line.at(i + 4));
+                    int positionY = stoi(strPositionY);
+
+                    Tile *tile = new Tile(color, shape);
+
+                    board.addTileForLoad(*tile, positionX, positionY);
                     i += 7;
                 }
             }
@@ -229,9 +248,9 @@ Player SaveLoad::getPlayer2()
     return this->loadedPlayer2;
 }
 
-std::vector<std::vector<Tile> > SaveLoad::getLoadedBoard()
+Board SaveLoad::getLoadedBoard()
 {
-    return this->loadedBoard;
+    return this->board;
 }
 LinkedList SaveLoad::getLoadedTileBag()
 {
