@@ -70,9 +70,6 @@ void GameView::processSelection(int input) {
     std::string player2;
     std::string fileDirectory;
 
-    std::cout << "\n> ";
-    std::cin >> input;
-
     if (input == 1)
     {
         startNewGame();
@@ -102,6 +99,9 @@ void GameView::startNewGame() {
     //Setup 2 players
     newPlayer();
     newPlayer();
+
+    std::cout << "\nLet's Play!\n"
+        << std::endl;
 }
 
 /**
@@ -119,9 +119,6 @@ void GameView::newPlayer()
     //TODO: validate player name
     std::cin >> playerName;
     gameModelPtr->addPlayerToGame(playerName);
-
-    std::cout << "\nLet's Play!\n"
-        << std::endl;
 }
 
 /**
