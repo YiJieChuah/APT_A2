@@ -160,6 +160,7 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
+                    // Need special method for adding tiles for load file?
 
                     i += 7;
                 }
