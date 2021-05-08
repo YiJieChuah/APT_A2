@@ -20,14 +20,16 @@ Board::~Board() {}
  * There cannot be duplicate tiles in a line.
  * Minimum number of point a player can score is 2.
  */
-void Board::addTile(Tile tile, int posX, int posY)
+bool Board::addTile(Tile tile, int posX, int posY)
 {
+    bool validAdd = false;
     try
     {
         if (tileIsValid(tile, posX, posY))
         {
             board[posY][posX] = tile;
             std::cout << "Score : " << calculateScore(posX, posY) << std::endl;
+            validAdd = true;
         }
         else
         {
@@ -38,6 +40,7 @@ void Board::addTile(Tile tile, int posX, int posY)
     {
         std::cerr << message << std::endl;
     }
+    return validAdd;
 }
 
 Tile Board::getTile(int row, int col)

@@ -9,10 +9,10 @@
 
 int main(void)
 {
-   std::unique_ptr<GameModel> gameModel;
-   std::unique_ptr<GameView> gameView;
+   std::shared_ptr<GameModel> gameModelPtr(new GameModel());
+   std::unique_ptr<GameView> gameViewPtr(new GameView(gameModelPtr));
 
-   gameView->init();
+   gameViewPtr->init();
 
    return EXIT_SUCCESS;
 }

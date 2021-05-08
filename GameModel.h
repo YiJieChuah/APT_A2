@@ -13,6 +13,7 @@ public:
     GameModel();
 
     void addPlayerToGame(std::string name);
+    unsigned int getNumPlayers();
 
 private:
     std::vector<Player> players;

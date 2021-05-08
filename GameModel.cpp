@@ -9,3 +9,7 @@ GameModel::GameModel() {}
 void GameModel::addPlayerToGame(std::string name) {
     players.push_back(Player(name));
 }
+
+unsigned int GameModel::getNumPlayers() {
+    return players.size()
+};

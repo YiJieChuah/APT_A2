@@ -3,21 +3,26 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
+
+#include "GameModel.h"
 
 class GameView
 {
-
+private:
+    std::shared_ptr<GameModel> gameModelPtr;
 public:
-    GameView();
+    GameView(std::shared_ptr<GameModel> gameModelPtr);
     ~GameView();
     void init();
-    int getValidInput(int input);
-    void processInput();
+    int getValidSelection();
+    void processSelection(int input);
     void startNewGame();
 
-    std::string newPlayer();
+    void newPlayer();
     std::string createFileDir();
     void printCredits();
+
 };
 
 #endif // ASSIGN2_GAMEVIEW_H

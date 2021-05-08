@@ -6,7 +6,9 @@
 /**
  * Present the user with the iterface. Also process user input here?
  */
-GameView::GameView() {}
+GameView::GameView(std::shared_ptr<GameModel> gameModelPtr) {
+    this->gameModelPtr = gameModelPtr;
+}
 GameView::~GameView() {}
 
 /**
@@ -23,42 +25,11 @@ void GameView::init()
     std::cout << "3. Credits (Show student information)" << std::endl;
     std::cout << "4. Quit" << std::endl;
 
-    processInput();
+    int selection = getValidSelection();
+    processSelection(selection);
 }
 
-void GameView::processInput() {
-    int selection;
-    std::string player1;
-    std::string player2;
-    std::string fileDirectory;
-
-    std::cout << "\n> ";
-    std::cin >> selection;
-
-    if (selection == 1)
-    {
-        startNewGame();
-    }
-    else if (selection == 2)
-    {
-        fileDirectory = createFileDir();
-
-        // FOR TESTING ONLY!
-        std::cout << fileDirectory << std::endl;
-    }
-    else if (selection == 3)
-    {
-        printCredits();
-        init();
-    }
-    else if (selection == 4)
-    {
-        // MAJOR FUNCTIONALITY MISSING! NEED TO CLEAR MEMORY HERE!!!!
-        std::cout << "\nGoodbye" << std::endl;
-    }
-}
-
-int GameView::getValidInput(int input) {
+int GameView::getValidSelection() {
     bool inputValid = false;
     int selection;
     do
@@ -90,8 +61,40 @@ int GameView::getValidInput(int input) {
         }
     } while (!inputValid || !std::cin.good());
 
-    return input;
+    return selection;
 };
+
+void GameView::processSelection(int input) {
+
+    std::string player1;
+    std::string player2;
+    std::string fileDirectory;
+
+    std::cout << "\n> ";
+    std::cin >> input;
+
+    if (input == 1)
+    {
+        startNewGame();
+    }
+    else if (input == 2)
+    {
+        fileDirectory = createFileDir();
+        // FOR TESTING ONLY!
+        std::cout << fileDirectory << std::endl;
+    }
+    else if (input == 3)
+    {
+        printCredits();
+        //restart
+        init();
+    }
+    else if (input == 4)
+    {
+        // MAJOR FUNCTIONALITY MISSING! NEED TO CLEAR MEMORY HERE!!!!
+        std::cout << "\nGoodbye" << std::endl;
+    }
+}
 
 void GameView::startNewGame() {
     std::cout << "Starting a New Game" << std::endl;
@@ -101,19 +104,23 @@ void GameView::startNewGame() {
 }
 
 /**
- * @return a player two's username.
+ * @return a player's username.
  */
-std::string GameView::newPlayer()
+void GameView::newPlayer()
 {
-    std::string player;
-    std::cout << "\nEnter a name for player 2 (uppercase characters only)"
+    std::string playerName;
+    std::cout << "\nEnter a name for player"
+        << gameModelPtr->getNumPlayers() + 1
+        << "(uppercase characters only)"
         << std::endl;
     std::cout << "> ";
-    std::cin >> player;
+
+    //TODO: validate player name
+    std::cin >> playerName;
+    gameModelPtr->addPlayerToGame(playerName);
 
     std::cout << "\nLet's Play!\n"
         << std::endl;
-    return player;
 }
 
 /**

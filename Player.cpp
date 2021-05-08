@@ -1,37 +1,48 @@
 #include <memory>
 
 #include "Player.h"
+#include "Board.h"
 
 #define HAND_SIZE 6
 
-Player::~Player()
-{
-    //TODO
-}
 
-Player::Player()
-{
-}
+
+Player::Player() {}
 
 Player::Player(std::string name)
 {
     this->name = name;
-    std::unique_ptr<LinkedList> hand();
     score = 0;
 }
+
+Player::~Player() {}
+
 
 void Player::draw(LinkedList bag)
 {
     for (int i = 0; i < HAND_SIZE; i++)
     {
-        if (hand.size() < HAND_SIZE)
+        if (hand->size() < HAND_SIZE)
         {
             // Adding first element of bag to the back of players hand
-            this->hand.add_back(bag.get(0));
+            hand->add_back(bag.get(0));
             // Removing the first element from bag
             bag.remove_front();
         }
     }
+}
+
+void Player::play(Tile tile, Board board, int posX, int posY)
+{
+    for (int i = 0; i < hand->size(); i++)
+    {
+        if (hand->get(i)->equals(tile)) {
+            if (board.addTile(tile, posX, posY)) {
+                hand->remove(i);
+            }
+        }
+    }
+
 }
 
 std::string Player::getName()
@@ -42,16 +53,6 @@ std::string Player::getName()
 void Player::setName(std::string name)
 {
     this->name = name;
-}
-
-LinkedList Player::getHand()
-{
-    return this->hand;
-}
-
-void Player::setHand(LinkedList hand)
-{
-    this->hand = hand;
 }
 
 int Player::getScore()
