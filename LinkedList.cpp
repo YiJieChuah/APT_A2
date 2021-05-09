@@ -131,6 +131,18 @@ void LinkedList::clear() {
    }
 }
 
+void LinkedList::shuffle() {
+   //TODO: temp set static seed.
+   srand(100);
+   for (int i = 0; i < currSize; i++)
+   {
+      int randNum = std::rand() % currSize;
+      this->add_back(new Tile(*this->get(randNum)));
+      this->remove(randNum);
+   }
+}
+
+
 std::string LinkedList::toString() {
    std::string retStr = "";
    if (head != nullptr) {
