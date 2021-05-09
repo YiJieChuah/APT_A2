@@ -15,8 +15,9 @@ GameModel::~GameModel() {
 }
 
 void GameModel::addPlayerToGame(std::string name) {
-    players.push_back(Player(name));
-    players.back().draw(tileBag);
+    Player* playerToAdd = new Player(name);
+    playerToAdd->draw(tileBag);
+    players.push_back(*playerToAdd);
 }
 
 Player GameModel::getPlayer(int playerNum) {
@@ -24,7 +25,7 @@ Player GameModel::getPlayer(int playerNum) {
 };
 
 std::vector<Player> GameModel::getPlayers() {
-    return players;
+    return this->players;
 };
 
 Board GameModel::getBoard() {

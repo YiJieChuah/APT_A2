@@ -13,7 +13,7 @@ Player::Player(std::string name)
 {
     this->name = name;
     this->score = 0;
-    hand = new LinkedList();
+    this->hand = new LinkedList();
 }
 
 Player::Player(const Player& other) {
@@ -32,7 +32,7 @@ void Player::draw(TileBag* bag)
     {
         if (hand->size() < HAND_SIZE)
         {
-            hand->add_back(bag->pop());
+            this->hand->add_back(bag->pop());
         }
     }
 }
@@ -70,9 +70,8 @@ std::string Player::handToString() {
     std::string handStr = "";
     for (int i = 0; i < hand->size(); i++)
     {
-        handStr += hand->get(i)->colour;
-        handStr += hand->get(i)->shape;
-        if (i != hand->size())
+        handStr += hand->get(i)->toString();
+        if (i != hand->size() - 1)
         {
             handStr += ",";
         }

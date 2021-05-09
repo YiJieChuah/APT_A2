@@ -10,7 +10,6 @@ LinkedList::LinkedList() {
 
 LinkedList::LinkedList(LinkedList& other) {
    head = nullptr;
-   this->currSize = other.size();
    for (int i = 0; i < other.size(); ++i) {
       Tile* tile = new Tile(*other.get(i));
       add_back(tile);
