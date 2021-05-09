@@ -104,8 +104,11 @@ void GameView::startNewGame() {
 
     //TODO: temp for testing
     std::vector<Player*> players = gameModelPtr->getPlayers();
-    for (Player* player : players) {
-        playerTurn(player);
+    while (gameModelPtr->getTileBag()->numTilesLeft() > 0)
+    {
+        for (Player* player : players) {
+            playerTurn(player);
+        }
     }
 
 }
@@ -162,12 +165,13 @@ std::string GameView::processGameInput(Player* player) {
                     std::string tileStr = tokens[1];
                     Colour inputColour = convertCharToColour(tileStr[0]);
 
-                    Shape inputShape = convertIntToShape(std::stoi(tileStr.substr(1, 1)));
+                    std::string shapeStr = tileStr.substr(1, tileStr.size());
+                    Shape inputShape = convertIntToShape(std::stoi(shapeStr));
                     Tile tile(inputColour, inputShape);
 
                     std::string coords = tokens[3];
 
-                    int posX = std::stoi(coords.substr(1, 1));
+                    int posX = std::stoi(coords.substr(1, coords.size()));
                     int posY = coords[0] - 'A';
 
                     player->play(tile, gameModelPtr->getTileBag(), gameModelPtr->getBoard(),
@@ -184,7 +188,7 @@ std::string GameView::processGameInput(Player* player) {
         }
         catch (const char* msg)
         {
-            std::cout << msg << std::endl;
+            std::cerr << msg << std::endl;
         }
 
     } while (!inputValid);

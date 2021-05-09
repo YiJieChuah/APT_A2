@@ -27,3 +27,7 @@ Tile* TileBag::pop() {
     tiles->remove_front();
     return tile;
 }
+
+int TileBag::numTilesLeft() {
+    return tiles->size();
+}

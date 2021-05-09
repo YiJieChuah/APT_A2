@@ -23,21 +23,15 @@ Board::~Board() {}
 bool Board::addTile(Tile tile, int posX, int posY)
 {
     bool validAdd = false;
-    try
+
+    if (tileIsValid(tile, posX, posY))
     {
-        if (tileIsValid(tile, posX, posY))
-        {
-            board[posY][posX] = tile;
-            validAdd = true;
-        }
-        else
-        {
-            throw "Invalid tile placement. Try another.";
-        }
+        board[posY][posX] = tile;
+        validAdd = true;
     }
-    catch (const char* message)
+    else
     {
-        std::cerr << message << std::endl;
+        throw "Invalid tile placement. Try another.";
     }
     return validAdd;
 }
@@ -154,17 +148,30 @@ std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
     }
     else
     {
+        bool reachRight = false;
+        bool reachLeft = false;
         int currPosX = posX;
-        while (!getTileNeighbour(currPosX, posY, WEST).isEmpty())
+        while (!getTileNeighbour(currPosX, posY, WEST).isEmpty() && !reachLeft)
         {
-            --currPosX;
-            currTile = board[posY][currPosX];
+            if (currPosX > 0) {
+                --currPosX;
+                currTile = board[posY][currPosX];
+            }
+            else {
+                reachLeft = true;
+            }
         }
-        while (!currTile.isEmpty())
+        while (!currTile.isEmpty() && !reachRight)
         {
-            line.push_back(currTile);
-            ++currPosX;
-            currTile = board[posY][currPosX];
+            if (currPosX < BOARD_DIMENSIONS - 1) {
+                line.push_back(currTile);
+                ++currPosX;
+                currTile = board[posY][currPosX];
+            }
+            else {
+                line.push_back(currTile);
+                reachRight = true;
+            }
         }
     }
     return line;
@@ -216,8 +223,18 @@ int Board::calculateScore(int posX, int posY)
     std::vector<Tile> vertLine = getLine(posX, posY, true);
     std::vector<Tile> horiLine = getLine(posX, posY, false);
 
-    totalScore += vertLine.size();
-    totalScore += horiLine.size();
+    if (vertLine.size() > 1) {
+        totalScore += vertLine.size();
+    }
+
+    if (horiLine.size() > 1) {
+        totalScore += horiLine.size();
+    }
+
+    //Special case: isolated (first piece)
+    if (vertLine.size() == 1 && horiLine.size() == 1) {
+        ++totalScore;
+    }
 
     return totalScore;
 };

@@ -13,6 +13,7 @@ public:
     ~TileBag();
 
     Tile* pop();
+    int numTilesLeft();
 };
 
 

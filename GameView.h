@@ -32,10 +32,6 @@ private:
      */
     Shape convertIntToShape(int shape);
 
-public:
-    GameView(GameModel* gameModelPtr);
-    ~GameView();
-    void init();
     int getValidMenuSelection();
     void processMenuSelection(int input);
     void startNewGame();
@@ -45,6 +41,11 @@ public:
     void newPlayer();
     std::string createFileDir();
     void printCredits();
+public:
+    GameView(GameModel* gameModelPtr);
+    ~GameView();
+    void init();
+
 
 };
 
