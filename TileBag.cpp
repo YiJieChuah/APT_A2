@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include "TileBag.h"
@@ -6,9 +7,13 @@ TileBag::TileBag() {
     Colour allColours[6]{ RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE };
     Shape allShapes[6]{ CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER };
 
-    for (Colour colour : allColours) {
-        for (Shape shape : allShapes) {
-            tiles->add_back(new Tile(colour, shape));
+    // Loops twice to generate 2 of each tile
+    for (int i = 0; i < 2; i++)
+    {
+        for (Colour colour : allColours) {
+            for (Shape shape : allShapes) {
+                tiles->add_back(new Tile(colour, shape));
+            }
         }
     }
     tiles->shuffle();
@@ -25,6 +30,9 @@ Tile* TileBag::pop() {
     Tile* tile = new Tile(*tiles->get(0));
     // Removing the first element from bag
     tiles->remove_front();
+
+    // TODO: Delete line after tests are done
+    // std::cout << numTilesLeft() << " tiles left in bag." << std::endl;
     return tile;
 }
 

@@ -131,8 +131,8 @@ void LinkedList::clear() {
 }
 
 void LinkedList::shuffle() {
-   //TODO: temp set static seed.
-   srand(100);
+   //Static seed set for testing
+   srand(RAND_SEED);
    for (int i = 0; i < currSize; i++)
    {
       int randNum = std::rand() % currSize;
