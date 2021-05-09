@@ -16,12 +16,13 @@ public:
 
     void addPlayerToGame(std::string name);
     unsigned int getNumPlayers();
-    Player getPlayer(int playerNum);
-    std::vector<Player> getPlayers();
-    Board getBoard();
+    Player* getPlayer(int playerID);
+    std::vector<Player*> getPlayers();
+    Board* getBoard();
+    TileBag* getTileBag();
 
 private:
-    std::vector<Player> players;
+    std::vector<Player*> players;
 
     TileBag* tileBag;
     Board* board;

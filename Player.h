@@ -8,12 +8,13 @@ class Player
 {
 public:
     Player();
-    Player(std::string name);
+    Player(int id, std::string name);
     Player(const Player& other);
     ~Player();
     void draw(TileBag* bag);
     void play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY);
 
+    int getPlayerID();
     std::string getName();
     LinkedList getHand();
     std::string handToString();
@@ -24,6 +25,7 @@ public:
     void setScore(int score);
 
 private:
+    int id;
     std::string name;
     LinkedList* hand;
     int score;

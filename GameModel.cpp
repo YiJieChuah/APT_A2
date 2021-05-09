@@ -12,25 +12,33 @@ GameModel::GameModel() {
 GameModel::~GameModel() {
     delete tileBag;
     delete board;
+    for (Player* player : players) {
+        delete player;
+    }
+    players.clear();
 }
 
 void GameModel::addPlayerToGame(std::string name) {
-    Player* playerToAdd = new Player(name);
+    Player* playerToAdd = new Player(players.size(), name);
     playerToAdd->draw(tileBag);
-    players.push_back(*playerToAdd);
+    players.push_back(playerToAdd);
 }
 
-Player GameModel::getPlayer(int playerNum) {
-    return players[playerNum];
+Player* GameModel::getPlayer(int playerID) {
+    return players[playerID];
 };
 
-std::vector<Player> GameModel::getPlayers() {
-    return this->players;
+std::vector<Player*> GameModel::getPlayers() {
+    return players;
 };
 
-Board GameModel::getBoard() {
-    return *board;
+Board* GameModel::getBoard() {
+    return board;
 };
+
+TileBag* GameModel::getTileBag() {
+    return  tileBag;
+}
 
 unsigned int GameModel::getNumPlayers() {
     return players.size();

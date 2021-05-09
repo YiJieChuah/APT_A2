@@ -1,7 +1,9 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include "GameView.h"
+#include "Tile.h"
 
 /**
  * Present the user with the iterface. Also process user input here?
@@ -25,11 +27,11 @@ void GameView::init()
     std::cout << "3. Credits (Show student information)" << std::endl;
     std::cout << "4. Quit" << std::endl;
 
-    int selection = getValidSelection();
-    processSelection(selection);
+    int selection = getValidMenuSelection();
+    processMenuSelection(selection);
 }
 
-int GameView::getValidSelection() {
+int GameView::getValidMenuSelection() {
     bool inputValid = false;
     int selection;
     do
@@ -64,7 +66,7 @@ int GameView::getValidSelection() {
     return selection;
 };
 
-void GameView::processSelection(int input) {
+void GameView::processMenuSelection(int input) {
     std::string fileDirectory;
 
     if (input == 1)
@@ -101,8 +103,8 @@ void GameView::startNewGame() {
         << std::endl;
 
     //TODO: temp for testing
-    std::vector<Player> players = gameModelPtr->getPlayers();
-    for (Player player : players) {
+    std::vector<Player*> players = gameModelPtr->getPlayers();
+    for (Player* player : players) {
         playerTurn(player);
     }
 
@@ -118,28 +120,203 @@ void GameView::newPlayer()
         << gameModelPtr->getNumPlayers() + 1
         << "(uppercase characters only)"
         << std::endl;
-    std::cout << "> ";
 
     //TODO: validate player name
     std::cin >> playerName;
     gameModelPtr->addPlayerToGame(playerName);
 }
 
-void GameView::playerTurn(Player player)
+void GameView::playerTurn(Player* player)
 {
-    std::cout << player.getName() << ", it's your turn" << std::endl;
+    std::cout << player->getName() << ", it's your turn" << std::endl;
     printScores();
-    gameModelPtr->getBoard().printBoard();
+    gameModelPtr->getBoard()->printBoard();
     std::cout << "Your hand is" << std::endl;
-    std::cout << player.handToString() << std::endl;
-    std::cout << "\n>";
+    std::cout << player->handToString() << std::endl;
+    processGameInput(player);
 }
 
+std::string GameView::processGameInput(Player* player) {
+    bool inputValid = false;
+    std::string cmd;
+    do
+    {
+        std::cout << "\n> ";
+        // std::string tmp;
+
+        std::vector<std::string> tokens;
+        std::string token;
+        std::cin.ignore();
+        std::getline(std::cin, token);
+        std::istringstream iss(token);
+
+        while (iss >> token) {
+            tokens.push_back(token);
+        }
+
+        try
+        {
+            if (tokens.size() == 4)
+            {
+                if (validatePlaceCmd(tokens)) {
+                    std::string tileStr = tokens[1];
+                    Colour inputColour = convertCharToColour(tileStr[0]);
+
+                    Shape inputShape = convertIntToShape(std::stoi(tileStr.substr(1, 1)));
+                    Tile tile(inputColour, inputShape);
+
+                    std::string coords = tokens[3];
+
+                    int posX = std::stoi(coords.substr(1, 1));
+                    int posY = coords[0] - 'A';
+
+                    player->play(tile, gameModelPtr->getTileBag(), gameModelPtr->getBoard(),
+                        posX, posY);
+                }
+                else {
+                    throw "Invalid Input";
+                }
+            }
+            else {
+                throw "Invalid Input";
+            }
+            inputValid = true;
+        }
+        catch (const char* msg)
+        {
+            std::cout << msg << std::endl;
+        }
+
+    } while (!inputValid);
+
+    return cmd;
+}
+
+bool GameView::validatePlaceCmd(std::vector <std::string> tokens) {
+    bool isValid = true;
+    if (tokens[0] != "place" && tokens[2] != "at") {
+        isValid = false;
+    }
+    if (!validateTile(tokens[1]))
+    {
+        isValid = false;
+    }
+    if (!validateCoord(tokens[3]))
+    {
+        isValid = false;
+    }
+    return isValid;
+};
+
+bool GameView::validateReplaceCmd(std::vector <std::string> tokens) {
+    return false;
+};
+
+bool GameView::validateTile(std::string tileStr) {
+    bool isValid = false;
+    char allColours[6]{ 'R', 'O', 'Y', 'G', 'B', 'P' };
+
+    char inputColour = tileStr[0];
+    //convert to string to use stoi
+    std::string tmp = "";
+    tmp += tileStr[1];
+    int inputShape = std::stoi(tmp);
+
+    bool colourIsValid = false;
+    for (char colour : allColours)
+    {
+        if (inputColour == colour) {
+            colourIsValid = true;
+        }
+    }
+
+    bool shapeIsValid = false;
+
+    //type casting is checked for here already
+    //if a char like 'a' is passed in, it will have an out of range value
+    if (inputShape > 0 && inputShape <= 6)
+    {
+        shapeIsValid = true;
+    }
+
+    if (colourIsValid && shapeIsValid) {
+        isValid = true;
+    }
+    return isValid;
+
+};
+
+bool GameView::validateCoord(std::string coord) {
+    bool isValid = false;
+    char baseAlph = 'A';
+    int yVal = coord[0];
+    int xVal = coord[1];
+
+    for (int offset = 0; offset < NUM_ALPHABETS; offset++)
+    {
+        // Uses char addition to check if yVal is in the alphabet
+        if (yVal == baseAlph + offset) {
+            isValid = true;
+        };
+        if (xVal >= 0 || xVal < NUM_ALPHABETS) {
+            isValid = true;
+        }
+    }
+    return isValid;
+};
+
+Colour GameView::convertCharToColour(char colour) {
+    Colour returnColour = EMPTY_COLOR;
+    if (colour == 'R') {
+        returnColour = RED;
+    }
+    else if (colour == 'O') {
+        returnColour = ORANGE;
+    }
+    else if (colour == 'Y') {
+        returnColour = YELLOW;
+    }
+    else if (colour == 'G') {
+        returnColour = GREEN;
+    }
+    else if (colour == 'B') {
+        returnColour = BLUE;
+    }
+    else if (colour == 'P') {
+        returnColour = PURPLE;
+    }
+    return returnColour;
+}
+
+Shape GameView::convertIntToShape(int shape) {
+    Shape returnShape = EMPTY_SHAPE;
+    if (shape == 1) {
+        returnShape = CIRCLE;
+    }
+    else if (shape == 2) {
+        returnShape = STAR_4;
+    }
+    else if (shape == 3) {
+        returnShape = DIAMOND;
+    }
+    else if (shape == 4) {
+        returnShape = SQUARE;
+    }
+    else if (shape == 5) {
+        returnShape = STAR_6;
+    }
+    else if (shape == 6) {
+        returnShape = CLOVER;
+    }
+    return returnShape;
+}
+
+
 void GameView::printScores() {
-    std::vector<Player> players = gameModelPtr->getPlayers();
-    for (Player player : players) {
-        std::cout << "Score for " << player.getName() << ": "
-            << player.getScore() << std::endl;
+    std::vector<Player*> players = gameModelPtr->getPlayers();
+    for (Player* player : players) {
+        std::cout << "Score for " << player->getName() << ": "
+            << player->getScore() << std::endl;
     }
 }
 

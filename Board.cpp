@@ -28,7 +28,6 @@ bool Board::addTile(Tile tile, int posX, int posY)
         if (tileIsValid(tile, posX, posY))
         {
             board[posY][posX] = tile;
-            std::cout << "Score : " << calculateScore(posX, posY) << std::endl;
             validAdd = true;
         }
         else
@@ -127,17 +126,30 @@ std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
     //Gets the vector by traversing north and then adding as it goes down.
     if (checkVert)
     {
+        bool reachTop = false;
+        bool reachBottom = false;
         int currPosY = posY;
-        while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty())
+        while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty() && !reachTop)
         {
-            --currPosY;
-            currTile = board[currPosY][posX];
+            if (currPosY > 0) {
+                --currPosY;
+                currTile = board[currPosY][posX];
+            }
+            else {
+                reachTop = true;
+            }
         }
-        while (!currTile.isEmpty())
+        while (!currTile.isEmpty() && !reachBottom)
         {
-            line.push_back(currTile);
-            ++currPosY;
-            currTile = board[currPosY][posX];
+            if (currPosY < BOARD_DIMENSIONS - 1) {
+                line.push_back(currTile);
+                ++currPosY;
+                currTile = board[currPosY][posX];
+            }
+            else {
+                line.push_back(currTile);
+                reachBottom = true;
+            }
         }
     }
     else
@@ -204,14 +216,8 @@ int Board::calculateScore(int posX, int posY)
     std::vector<Tile> vertLine = getLine(posX, posY, true);
     std::vector<Tile> horiLine = getLine(posX, posY, false);
 
-    if (vertLine.size() > 1)
-    {
-        totalScore += vertLine.size();
-    }
-    if (horiLine.size() > 1)
-    {
-        totalScore += horiLine.size();
-    }
+    totalScore += vertLine.size();
+    totalScore += horiLine.size();
 
     return totalScore;
 };

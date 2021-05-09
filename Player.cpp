@@ -9,14 +9,16 @@
 
 Player::Player() {}
 
-Player::Player(std::string name)
+Player::Player(int id, std::string name)
 {
+    this->id = id;
     this->name = name;
     this->score = 0;
     this->hand = new LinkedList();
 }
 
 Player::Player(const Player& other) {
+    this->id = other.id;
     this->name = other.name;
     this->score = other.score;
     this->hand = new LinkedList(*other.hand);
@@ -51,6 +53,11 @@ void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
     }
 
 }
+
+int Player::getPlayerID()
+{
+    return this->id;
+};
 
 std::string Player::getName()
 {
