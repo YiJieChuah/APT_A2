@@ -127,7 +127,7 @@ void GameView::newPlayer()
 
 void GameView::playerTurn(Player player)
 {
-    std::cout << player.getName() << "it's your turn" << std::endl;
+    std::cout << player.getName() << ", it's your turn" << std::endl;
     printScores();
     gameModelPtr->getBoard().printBoard();
     std::cout << player.handToString() << std::endl;

@@ -5,7 +5,7 @@
 #include <memory>
 
 GameModel::GameModel() {
-    tileBag = new LinkedList();
+    tileBag = new TileBag();
     board = new Board();
 }
 
@@ -16,6 +16,7 @@ GameModel::~GameModel() {
 
 void GameModel::addPlayerToGame(std::string name) {
     players.push_back(Player(name));
+    players.back().draw(tileBag);
 }
 
 Player GameModel::getPlayer(int playerNum) {

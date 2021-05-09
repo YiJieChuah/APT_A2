@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "Board.h"
-#include "LinkedList.h"
+#include "TileBag.h"
 
 class Player
 {
@@ -11,8 +11,8 @@ public:
     Player(std::string name);
     Player(const Player& other);
     ~Player();
-    void draw(LinkedList bag);
-    void play(Tile tile, LinkedList tileBag, Board board, int posX, int posY);
+    void draw(TileBag* bag);
+    void play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY);
 
     std::string getName();
     LinkedList getHand();

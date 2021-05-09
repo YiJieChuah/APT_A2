@@ -11,7 +11,9 @@ private:
 public:
     TileBag();
     ~TileBag();
+
+    Tile* pop();
 };
 
 
-#endif ASSIGN2_TILEBAG_H
+#endif //ASSIGN2_TILEBAG_H

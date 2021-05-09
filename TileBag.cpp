@@ -2,22 +2,28 @@
 
 #include "TileBag.h"
 
-//TODO: Do we need this class?
 TileBag::TileBag() {
     Colour allColours[6]{ RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE };
     Shape allShapes[6]{ CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER };
 
-    //temp vector to hold generated tiles
-    std::vector<Tile> tilesInOrder;
-
     for (Colour colour : allColours) {
         for (Shape shape : allShapes) {
-            tilesInOrder.push_back(Tile(colour, shape));
+            tiles->add_back(new Tile(colour, shape));
         }
     }
+    tiles->shuffle();
 
 }
 
 TileBag::~TileBag() {
     delete tiles;
+}
+
+Tile* TileBag::pop() {
+    // Adding first element of bag to the back of players hand
+    // Copied tile will belong to the player
+    Tile* tile = new Tile(*tiles->get(0));
+    // Removing the first element from bag
+    tiles->remove_front();
+    return tile;
 }

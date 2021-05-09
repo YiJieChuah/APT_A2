@@ -26,28 +26,25 @@ Player::~Player() {
     delete hand;
 }
 
-void Player::draw(LinkedList bag)
+void Player::draw(TileBag* bag)
 {
     for (int i = 0; i < HAND_SIZE; i++)
     {
         if (hand->size() < HAND_SIZE)
         {
-            // Adding first element of bag to the back of players hand
-            hand->add_back(bag.get(0));
-            // Removing the first element from bag
-            bag.remove_front();
+            hand->add_back(bag->pop());
         }
     }
 }
 
-void Player::play(Tile tile, LinkedList tileBag, Board board, int posX, int posY)
+void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
 {
     for (int i = 0; i < hand->size(); i++)
     {
         if (hand->get(i)->equals(tile)) {
-            if (board.addTile(tile, posX, posY)) {
+            if (board->addTile(tile, posX, posY)) {
                 hand->remove(i);
-                score += board.calculateScore(posX, posY);
+                score += board->calculateScore(posX, posY);
                 draw(tileBag);
             }
         }

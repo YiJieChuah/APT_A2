@@ -6,6 +6,7 @@
 
 #include "Player.h"
 #include "Board.h"
+#include "TileBag.h"
 
 class GameModel
 {
@@ -22,8 +23,7 @@ public:
 private:
     std::vector<Player> players;
 
-    //TODO: Need wrapper class?
-    LinkedList* tileBag;
+    TileBag* tileBag;
     Board* board;
 };
 
