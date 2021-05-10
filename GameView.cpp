@@ -127,9 +127,30 @@ void GameView::newPlayer()
         << "(uppercase characters only)"
         << std::endl;
 
-    //TODO: validate player name
-    std::cin >> playerName;
+    bool nameIsValid = false;
+    do {
+        std::cout << "\n> ";
+        std::cin >> playerName;
+        nameIsValid = validatePlayerName(playerName);
+        if (!nameIsValid) {
+            std::cerr << "Invalid Input" << std::endl;
+        }
+    } while (!nameIsValid);
     gameModelPtr->addPlayerToGame(playerName);
+
+}
+
+bool GameView::validatePlayerName(std::string name) {
+    bool isValid = true;
+    std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (unsigned int i = 0; i < name.size(); i++)
+    {
+        if (allowedChars.find(name[i]) == std::string::npos) {
+            isValid = false;
+        }
+    }
+    return isValid;
+
 }
 
 void GameView::playerTurn(Player* player)
