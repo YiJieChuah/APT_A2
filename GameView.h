@@ -19,7 +19,7 @@ private:
     bool validateReplaceCmd(std::vector <std::string> tokens);
     bool validateCoord(std::string coord);
     bool validateTile(std::string tile);
-
+    bool validatePlayerName(std::string name);
     /**
      * Assumes that the char passed in is valid
      * @return colour typedef value matching the char
