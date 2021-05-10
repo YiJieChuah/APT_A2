@@ -41,15 +41,20 @@ void Player::draw(TileBag* bag)
 
 void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
 {
+    bool foundTile = false;
     for (int i = 0; i < hand->size(); i++)
     {
         if (hand->get(i)->equals(tile)) {
+            foundTile = true;
             if (board->addTile(tile, posX, posY)) {
                 hand->remove(i);
                 score += board->calculateScore(posX, posY);
                 draw(tileBag);
             }
         }
+    }
+    if (!foundTile) {
+        throw "Invalid Input";
     }
 
 }
