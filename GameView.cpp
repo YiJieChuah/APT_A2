@@ -10,6 +10,7 @@
  */
 GameView::GameView(GameModel* gameModelPtr) {
     this->gameModelPtr = gameModelPtr;
+    gameOver = false;
 }
 GameView::~GameView() {}
 
@@ -87,8 +88,7 @@ void GameView::processMenuSelection(int input) {
     }
     else if (input == 4)
     {
-        // MAJOR FUNCTIONALITY MISSING! NEED TO CLEAR MEMORY HERE!!!!
-        std::cout << "\nGoodbye" << std::endl;
+        quit();
     }
 }
 
@@ -107,10 +107,13 @@ void GameView::startNewGame() {
 
     // For when we take input for the first iteration later
     std::cin.ignore();
-    while (gameModelPtr->getTileBag()->numTilesLeft() > 0)
+    while ((gameModelPtr->getTileBag()->numTilesLeft() > 0) &&
+        !gameOver)
     {
+
         for (Player* player : players) {
-            playerTurn(player);
+            if (!gameOver)
+                playerTurn(player);
         }
     }
 
@@ -180,6 +183,7 @@ std::string GameView::processGameInput(Player* player) {
         while (iss >> token) {
             tokens.push_back(token);
         }
+
         try
         {
             if (validatePlaceCmd(tokens)) {
@@ -200,6 +204,10 @@ std::string GameView::processGameInput(Player* player) {
                 player->replace(tile, gameModelPtr->getTileBag());
                 inputValid = true;
             }
+            if (tokens[0] == "quit") {
+                quit();
+                inputValid = true;
+            }
             if (!inputValid) {
                 throw "Invalid Input";
             }
@@ -210,7 +218,7 @@ std::string GameView::processGameInput(Player* player) {
             std::cerr << msg << std::endl;
         }
 
-    } while (!inputValid);
+    } while (!inputValid && !gameOver);
 
     return cmd;
 }
@@ -409,4 +417,9 @@ void GameView::printCredits()
     }
     std::cout << "-----------------------------------\n"
         << std::endl;
+}
+
+void GameView::quit() {
+    std::cout << "\nGoodbye" << std::endl;
+    this->gameOver = true;
 }

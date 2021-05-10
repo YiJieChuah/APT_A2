@@ -14,6 +14,7 @@ class GameView
 {
 private:
     GameModel* gameModelPtr;
+    bool gameOver;
 
     bool validatePlaceCmd(std::vector <std::string> tokens);
     bool validateReplaceCmd(std::vector <std::string> tokens);
@@ -48,6 +49,7 @@ public:
     ~GameView();
     void init();
 
+    void quit();
 
 };
 
