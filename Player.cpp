@@ -30,12 +30,9 @@ Player::~Player() {
 
 void Player::draw(TileBag* bag)
 {
-    for (int i = 0; i < HAND_SIZE; i++)
+    while (hand->size() < HAND_SIZE)
     {
-        if (hand->size() < HAND_SIZE)
-        {
-            this->hand->add_back(bag->pop());
-        }
+        this->hand->add_back(bag->pop());
     }
 }
 
@@ -48,6 +45,18 @@ void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
             score += board->calculateScore(posX, posY);
             draw(tileBag);
         }
+    }
+    else {
+        throw "Invalid Input";
+    }
+}
+
+void Player::replace(Tile tile, TileBag* tileBag)
+{
+    int tileIdx = findTileInHand(tile);
+    if (tileIdx != -1) {
+        hand->remove(tileIdx);
+        draw(tileBag);
     }
     else {
         throw "Invalid Input";
