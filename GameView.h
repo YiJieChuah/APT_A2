@@ -32,6 +32,8 @@ private:
      */
     Shape convertIntToShape(int shape);
 
+    Tile convertStrToTile(std::string tileStr);
+
     int getValidMenuSelection();
     void processMenuSelection(int input);
     void startNewGame();

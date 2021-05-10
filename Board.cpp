@@ -31,7 +31,7 @@ bool Board::addTile(Tile tile, int posX, int posY)
     }
     else
     {
-        throw "Invalid tile placement. Try another.";
+        throw "Invalid Input";
     }
     return validAdd;
 }

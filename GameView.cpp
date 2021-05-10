@@ -104,6 +104,9 @@ void GameView::startNewGame() {
 
     //TODO: temp for testing
     std::vector<Player*> players = gameModelPtr->getPlayers();
+
+    // For when we take input for the first iteration later
+    std::cin.ignore();
     while (gameModelPtr->getTileBag()->numTilesLeft() > 0)
     {
         for (Player* player : players) {
@@ -137,54 +140,49 @@ void GameView::playerTurn(Player* player)
     std::cout << "Your hand is" << std::endl;
     std::cout << player->handToString() << std::endl;
     processGameInput(player);
+    std::cout << std::endl;
 }
 
 std::string GameView::processGameInput(Player* player) {
-    bool inputValid = false;
+
     std::string cmd;
+    bool inputValid = false;
+
     do
     {
         std::cout << "\n> ";
-        // std::string tmp;
-
         std::vector<std::string> tokens;
         std::string token;
-        std::cin.ignore();
         std::getline(std::cin, token);
         std::istringstream iss(token);
 
         while (iss >> token) {
             tokens.push_back(token);
         }
-
         try
         {
-            if (tokens.size() == 4)
-            {
-                if (validatePlaceCmd(tokens)) {
-                    std::string tileStr = tokens[1];
-                    Colour inputColour = convertCharToColour(tileStr[0]);
+            if (validatePlaceCmd(tokens)) {
+                std::string tileStr = tokens[1];
+                Tile tile = convertStrToTile(tileStr);
 
-                    std::string shapeStr = tileStr.substr(1, tileStr.size());
-                    Shape inputShape = convertIntToShape(std::stoi(shapeStr));
-                    Tile tile(inputColour, inputShape);
+                std::string coords = tokens[3];
+                int posX = std::stoi(coords.substr(1, coords.size()));
+                int posY = coords[0] - 'A';
 
-                    std::string coords = tokens[3];
-
-                    int posX = std::stoi(coords.substr(1, coords.size()));
-                    int posY = coords[0] - 'A';
-
-                    player->play(tile, gameModelPtr->getTileBag(), gameModelPtr->getBoard(),
-                        posX, posY);
-                }
-                else {
-                    throw "Invalid Input";
-                }
+                player->play(tile, gameModelPtr->getTileBag(), gameModelPtr->getBoard(),
+                    posX, posY);
+                inputValid = true;
             }
-            else {
+            if (validateReplaceCmd(tokens)) {
+                std::string tileStr = tokens[1];
+                Tile tile = convertStrToTile(tileStr);
+                player->replace(tile, gameModelPtr->getTileBag());
+                inputValid = true;
+            }
+            if (!inputValid) {
                 throw "Invalid Input";
             }
-            inputValid = true;
+
         }
         catch (const char* msg)
         {
@@ -198,22 +196,40 @@ std::string GameView::processGameInput(Player* player) {
 
 bool GameView::validatePlaceCmd(std::vector <std::string> tokens) {
     bool isValid = true;
-    if (tokens[0] != "place" && tokens[2] != "at") {
-        isValid = false;
+    if (tokens.size() == 4) {
+        if (tokens[0] != "place" && tokens[2] != "at") {
+            isValid = false;
+        }
+        if (!validateTile(tokens[1]))
+        {
+            isValid = false;
+        }
+        if (!validateCoord(tokens[3]))
+        {
+            isValid = false;
+        }
     }
-    if (!validateTile(tokens[1]))
-    {
-        isValid = false;
-    }
-    if (!validateCoord(tokens[3]))
-    {
+    else {
         isValid = false;
     }
     return isValid;
 };
 
 bool GameView::validateReplaceCmd(std::vector <std::string> tokens) {
-    return false;
+    bool isValid = true;
+    if (tokens.size() == 2) {
+        if (tokens[0] != "replace") {
+            isValid = false;
+        }
+        if (!validateTile(tokens[1])) {
+            isValid = false;
+        }
+    }
+    else {
+        isValid = false;
+    }
+
+    return isValid;
 };
 
 bool GameView::validateTile(std::string tileStr) {
@@ -249,6 +265,14 @@ bool GameView::validateTile(std::string tileStr) {
     return isValid;
 
 };
+
+Tile GameView::convertStrToTile(std::string tileStr) {
+    Colour colour = convertCharToColour(tileStr[0]);
+    std::string shapeStr = tileStr.substr(1, tileStr.size());
+    Shape shape = convertIntToShape(std::stoi(shapeStr));
+
+    return Tile(colour, shape);
+}
 
 bool GameView::validateCoord(std::string coord) {
     bool isValid = false;
