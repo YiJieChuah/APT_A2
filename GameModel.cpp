@@ -24,6 +24,7 @@ void GameModel::addPlayerToGame(std::string name) {
     players.push_back(playerToAdd);
 }
 
+//TODO: Could get rid of this
 Player* GameModel::getPlayer(int playerID) {
     return players[playerID];
 };
