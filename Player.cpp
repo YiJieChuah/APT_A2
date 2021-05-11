@@ -1,35 +1,83 @@
+#include <memory>
+
 #include "Player.h"
+#include "Board.h"
 
 #define HAND_SIZE 6
 
-Player::~Player()
-{
-    //TODO
-}
 
-Player::Player()
+
+Player::Player() {}
+
+Player::Player(int id, std::string name)
 {
-}
-Player::Player(std::string name)
-{
+    this->id = id;
     this->name = name;
-    // LinkedList *hand = new LinkedList();
-    // score = 0;
+    this->score = 0;
+    this->hand = new LinkedList();
 }
 
-void Player::draw(LinkedList bag)
+Player::Player(const Player& other) {
+    this->id = other.id;
+    this->name = other.name;
+    this->score = other.score;
+    this->hand = new LinkedList(*other.hand);
+}
+
+Player::~Player() {
+    delete hand;
+}
+
+void Player::draw(TileBag* bag)
 {
-    for (int i = 0; i < HAND_SIZE; i++)
+    while (hand->size() < HAND_SIZE)
     {
-        if (hand.size() < HAND_SIZE)
-        {
-            // Adding first element of bag to the back of players hand
-            this->hand.add_back(bag.get(0));
-            // Removing the first element from bag
-            bag.remove_front();
-        }
+        this->hand->add_back(bag->pop());
     }
 }
+
+void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
+{
+    int tileIdx = findTileInHand(tile);
+    if (tileIdx != -1) {
+        if (board->addTile(tile, posX, posY)) {
+            hand->remove(tileIdx);
+            score += board->calculateScore(posX, posY);
+            draw(tileBag);
+        }
+    }
+    else {
+        throw "Invalid Input";
+    }
+}
+
+void Player::replace(Tile tile, TileBag* tileBag)
+{
+    int tileIdx = findTileInHand(tile);
+    if (tileIdx != -1) {
+        hand->remove(tileIdx);
+        draw(tileBag);
+    }
+    else {
+        throw "Invalid Input";
+    }
+}
+
+int Player::findTileInHand(Tile tile) {
+    int idx = -1;
+    for (int i = 0; i < hand->size(); i++)
+    {
+        if (hand->get(i)->equals(tile)) {
+            idx = i;
+        }
+    }
+    return idx;
+}
+
+int Player::getPlayerID()
+{
+    return this->id;
+};
 
 std::string Player::getName()
 {
@@ -41,14 +89,21 @@ void Player::setName(std::string name)
     this->name = name;
 }
 
-LinkedList Player::getHand()
-{
-    return this->hand;
+LinkedList Player::getHand() {
+    return *this->hand;
 }
 
-void Player::setHand(LinkedList hand)
-{
-    this->hand = hand;
+std::string Player::handToString() {
+    std::string handStr = "";
+    for (int i = 0; i < hand->size(); i++)
+    {
+        handStr += hand->get(i)->toString();
+        if (i != hand->size() - 1)
+        {
+            handStr += ",";
+        }
+    }
+    return handStr;
 }
 
 int Player::getScore()

@@ -2,6 +2,8 @@
 #ifndef ASSIGN2_LINKEDLIST_H
 #define ASSIGN2_LINKEDLIST_H
 
+#define RAND_SEED 100
+
 #include "Node.h"
 
 class LinkedList
@@ -22,6 +24,8 @@ public:
 
    void remove(int index);
    std::string toString();
+
+   void shuffle();
 
    void clear();
 

@@ -7,14 +7,17 @@ Tile::Tile() {
     this->colour = 'Z';
     this->shape = 0;
 }
+
 Tile::Tile(Colour colour, Shape shape) {
     this->colour = colour;
     this->shape = shape;
 };
+
 Tile::Tile(const Tile& other) {
     this->colour = other.colour;
     this->shape = other.shape;
 };
+
 Tile::~Tile() {}
 
 std::string Tile::toString() {

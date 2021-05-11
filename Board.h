@@ -39,10 +39,9 @@ public:
     ~Board();
 
     /**
-     * Throws an "instance of char*"" error which needs to be caught if tile
-     * add is invalid
+     * @returns false if tile placement is invalid
      */
-    void addTile(Tile tile, int positionX, int positionY);
+    bool addTile(Tile tile, int positionX, int positionY);
     Tile getTile(int row, int col);
     int getTile(Tile);
 
@@ -79,7 +78,7 @@ public:
     std::string getSaveFormat();
 
     // gets the dimensions of the board.
-    int getBoardDimentions();
+    int getBoardDimensions();
 
     // This method is specifically used for adding tiles from a load file.
     bool addTileForLoad(Tile tile, int positionX, int postionY);

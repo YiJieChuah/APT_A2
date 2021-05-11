@@ -10,7 +10,6 @@ LinkedList::LinkedList() {
 
 LinkedList::LinkedList(LinkedList& other) {
    head = nullptr;
-   this->currSize = other.size();
    for (int i = 0; i < other.size(); ++i) {
       Tile* tile = new Tile(*other.get(i));
       add_back(tile);
@@ -130,6 +129,18 @@ void LinkedList::clear() {
       remove_front();
    }
 }
+
+void LinkedList::shuffle() {
+   //Static seed set for testing
+   srand(RAND_SEED);
+   for (int i = 0; i < currSize; i++)
+   {
+      int randNum = std::rand() % currSize;
+      this->add_back(new Tile(*this->get(randNum)));
+      this->remove(randNum);
+   }
+}
+
 
 std::string LinkedList::toString() {
    std::string retStr = "";

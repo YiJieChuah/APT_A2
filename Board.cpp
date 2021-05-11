@@ -20,24 +20,20 @@ Board::~Board() {}
  * There cannot be duplicate tiles in a line.
  * Minimum number of point a player can score is 2.
  */
-void Board::addTile(Tile tile, int posX, int posY)
+bool Board::addTile(Tile tile, int posX, int posY)
 {
-    try
+    bool validAdd = false;
+
+    if (tileIsValid(tile, posX, posY))
     {
-        if (tileIsValid(tile, posX, posY))
-        {
-            board[posY][posX] = tile;
-            std::cout << "Score : " << calculateScore(posX, posY) << std::endl;
-        }
-        else
-        {
-            throw "Invalid tile placement. Try another.";
-        }
+        board[posY][posX] = tile;
+        validAdd = true;
     }
-    catch (const char *message)
+    else
     {
-        std::cerr << message << std::endl;
+        throw "Invalid Input";
     }
+    return validAdd;
 }
 
 Tile Board::getTile(int row, int col)
@@ -124,32 +120,58 @@ std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
     //Gets the vector by traversing north and then adding as it goes down.
     if (checkVert)
     {
+        bool reachTop = false;
+        bool reachBottom = false;
         int currPosY = posY;
-        while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty())
+        while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty() && !reachTop)
         {
-            --currPosY;
-            currTile = board[currPosY][posX];
+            if (currPosY > 0) {
+                --currPosY;
+                currTile = board[currPosY][posX];
+            }
+            else {
+                reachTop = true;
+            }
         }
-        while (!currTile.isEmpty())
+        while (!currTile.isEmpty() && !reachBottom)
         {
-            line.push_back(currTile);
-            ++currPosY;
-            currTile = board[currPosY][posX];
+            if (currPosY < BOARD_DIMENSIONS - 1) {
+                line.push_back(currTile);
+                ++currPosY;
+                currTile = board[currPosY][posX];
+            }
+            else {
+                line.push_back(currTile);
+                reachBottom = true;
+            }
         }
     }
     else
     {
+        bool reachRight = false;
+        bool reachLeft = false;
         int currPosX = posX;
-        while (!getTileNeighbour(currPosX, posY, WEST).isEmpty())
+        while (!getTileNeighbour(currPosX, posY, WEST).isEmpty() && !reachLeft)
         {
-            --currPosX;
-            currTile = board[posY][currPosX];
+            if (currPosX > 0) {
+                --currPosX;
+                currTile = board[posY][currPosX];
+            }
+            else {
+                reachLeft = true;
+            }
         }
-        while (!currTile.isEmpty())
+        while (!currTile.isEmpty() && !reachRight)
         {
-            line.push_back(currTile);
-            ++currPosX;
-            currTile = board[posY][currPosX];
+            if (currPosX < BOARD_DIMENSIONS - 1) {
+                line.push_back(currTile);
+                ++currPosX;
+                currTile = board[posY][currPosX];
+            }
+            else {
+                line.push_back(currTile);
+                reachRight = true;
+            }
         }
     }
     return line;
@@ -201,13 +223,17 @@ int Board::calculateScore(int posX, int posY)
     std::vector<Tile> vertLine = getLine(posX, posY, true);
     std::vector<Tile> horiLine = getLine(posX, posY, false);
 
-    if (vertLine.size() > 1)
-    {
+    if (vertLine.size() > 1) {
         totalScore += vertLine.size();
     }
-    if (horiLine.size() > 1)
-    {
+
+    if (horiLine.size() > 1) {
         totalScore += horiLine.size();
+    }
+
+    //Special case: isolated (first piece)
+    if (vertLine.size() == 1 && horiLine.size() == 1) {
+        ++totalScore;
     }
 
     return totalScore;
@@ -229,7 +255,7 @@ void Board::printBoard()
         }
     }
     std::cout << std::endl
-              << "  -";
+        << "  -";
 
     // Printing the line below the comlumn numbers.
     for (int i = 0; i < BOARD_DIMENSIONS; i++)
@@ -291,7 +317,7 @@ std::string Board::getSaveFormat()
     return saveString;
 }
 
-int Board::getBoardDimentions()
+int Board::getBoardDimensions()
 {
     return BOARD_DIMENSIONS;
 }

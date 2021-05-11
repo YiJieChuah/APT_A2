@@ -1,7 +1,10 @@
 
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
+
 #include <string>
+
+#include "TileCodes.h"
 
 // Define a Colour type
 typedef char Colour;
@@ -18,6 +21,7 @@ public:
 
    Tile();
    Tile(Colour colour, Shape shape);
+   //Constructor which auto-converts the colour and int
    Tile(const Tile& other);
    ~Tile();
    std::string toString();
@@ -25,7 +29,7 @@ public:
    bool equals(Tile& other);
    bool hasMatchingAttribute(Tile& other);
 
-}
-;
+
+};
 
 #endif // ASSIGN2_TILE_H
