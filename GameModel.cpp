@@ -62,3 +62,16 @@ void GameModel::setCurrentPlayer(std::string name)
 {
     this->currentPlayer = name;
 }
+
+void GameModel::addPlayer(Player *player)
+{
+    players.push_back(player);
+}
+void GameModel::setBoard(Board *board)
+{
+    this->board = board;
+}
+void GameModel::setTileBag(LinkedList *tileBag)
+{
+    this->tileBag->setTiles(tileBag);
+}

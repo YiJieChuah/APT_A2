@@ -8,6 +8,10 @@
 
 SaveLoad::SaveLoad()
 {
+    loadedPlayer1 = new Player();
+    loadedPlayer2 = new Player();
+    loadedTileBag = new LinkedList();
+    board = new Board();
 }
 
 SaveLoad::~SaveLoad() {}
@@ -86,11 +90,11 @@ bool SaveLoad::load(std::string fileName)
         {
             if (lineNum == 0)
             {
-                loadedPlayer1.setName(line);
+                loadedPlayer1->setName(line);
             }
             else if (lineNum == 1)
             {
-                loadedPlayer1.setScore(stoi(line));
+                loadedPlayer1->setScore(stoi(line));
             }
             else if (lineNum == 2)
             {
@@ -102,17 +106,17 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    loadedPlayer1.addTileToHand(new Tile(color, shape));
+                    loadedPlayer1->addTileToHand(new Tile(color, shape));
                     i += 3;
                 }
             }
             else if (lineNum == 3)
             {
-                loadedPlayer2.setName(line);
+                loadedPlayer2->setName(line);
             }
             else if (lineNum == 4)
             {
-                loadedPlayer2.setScore(stoi(line));
+                loadedPlayer2->setScore(stoi(line));
             }
             else if (lineNum == 5)
             {
@@ -123,7 +127,7 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    loadedPlayer2.addTileToHand(new Tile(color, shape));
+                    loadedPlayer2->addTileToHand(new Tile(color, shape));
 
                     i += 3;
                 }
@@ -149,7 +153,7 @@ bool SaveLoad::load(std::string fileName)
                     int positionX = 0;
                     for (int i = 0; i < BOARD_DIMENSIONS; i++)
                     {
-                        if (charPositionX == letters[1])
+                        if (charPositionX == letters[i])
                         {
                             positionX = i;
                             i = BOARD_DIMENSIONS;
@@ -161,7 +165,7 @@ bool SaveLoad::load(std::string fileName)
 
                     Tile *tile = new Tile(color, shape);
 
-                    board.addTileForLoad(*tile, positionX, positionY);
+                    board->addTileForLoad(*tile, positionX, positionY);
                     i += 7;
                 }
             }
@@ -174,7 +178,7 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    loadedTileBag.add_back(new Tile(color, shape));
+                    loadedTileBag->add_back(new Tile(color, shape));
 
                     i += 3;
                 }
@@ -217,20 +221,20 @@ std::string SaveLoad::createTileString(LinkedList list)
     return "";
 }
 
-// Player SaveLoad::getPlayer1()
-// {
-//     return this->loadedPlayer1;
-// }
-// Player SaveLoad::getPlayer2()
-// {
-//     return this->loadedPlayer2;
-// }
+Player *SaveLoad::getPlayer1()
+{
+    return this->loadedPlayer1;
+}
+Player *SaveLoad::getPlayer2()
+{
+    return this->loadedPlayer2;
+}
 
-Board SaveLoad::getLoadedBoard()
+Board *SaveLoad::getLoadedBoard()
 {
     return this->board;
 }
-LinkedList SaveLoad::getLoadedTileBag()
+LinkedList *SaveLoad::getLoadedTileBag()
 {
     return this->loadedTileBag;
 }

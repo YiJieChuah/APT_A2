@@ -84,10 +84,12 @@ void GameView::processMenuSelection(int input)
         fileDirectory = createFileDir();
         SaveLoad *loader = new SaveLoad();
         loader->load(fileDirectory);
-        gameModelPtr->addPlayerToGame(loader->getPlayer1().getName());
-        gameModelPtr->addPlayerToGame(loader->getPlayer2().getName());
-
-        // call playerTurn() to start play.
+        gameModelPtr->addPlayer(loader->getPlayer1());
+        gameModelPtr->addPlayer(loader->getPlayer2());
+        gameModelPtr->setBoard(loader->getLoadedBoard());
+        gameModelPtr->setTileBag(loader->getLoadedTileBag());
+        gameModelPtr->setCurrentPlayer(loader->getCurrentPlayer());
+        startGame();
         delete loader;
     }
     else if (input == 3)
@@ -100,6 +102,30 @@ void GameView::processMenuSelection(int input)
     {
         // MAJOR FUNCTIONALITY MISSING! NEED TO CLEAR MEMORY HERE!!!!
         std::cout << "\nGoodbye" << std::endl;
+    }
+}
+
+void GameView::startGame()
+{
+    bool firstIteration = true;
+    std::cout << "\nQwirkle game successfully loaded" << std::endl;
+
+    //TODO: temp for testing
+    std::vector<Player *> players = gameModelPtr->getPlayers();
+
+    // For when we take input for the first iteration later
+    std::cin.ignore();
+    while (gameModelPtr->getTileBag()->numTilesLeft() > 0)
+    {
+        for (Player *player : players)
+        {
+            if (!firstIteration)
+            {
+                gameModelPtr->setCurrentPlayer(player->getName());
+                firstIteration = false;
+            }
+            playerTurn(player);
+        }
     }
 }
 

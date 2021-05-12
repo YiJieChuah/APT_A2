@@ -25,10 +25,9 @@ public:
     void setCurrentPlayer(std::string name);
 
     // Need to add.
-    void addPlayer(Player player);
-    void setBoard(Board board);
-    void setTileBag(LinkedList tileBag);
-    void stringSetCurrentPlayer(std::string);
+    void addPlayer(Player *player);
+    void setBoard(Board *board);
+    void setTileBag(LinkedList *tileBag);
 
 private:
     std::vector<Player *> players;

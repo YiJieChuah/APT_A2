@@ -38,6 +38,7 @@ private:
 
     int getValidMenuSelection();
     void processMenuSelection(int input);
+    void startGame();
     void startNewGame();
     void playerTurn(Player *player);
     std::string processGameInput(Player *player);
