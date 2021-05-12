@@ -246,10 +246,8 @@ bool GameView::validatePlaceCmd(std::vector <std::string> tokens) {
 
 bool GameView::validateReplaceCmd(std::vector <std::string> tokens) {
     bool isValid = true;
-    if (tokens.size() == 2) {
-        if (tokens[0] != "replace") {
-            isValid = false;
-        }
+    if (tokens.size() == 2 && tokens[0] == "replace") {
+
         if (!validateTile(tokens[1])) {
             isValid = false;
         }
