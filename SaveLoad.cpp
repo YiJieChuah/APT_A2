@@ -6,7 +6,13 @@
 #include <memory>
 #include <fstream>
 
-SaveLoad::SaveLoad() {}
+SaveLoad::SaveLoad()
+{
+    loadedPlayer1 = new Player();
+    loadedPlayer2 = new Player();
+    loadedTileBag = new LinkedList();
+    board = new Board();
+}
 
 SaveLoad::~SaveLoad() {}
 
@@ -14,12 +20,12 @@ SaveLoad::~SaveLoad() {}
  * Takes input from vaious places and puts it all into one .save file.
  * @return True if save was successful, otherwise false.
  */
-bool SaveLoad::save(Board board, std::string fileName, Player player1, Player player2, LinkedList tileBag, std::string currentPLayer)
+bool SaveLoad::save(Board board, std::string fileName, Player *player1, Player *player2, TileBag *tileBag, std::string currentPLayer)
 {
     bool saved = false;
-
     try
     {
+
         // Opens or creates the file.
         std::ofstream saveFile("saves/" + fileName + ".save");
 
@@ -27,43 +33,28 @@ bool SaveLoad::save(Board board, std::string fileName, Player player1, Player pl
         if (saveFile.is_open())
         {
             // Inserting player details.
-            saveFile << player1.getName() << std::endl;
-            saveFile << player1.getScore() << std::endl;
-            for (int i = 0; i < player1.getHand().size(); i++)
-            {
-                saveFile << player1.getHand().get(i)->colour;
-                saveFile << player1.getHand().get(i)->shape;
-                if (i != player1.getHand().size())
-                {
-                    saveFile << ",";
-                }
-            }
-            saveFile << std::endl;
-            saveFile << player2.getName() << std::endl;
-            saveFile << player2.getScore() << std::endl;
-            for (int i = 0; i < player2.getHand().size(); i++)
-            {
-                saveFile << player2.getHand().get(i)->colour;
-                saveFile << player2.getHand().get(i)->shape;
-                if (i != player2.getHand().size())
-                {
-                    saveFile << ",";
-                }
-            }
-            saveFile << std::endl;
+            saveFile << player1->getName() << std::endl;
+            saveFile << player1->getScore() << std::endl;
+            saveFile << player1->handToString() << std::endl;
+
+            saveFile << player2->getName() << std::endl;
+            saveFile << player2->getScore() << std::endl;
+            saveFile << player2->handToString() << std::endl;
 
             // Inserting board details.
             saveFile << board.getBoardDimensions() << "," << board.getBoardDimensions() << std::endl;
             saveFile << board.getSaveFormat() << std::endl;
-            for (int i = 0; i < tileBag.size(); i++)
+
+            for (int i = 0; i < tileBag->getTiles()->size(); i++)
             {
-                saveFile << tileBag.get(i)->colour;
-                saveFile << tileBag.get(i)->shape;
-                if (i != tileBag.size())
+                saveFile << tileBag->getTiles()->get(i)->colour;
+                saveFile << tileBag->getTiles()->get(i)->shape;
+                if (i != tileBag->getTiles()->size())
                 {
                     saveFile << ",";
                 }
             }
+
             saveFile << std::endl;
 
             saveFile << currentPLayer << std::endl;
@@ -71,7 +62,7 @@ bool SaveLoad::save(Board board, std::string fileName, Player player1, Player pl
             saved = true;
         }
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -82,7 +73,6 @@ bool SaveLoad::save(Board board, std::string fileName, Player player1, Player pl
 bool SaveLoad::load(std::string fileName)
 {
     bool loaded = false;
-
     try
     {
         std::string line;
@@ -100,11 +90,11 @@ bool SaveLoad::load(std::string fileName)
         {
             if (lineNum == 0)
             {
-                loadedPlayer1.setName(line);
+                loadedPlayer1->setName(line);
             }
             else if (lineNum == 1)
             {
-                loadedPlayer1.setScore(stoi(line));
+                loadedPlayer1->setScore(stoi(line));
             }
             else if (lineNum == 2)
             {
@@ -116,18 +106,17 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    loadedPlayer1.getHand().add_back(new Tile(color, shape));
-
+                    loadedPlayer1->addTileToHand(new Tile(color, shape));
                     i += 3;
                 }
             }
             else if (lineNum == 3)
             {
-                loadedPlayer2.setName(line);
+                loadedPlayer2->setName(line);
             }
             else if (lineNum == 4)
             {
-                loadedPlayer2.setScore(stoi(line));
+                loadedPlayer2->setScore(stoi(line));
             }
             else if (lineNum == 5)
             {
@@ -138,7 +127,7 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    loadedPlayer2.getHand().add_back(new Tile(color, shape));
+                    loadedPlayer2->addTileToHand(new Tile(color, shape));
 
                     i += 3;
                 }
@@ -154,7 +143,7 @@ bool SaveLoad::load(std::string fileName)
                 {
 
                     // I got frustrated trying to solve a probelm and so this is my temp solution.
-                    char letters[BOARD_DIMENSIONS] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+                    char letters[BOARD_DIMENSIONS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
@@ -164,7 +153,7 @@ bool SaveLoad::load(std::string fileName)
                     int positionX = 0;
                     for (int i = 0; i < BOARD_DIMENSIONS; i++)
                     {
-                        if (charPositionX == letters[1])
+                        if (charPositionX == letters[i])
                         {
                             positionX = i;
                             i = BOARD_DIMENSIONS;
@@ -174,9 +163,9 @@ bool SaveLoad::load(std::string fileName)
                     std::string strPositionY(1, line.at(i + 4));
                     int positionY = stoi(strPositionY);
 
-                    Tile* tile = new Tile(color, shape);
+                    Tile *tile = new Tile(color, shape);
 
-                    board.addTileForLoad(*tile, positionX, positionY);
+                    board->addTileForLoad(*tile, positionX, positionY);
                     i += 7;
                 }
             }
@@ -189,7 +178,7 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    loadedTileBag.add_back(new Tile(color, shape));
+                    loadedTileBag->add_back(new Tile(color, shape));
 
                     i += 3;
                 }
@@ -199,9 +188,6 @@ bool SaveLoad::load(std::string fileName)
                 currentPlayer = line;
             }
 
-            // TODO: TESTING.
-            std::cout << line;
-
             lineNum++;
         }
 
@@ -209,7 +195,7 @@ bool SaveLoad::load(std::string fileName)
 
         loaded = true;
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -235,20 +221,20 @@ std::string SaveLoad::createTileString(LinkedList list)
     return "";
 }
 
-// Player SaveLoad::getPlayer1()
-// {
-//     return this->loadedPlayer1;
-// }
-// Player SaveLoad::getPlayer2()
-// {
-//     return this->loadedPlayer2;
-// }
+Player *SaveLoad::getPlayer1()
+{
+    return this->loadedPlayer1;
+}
+Player *SaveLoad::getPlayer2()
+{
+    return this->loadedPlayer2;
+}
 
-Board SaveLoad::getLoadedBoard()
+Board *SaveLoad::getLoadedBoard()
 {
     return this->board;
 }
-LinkedList SaveLoad::getLoadedTileBag()
+LinkedList *SaveLoad::getLoadedTileBag()
 {
     return this->loadedTileBag;
 }

@@ -61,13 +61,6 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY)
         isValid = false;
     }
 
-    //checks for presence of neighbouring tiles if the board already has tiles on it
-    if(!isEmpty()){
-        if(!tileHasNeighbour(posX, posY)){
-            isValid = false;
-        }
-    }
-
     //temporary tile addition to accomodate for validation
     board[posY][posX] = tileToAdd;
 
@@ -132,22 +125,26 @@ std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
         int currPosY = posY;
         while (!getTileNeighbour(posX, currPosY, NORTH).isEmpty() && !reachTop)
         {
-            if (currPosY > 0) {
+            if (currPosY > 0)
+            {
                 --currPosY;
                 currTile = board[currPosY][posX];
             }
-            else {
+            else
+            {
                 reachTop = true;
             }
         }
         while (!currTile.isEmpty() && !reachBottom)
         {
-            if (currPosY < BOARD_DIMENSIONS - 1) {
+            if (currPosY < BOARD_DIMENSIONS - 1)
+            {
                 line.push_back(currTile);
                 ++currPosY;
                 currTile = board[currPosY][posX];
             }
-            else {
+            else
+            {
                 line.push_back(currTile);
                 reachBottom = true;
             }
@@ -160,22 +157,26 @@ std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
         int currPosX = posX;
         while (!getTileNeighbour(currPosX, posY, WEST).isEmpty() && !reachLeft)
         {
-            if (currPosX > 0) {
+            if (currPosX > 0)
+            {
                 --currPosX;
                 currTile = board[posY][currPosX];
             }
-            else {
+            else
+            {
                 reachLeft = true;
             }
         }
         while (!currTile.isEmpty() && !reachRight)
         {
-            if (currPosX < BOARD_DIMENSIONS - 1) {
+            if (currPosX < BOARD_DIMENSIONS - 1)
+            {
                 line.push_back(currTile);
                 ++currPosX;
                 currTile = board[posY][currPosX];
             }
-            else {
+            else
+            {
                 line.push_back(currTile);
                 reachRight = true;
             }
@@ -230,17 +231,20 @@ int Board::calculateScore(int posX, int posY)
     std::vector<Tile> vertLine = getLine(posX, posY, true);
     std::vector<Tile> horiLine = getLine(posX, posY, false);
 
-    if (vertLine.size() > 1) {
+    if (vertLine.size() > 1)
+    {
         totalScore += vertLine.size();
     }
 
-    if (horiLine.size() > 1) {
+    if (horiLine.size() > 1)
+    {
         totalScore += horiLine.size();
     }
 
     //Special case: isolated (first piece)
-    if (vertLine.size() == 1 && horiLine.size() == 1) {
-        totalScore += 2;
+    if (vertLine.size() == 1 && horiLine.size() == 1)
+    {
+        ++totalScore;
     }
 
     return totalScore;
@@ -262,7 +266,7 @@ void Board::printBoard()
         }
     }
     std::cout << std::endl
-        << "  -";
+              << "  -";
 
     // Printing the line below the comlumn numbers.
     for (int i = 0; i < BOARD_DIMENSIONS; i++)
@@ -329,36 +333,8 @@ int Board::getBoardDimensions()
     return BOARD_DIMENSIONS;
 }
 
-bool Board::addTileForLoad(Tile tile, int positionX, int postionY)
+bool Board::addTileForLoad(Tile tile, int positionX, int positionY)
 {
-    board[postionY][positionX] = tile;
+    board[positionX][positionY] = tile;
     return false;
-}
-
-bool Board::isEmpty(){
-    bool boardIsEmpty = true;
-    for (int row = 0; row < BOARD_DIMENSIONS; row++)
-    {
-        for (int col = 0; col < BOARD_DIMENSIONS; col++)
-        {
-            if(!board[row][col].isEmpty()){
-                boardIsEmpty = false;
-            }
-        }
-    }
-    return boardIsEmpty;
-    
-}
-
-bool Board::tileHasNeighbour(int posX, int posY){
-    bool hasNeighbour = false;
-    for (int direction = NORTH; direction != WEST; direction++)
-    {
-        Direction castDir = static_cast<Direction>(direction);
-        if(!getTileNeighbour(posX, posY, castDir).isEmpty()){
-            hasNeighbour = true;
-        }
-    }
-    return hasNeighbour;
-    
 }
