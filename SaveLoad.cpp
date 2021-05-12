@@ -14,7 +14,12 @@ SaveLoad::SaveLoad()
     board = new Board();
 }
 
-SaveLoad::~SaveLoad() {}
+SaveLoad::~SaveLoad() {
+    delete loadedPlayer1;
+    delete loadedPlayer2;
+    delete loadedTileBag;
+    delete board;
+}
 
 /**
  * Takes input from vaious places and puts it all into one .save file.

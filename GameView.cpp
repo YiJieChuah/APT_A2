@@ -10,7 +10,7 @@
 /**
  * Present the user with the iterface. Also process user input here?
  */
-GameView::GameView(GameModel *gameModelPtr)
+GameView::GameView(GameModel* gameModelPtr)
 {
     this->gameModelPtr = gameModelPtr;
     gameOver = false;
@@ -59,11 +59,11 @@ int GameView::getValidMenuSelection()
             }
             inputValid = true;
         }
-        catch (std::out_of_range &e)
+        catch (std::out_of_range& e)
         {
             std::cout << e.what() << std::endl;
         }
-        catch (std::domain_error &e)
+        catch (std::domain_error& e)
         {
             std::cout << e.what() << std::endl;
         }
@@ -83,7 +83,7 @@ void GameView::processMenuSelection(int input)
     else if (input == 2)
     {
         fileDirectory = createFileDir();
-        SaveLoad *loader = new SaveLoad();
+        SaveLoad* loader = new SaveLoad();
         loader->load(fileDirectory);
         gameModelPtr->addPlayer(loader->getPlayer1());
         gameModelPtr->addPlayer(loader->getPlayer2());
@@ -110,21 +110,22 @@ void GameView::startGame()
     bool firstIteration = true;
     std::cout << "\nQwirkle game successfully loaded" << std::endl;
 
-    //TODO: temp for testing
-    std::vector<Player *> players = gameModelPtr->getPlayers();
+    std::vector<Player*> players = gameModelPtr->getPlayers();
 
     // For when we take input for the first iteration later
     std::cin.ignore();
-    while (gameModelPtr->getTileBag()->numTilesLeft() > 0)
+    while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
     {
-        for (Player *player : players)
+        for (Player* player : players)
         {
-            if (!firstIteration)
-            {
-                gameModelPtr->setCurrentPlayer(player->getName());
-                firstIteration = false;
+            if (!gameOver) {
+                if (!firstIteration)
+                {
+                    gameModelPtr->setCurrentPlayer(player->getName());
+                    firstIteration = false;
+                }
+                playerTurn(player);
             }
-            playerTurn(player);
         }
     }
 }
@@ -138,20 +139,20 @@ void GameView::startNewGame()
     newPlayer();
 
     std::cout << "\nLet's Play!\n"
-              << std::endl;
+        << std::endl;
 
-    //TODO: temp for testing
-    std::vector<Player *> players = gameModelPtr->getPlayers();
+    std::vector<Player*> players = gameModelPtr->getPlayers();
 
     // For when we take input for the first iteration later
     std::cin.ignore();
-    while ((gameModelPtr->getTileBag()->numTilesLeft() > 0) &&
-           !gameOver)
+    while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
     {
-        for (Player *player : players)
+        for (Player* player : players)
         {
-            gameModelPtr->setCurrentPlayer(player->getName());
-            playerTurn(player);
+            if (!gameOver) {
+                gameModelPtr->setCurrentPlayer(player->getName());
+                playerTurn(player);
+            }
         }
     }
 }
@@ -163,9 +164,9 @@ void GameView::newPlayer()
 {
     std::string playerName;
     std::cout << "\nEnter a name for player"
-              << gameModelPtr->getNumPlayers() + 1
-              << "(uppercase characters only)"
-              << std::endl;
+        << gameModelPtr->getNumPlayers() + 1
+        << "(uppercase characters only)"
+        << std::endl;
 
     bool nameIsValid = false;
     do
@@ -195,7 +196,7 @@ bool GameView::validatePlayerName(std::string name)
     return isValid;
 }
 
-void GameView::playerTurn(Player *player)
+void GameView::playerTurn(Player* player)
 {
     std::cout << player->getName() << ", it's your turn" << std::endl;
     printScores();
@@ -206,7 +207,7 @@ void GameView::playerTurn(Player *player)
     std::cout << std::endl;
 }
 
-std::string GameView::processGameInput(Player *player)
+std::string GameView::processGameInput(Player* player)
 {
 
     std::string cmd;
@@ -237,7 +238,7 @@ std::string GameView::processGameInput(Player *player)
                 int posY = coords[0] - 'A';
 
                 player->play(tile, gameModelPtr->getTileBag(), gameModelPtr->getBoard(),
-                             posX, posY);
+                    posX, posY);
                 inputValid = true;
             }
 
@@ -257,7 +258,7 @@ std::string GameView::processGameInput(Player *player)
 
             if (validateSave(tokens))
             {
-                SaveLoad *saver = new SaveLoad();
+                SaveLoad* saver = new SaveLoad();
                 saver->save(*gameModelPtr->getBoard(), tokens[1], gameModelPtr->getPlayers()[0], gameModelPtr->getPlayers()[1], gameModelPtr->getTileBag(), gameModelPtr->getCurrentPlayer());
                 delete saver;
                 inputValid = true;
@@ -268,7 +269,7 @@ std::string GameView::processGameInput(Player *player)
                 throw "Invalid Input";
             }
         }
-        catch (const char *msg)
+        catch (const char* msg)
         {
             std::cerr << msg << std::endl;
         }
@@ -329,7 +330,7 @@ bool GameView::validateSave(std::vector<std::string> tokens)
     {
         std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-        for (char &c : tokens[1])
+        for (char& c : tokens[1])
         {
             if (allowedChars.find((char)toupper(c)) == std::string::npos)
             {
@@ -348,7 +349,7 @@ bool GameView::validateSave(std::vector<std::string> tokens)
 bool GameView::validateTile(std::string tileStr)
 {
     bool isValid = false;
-    char allColours[6]{'R', 'O', 'Y', 'G', 'B', 'P'};
+    char allColours[6]{ 'R', 'O', 'Y', 'G', 'B', 'P' };
 
     char inputColour = tileStr[0];
     //convert to string to use stoi
@@ -474,11 +475,11 @@ Shape GameView::convertIntToShape(int shape)
 
 void GameView::printScores()
 {
-    std::vector<Player *> players = gameModelPtr->getPlayers();
-    for (Player *player : players)
+    std::vector<Player*> players = gameModelPtr->getPlayers();
+    for (Player* player : players)
     {
         std::cout << "Score for " << player->getName() << ": "
-                  << player->getScore() << std::endl;
+            << player->getScore() << std::endl;
     }
 }
 
@@ -498,9 +499,9 @@ std::string GameView::createFileDir()
 void GameView::printCredits()
 {
 
-    std::string names[4] = {"Seth Danford", "Simon Dean", "Jeremy West", "Yi Jie Chuah"};
-    std::string studentIDs[4] = {"s3845408", "s3599190", "s3869546", "s3847905"};
-    std::string emails[4] = {"s3845408@student.rmit.edu.au", "s3599190@student.rmit.edu.au", "s3869546@student.rmit.edu.au", "s3847905@student.rmit.edu.au"};
+    std::string names[4] = { "Seth Danford", "Simon Dean", "Jeremy West", "Yi Jie Chuah" };
+    std::string studentIDs[4] = { "s3845408", "s3599190", "s3869546", "s3847905" };
+    std::string emails[4] = { "s3845408@student.rmit.edu.au", "s3599190@student.rmit.edu.au", "s3869546@student.rmit.edu.au", "s3847905@student.rmit.edu.au" };
 
     std::cout << "-----------------------------------" << std::endl;
     for (int i = 0; i < 4; i++)
@@ -510,7 +511,7 @@ void GameView::printCredits()
         if (i != 3)
         {
             std::cout << "Email: " + emails[i] + "\n"
-                      << std::endl;
+                << std::endl;
         }
         else
         {
@@ -518,7 +519,7 @@ void GameView::printCredits()
         }
     }
     std::cout << "-----------------------------------\n"
-              << std::endl;
+        << std::endl;
 }
 
 void GameView::quit()
