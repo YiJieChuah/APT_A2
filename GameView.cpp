@@ -254,10 +254,6 @@ std::string GameView::processGameInput(Player *player)
                 quit();
                 inputValid = true;
             }
-            if (!inputValid)
-            {
-                throw "Invalid Input";
-            }
 
             if (validateSave(tokens))
             {
