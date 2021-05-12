@@ -14,7 +14,7 @@ SaveLoad::~SaveLoad() {}
  * Takes input from vaious places and puts it all into one .save file.
  * @return True if save was successful, otherwise false.
  */
-bool SaveLoad::save(Board board, std::string fileName, Player player1, Player player2, LinkedList tileBag, std::string currentPLayer)
+bool SaveLoad::save(Board board, std::string fileName, Player* player1, Player* player2, TileBag* tileBag, std::string currentPLayer)
 {
     bool saved = false;
     std::cout << "SAVING" << std::endl;
@@ -28,43 +28,29 @@ bool SaveLoad::save(Board board, std::string fileName, Player player1, Player pl
         if (saveFile.is_open())
         {
             // Inserting player details.
-            saveFile << player1.getName() << std::endl;
-            saveFile << player1.getScore() << std::endl;
-            for (int i = 0; i < player1.getHand().size(); i++)
-            {
-                saveFile << player1.getHand().get(i)->colour;
-                saveFile << player1.getHand().get(i)->shape;
-                if (i != player1.getHand().size())
-                {
-                    saveFile << ",";
-                }
-            }
-            saveFile << std::endl;
-            saveFile << player2.getName() << std::endl;
-            saveFile << player2.getScore() << std::endl;
-            for (int i = 0; i < player2.getHand().size(); i++)
-            {
-                saveFile << player2.getHand().get(i)->colour;
-                saveFile << player2.getHand().get(i)->shape;
-                if (i != player2.getHand().size())
-                {
-                    saveFile << ",";
-                }
-            }
-            saveFile << std::endl;
+            saveFile << player1->getName() << std::endl;
+            saveFile << player1->getScore() << std::endl;
+            saveFile << player1->handToString() << std::endl;
+
+            saveFile << player2->getName() << std::endl;
+            saveFile << player2->getScore() << std::endl;
+            saveFile << player2->handToString() << std::endl;
+
 
             // Inserting board details.
             saveFile << board.getBoardDimensions() << "," << board.getBoardDimensions() << std::endl;
             saveFile << board.getSaveFormat() << std::endl;
-            for (int i = 0; i < tileBag.size(); i++)
+
+            for (int i = 0; i < tileBag->getTiles()->size(); i++)
             {
-                saveFile << tileBag.get(i)->colour;
-                saveFile << tileBag.get(i)->shape;
-                if (i != tileBag.size())
+                saveFile << tileBag->getTiles()->get(i)->colour;
+                saveFile << tileBag->getTiles()->get(i)->shape;
+                if (i != tileBag->getTiles()->size())
                 {
                     saveFile << ",";
                 }
             }
+
             saveFile << std::endl;
 
             saveFile << currentPLayer << std::endl;
@@ -72,7 +58,7 @@ bool SaveLoad::save(Board board, std::string fileName, Player player1, Player pl
             saved = true;
         }
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -155,7 +141,7 @@ bool SaveLoad::load(std::string fileName)
                 {
 
                     // I got frustrated trying to solve a probelm and so this is my temp solution.
-                    char letters[BOARD_DIMENSIONS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+                    char letters[BOARD_DIMENSIONS] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
@@ -175,7 +161,7 @@ bool SaveLoad::load(std::string fileName)
                     std::string strPositionY(1, line.at(i + 4));
                     int positionY = stoi(strPositionY);
 
-                    Tile *tile = new Tile(color, shape);
+                    Tile* tile = new Tile(color, shape);
 
                     board.addTileForLoad(*tile, positionX, positionY);
                     i += 7;
@@ -210,7 +196,7 @@ bool SaveLoad::load(std::string fileName)
 
         loaded = true;
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
