@@ -20,7 +20,7 @@ SaveLoad::~SaveLoad() {}
  * Takes input from vaious places and puts it all into one .save file.
  * @return True if save was successful, otherwise false.
  */
-bool SaveLoad::save(Board board, std::string fileName, Player *player1, Player *player2, TileBag *tileBag, std::string currentPLayer)
+bool SaveLoad::save(Board board, std::string fileName, Player* player1, Player* player2, TileBag* tileBag, std::string currentPLayer)
 {
     bool saved = false;
     try
@@ -62,7 +62,7 @@ bool SaveLoad::save(Board board, std::string fileName, Player *player1, Player *
             saved = true;
         }
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -143,7 +143,7 @@ bool SaveLoad::load(std::string fileName)
                 {
 
                     // I got frustrated trying to solve a probelm and so this is my temp solution.
-                    char letters[BOARD_DIMENSIONS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+                    char letters[BOARD_DIMENSIONS] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
@@ -163,7 +163,7 @@ bool SaveLoad::load(std::string fileName)
                     std::string strPositionY(1, line.at(i + 4));
                     int positionY = stoi(strPositionY);
 
-                    Tile *tile = new Tile(color, shape);
+                    Tile* tile = new Tile(color, shape);
 
                     board->addTileForLoad(*tile, positionX, positionY);
                     i += 7;
@@ -195,7 +195,7 @@ bool SaveLoad::load(std::string fileName)
 
         loaded = true;
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -221,20 +221,20 @@ std::string SaveLoad::createTileString(LinkedList list)
     return "";
 }
 
-Player *SaveLoad::getPlayer1()
+Player* SaveLoad::getPlayer1()
 {
     return this->loadedPlayer1;
 }
-Player *SaveLoad::getPlayer2()
+Player* SaveLoad::getPlayer2()
 {
     return this->loadedPlayer2;
 }
 
-Board *SaveLoad::getLoadedBoard()
+Board* SaveLoad::getLoadedBoard()
 {
     return this->board;
 }
-LinkedList *SaveLoad::getLoadedTileBag()
+LinkedList* SaveLoad::getLoadedTileBag()
 {
     return this->loadedTileBag;
 }
