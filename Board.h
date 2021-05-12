@@ -33,6 +33,8 @@ private:
      */
     std::vector<Tile> getCombo(int posX, int posY, bool comboIsVertical);
     bool checkDupTileInCombo(Tile tile, std::vector<Tile> combo);
+    bool isEmpty();
+    bool tileHasNeighbour(int posX, int posY);
 
 public:
     Board();

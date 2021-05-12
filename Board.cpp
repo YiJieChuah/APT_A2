@@ -61,6 +61,13 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY)
         isValid = false;
     }
 
+    //checks for presence of neighbouring tiles if the board already has tiles on it
+    if(!isEmpty()){
+        if(!tileHasNeighbour(posX, posY)){
+            isValid = false;
+        }
+    }
+
     //temporary tile addition to accomodate for validation
     board[posY][posX] = tileToAdd;
 
@@ -233,7 +240,7 @@ int Board::calculateScore(int posX, int posY)
 
     //Special case: isolated (first piece)
     if (vertLine.size() == 1 && horiLine.size() == 1) {
-        ++totalScore;
+        totalScore += 2;
     }
 
     return totalScore;
@@ -326,4 +333,32 @@ bool Board::addTileForLoad(Tile tile, int positionX, int postionY)
 {
     board[postionY][positionX] = tile;
     return false;
+}
+
+bool Board::isEmpty(){
+    bool boardIsEmpty = true;
+    for (int row = 0; row < BOARD_DIMENSIONS; row++)
+    {
+        for (int col = 0; col < BOARD_DIMENSIONS; col++)
+        {
+            if(!board[row][col].isEmpty()){
+                boardIsEmpty = false;
+            }
+        }
+    }
+    return boardIsEmpty;
+    
+}
+
+bool Board::tileHasNeighbour(int posX, int posY){
+    bool hasNeighbour = false;
+    for (int direction = NORTH; direction != WEST; direction++)
+    {
+        Direction castDir = static_cast<Direction>(direction);
+        if(!getTileNeighbour(posX, posY, castDir).isEmpty()){
+            hasNeighbour = true;
+        }
+    }
+    return hasNeighbour;
+    
 }
