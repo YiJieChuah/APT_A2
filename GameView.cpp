@@ -85,13 +85,14 @@ void GameView::processMenuSelection(int input)
         fileDirectory = createFileDir();
         SaveLoad* loader = new SaveLoad();
         loader->load(fileDirectory);
-        gameModelPtr->addPlayer(loader->getPlayer1());
-        gameModelPtr->addPlayer(loader->getPlayer2());
-        gameModelPtr->setBoard(loader->getLoadedBoard());
-        gameModelPtr->setTileBag(loader->getLoadedTileBag());
+
+        gameModelPtr->addPlayer(new Player(loader->getPlayer1()));
+        gameModelPtr->addPlayer(new Player(loader->getPlayer2()));
+        gameModelPtr->setBoard(new Board(loader->getLoadedBoard()));
+        gameModelPtr->setTileBag(new LinkedList(loader->getLoadedTileBag()));
         gameModelPtr->setCurrentPlayer(loader->getCurrentPlayer());
-        startGame();
         delete loader;
+        startGame();
     }
     else if (input == 3)
     {

@@ -84,7 +84,7 @@ bool SaveLoad::load(std::string fileName)
         std::ifstream saveFile("saves/" + fileName + ".save");
 
         // Board and tile bag.
-        std::string boardDimentions;
+        std::string boardDimensions;
 
         std::string boardState;
         std::string tileBagContents;
@@ -139,7 +139,7 @@ bool SaveLoad::load(std::string fileName)
             }
             else if (lineNum == 6)
             {
-                boardDimentions = line.at(0);
+                boardDimensions = line.at(0);
             }
             else if (lineNum == 7)
             {
@@ -171,6 +171,8 @@ bool SaveLoad::load(std::string fileName)
                     Tile* tile = new Tile(color, shape);
 
                     board->addTileForLoad(*tile, positionX, positionY);
+                    delete tile;
+
                     i += 7;
                 }
             }
@@ -226,22 +228,22 @@ std::string SaveLoad::createTileString(LinkedList list)
     return "";
 }
 
-Player* SaveLoad::getPlayer1()
+Player SaveLoad::getPlayer1() const
 {
-    return this->loadedPlayer1;
+    return *this->loadedPlayer1;
 }
-Player* SaveLoad::getPlayer2()
+Player SaveLoad::getPlayer2() const
 {
-    return this->loadedPlayer2;
+    return *this->loadedPlayer2;
 }
 
-Board* SaveLoad::getLoadedBoard()
+Board SaveLoad::getLoadedBoard()
 {
-    return this->board;
+    return *this->board;
 }
-LinkedList* SaveLoad::getLoadedTileBag()
+LinkedList SaveLoad::getLoadedTileBag()
 {
-    return this->loadedTileBag;
+    return *this->loadedTileBag;
 }
 std::string SaveLoad::getCurrentPlayer()
 {

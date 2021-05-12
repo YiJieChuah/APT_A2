@@ -8,22 +8,25 @@ LinkedList::LinkedList() {
    currSize = 0;
 }
 
-LinkedList::LinkedList(LinkedList& other) {
+LinkedList::LinkedList(const LinkedList& other) {
    head = nullptr;
+   tail = nullptr;
+   currSize = 0;
    for (int i = 0; i < other.size(); ++i) {
       Tile* tile = new Tile(*other.get(i));
       add_back(tile);
    }
 }
+
 LinkedList::~LinkedList() {
    clear();
 }
 
-int LinkedList::size() {
+int LinkedList::size() const {
    return currSize;
 }
 
-Tile* LinkedList::get(int index) {
+Tile* LinkedList::get(int index) const {
    Tile* retTile = nullptr;
 
    if (index >= 0 && index < size()) {

@@ -6,25 +6,25 @@
 class SaveLoad
 {
 private:
-    Board *board;
+    Board* board;
 
-    Player *loadedPlayer1;
-    Player *loadedPlayer2;
+    Player* loadedPlayer1;
+    Player* loadedPlayer2;
 
-    LinkedList *loadedTileBag;
+    LinkedList* loadedTileBag;
     std::string currentPlayer;
 
 public:
     SaveLoad();
     ~SaveLoad();
-    bool save(Board board, std::string fileName, Player *player1, Player *player2, TileBag *tileBag, std::string currentPlayer);
+    bool save(Board board, std::string fileName, Player* player1, Player* player2, TileBag* tileBag, std::string currentPlayer);
     bool load(std::string fileName);
     std::string createTileString(LinkedList list);
 
-    Player *getPlayer1();
-    Player *getPlayer2();
+    Player getPlayer1() const;
+    Player getPlayer2() const;
 
-    Board *getLoadedBoard();
-    LinkedList *getLoadedTileBag();
+    Board getLoadedBoard();
+    LinkedList getLoadedTileBag();
     std::string getCurrentPlayer();
 };

@@ -16,24 +16,24 @@ public:
 
     void addPlayerToGame(std::string name);
     unsigned int getNumPlayers();
-    Player *getPlayer(int playerID);
-    std::vector<Player *> getPlayers();
-    Board *getBoard();
-    TileBag *getTileBag();
+    Player* getPlayer(int playerID);
+    std::vector<Player*> getPlayers();
+    Board* getBoard();
+    TileBag* getTileBag();
     std::string getCurrentPlayer();
 
     void setCurrentPlayer(std::string name);
 
     // Need to add.
-    void addPlayer(Player *player);
-    void setBoard(Board *board);
-    void setTileBag(LinkedList *tileBag);
+    void addPlayer(Player* player);
+    void setBoard(Board* board);
+    void setTileBag(LinkedList* tileBag);
 
 private:
-    std::vector<Player *> players;
+    std::vector<Player*> players;
 
-    TileBag *tileBag;
-    Board *board;
+    TileBag* tileBag;
+    Board* board;
     std::string currentPlayer;
 };
 

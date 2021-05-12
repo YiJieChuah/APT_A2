@@ -10,11 +10,11 @@ class LinkedList
 {
 public:
    LinkedList();
-   LinkedList(LinkedList& other);
+   LinkedList(const LinkedList& other);
    ~LinkedList();
 
-   int size();
-   Tile* get(int index);
+   int size() const;
+   Tile* get(int index) const;
 
    void add_front(Tile* tile);
    void add_back(Tile* tile);

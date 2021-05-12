@@ -18,7 +18,7 @@ Player::Player(int id, std::string name)
     this->hand = new LinkedList();
 }
 
-Player::Player(const Player &other)
+Player::Player(const Player& other)
 {
     this->id = other.id;
     this->name = other.name;
@@ -31,7 +31,7 @@ Player::~Player()
     delete hand;
 }
 
-void Player::draw(TileBag *bag)
+void Player::draw(TileBag* bag)
 {
     while (hand->size() < HAND_SIZE)
     {
@@ -39,7 +39,7 @@ void Player::draw(TileBag *bag)
     }
 }
 
-void Player::play(Tile tile, TileBag *tileBag, Board *board, int posX, int posY)
+void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
 {
     int tileIdx = findTileInHand(tile);
     if (tileIdx != -1)
@@ -57,7 +57,7 @@ void Player::play(Tile tile, TileBag *tileBag, Board *board, int posX, int posY)
     }
 }
 
-void Player::replace(Tile tile, TileBag *tileBag)
+void Player::replace(Tile tile, TileBag* tileBag)
 {
     int tileIdx = findTileInHand(tile);
     if (tileIdx != -1)
@@ -99,7 +99,7 @@ void Player::setName(std::string name)
     this->name = name;
 }
 
-LinkedList *Player::getHand()
+LinkedList* Player::getHand()
 {
     return this->hand;
 }
@@ -128,7 +128,7 @@ void Player::setScore(int score)
     this->score = score;
 }
 
-void Player::addTileToHand(Tile *tile)
+void Player::addTileToHand(Tile* tile)
 {
     if (this->hand != nullptr)
     {

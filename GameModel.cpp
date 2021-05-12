@@ -14,7 +14,7 @@ GameModel::~GameModel()
 {
     delete tileBag;
     delete board;
-    for (Player *player : players)
+    for (Player* player : players)
     {
         delete player;
     }
@@ -23,28 +23,28 @@ GameModel::~GameModel()
 
 void GameModel::addPlayerToGame(std::string name)
 {
-    Player *playerToAdd = new Player(players.size(), name);
+    Player* playerToAdd = new Player(players.size(), name);
     playerToAdd->draw(tileBag);
     players.push_back(playerToAdd);
 }
 
 //TODO: Could get rid of this
-Player *GameModel::getPlayer(int playerID)
+Player* GameModel::getPlayer(int playerID)
 {
     return players[playerID];
 };
 
-std::vector<Player *> GameModel::getPlayers()
+std::vector<Player*> GameModel::getPlayers()
 {
     return players;
 };
 
-Board *GameModel::getBoard()
+Board* GameModel::getBoard()
 {
     return board;
 };
 
-TileBag *GameModel::getTileBag()
+TileBag* GameModel::getTileBag()
 {
     return tileBag;
 }
@@ -63,15 +63,15 @@ void GameModel::setCurrentPlayer(std::string name)
     this->currentPlayer = name;
 }
 
-void GameModel::addPlayer(Player *player)
+void GameModel::addPlayer(Player* player)
 {
     players.push_back(player);
 }
-void GameModel::setBoard(Board *board)
+void GameModel::setBoard(Board* board)
 {
     this->board = board;
 }
-void GameModel::setTileBag(LinkedList *tileBag)
+void GameModel::setTileBag(LinkedList* tileBag)
 {
     this->tileBag->setTiles(tileBag);
 }
