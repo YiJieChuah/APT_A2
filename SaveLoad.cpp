@@ -83,14 +83,14 @@ bool SaveLoad::load(std::string fileName)
     bool loaded = false;
     try
     {
-        std::string line;
+        std::string line = "";
         std::ifstream saveFile("saves/" + fileName + ".save");
         if (saveFile) {
             // Board and tile bag.
-            std::string boardDimensions;
+            std::string boardDimensions = "";
 
-            std::string boardState;
-            std::string tileBagContents;
+            std::string boardState = "";
+            std::string tileBagContents = "";
 
             int lineNum = 0;
 
