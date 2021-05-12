@@ -21,7 +21,14 @@ public:
     Board *getBoard();
     TileBag *getTileBag();
     std::string getCurrentPlayer();
+
     void setCurrentPlayer(std::string name);
+
+    // Need to add.
+    void addPlayer(Player player);
+    void setBoard(Board board);
+    void setTileBag(LinkedList tileBag);
+    void stringSetCurrentPlayer(std::string);
 
 private:
     std::vector<Player *> players;

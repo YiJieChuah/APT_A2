@@ -130,6 +130,13 @@ void Player::setScore(int score)
 
 void Player::addTileToHand(Tile *tile)
 {
-    this->hand->add_back(tile);
-    std::cout << "CHECK-1.5" << std::endl;
+    if (this->hand != nullptr)
+    {
+        this->hand->add_back(tile);
+    }
+    else
+    {
+        this->hand = new LinkedList();
+        this->hand->add_back(tile);
+    }
 }

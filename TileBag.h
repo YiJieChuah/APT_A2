@@ -18,6 +18,7 @@ public:
     int numTilesLeft();
 
     LinkedList *getTiles();
+    void setTiles(LinkedList *tiles);
 };
 
 #endif //ASSIGN2_TILEBAG_H

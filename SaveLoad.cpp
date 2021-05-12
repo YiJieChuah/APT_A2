@@ -102,9 +102,7 @@ bool SaveLoad::load(std::string fileName)
                     char color = line.at(i);
                     std::string strShape(1, line.at(i + 1));
                     int shape = stoi(strShape);
-                    std::cout << "CHECK-1" << std::endl;
                     loadedPlayer1.addTileToHand(new Tile(color, shape));
-                    std::cout << "CHECK-2" << std::endl;
                     i += 3;
                 }
             }
@@ -186,9 +184,6 @@ bool SaveLoad::load(std::string fileName)
                 currentPlayer = line;
             }
 
-            // TODO: TESTING.
-            std::cout << line;
-
             lineNum++;
         }
 
@@ -198,7 +193,6 @@ bool SaveLoad::load(std::string fileName)
     }
     catch (const std::exception &e)
     {
-        std::cout << "thrown" << std::endl;
         std::cerr << e.what() << '\n';
     }
 

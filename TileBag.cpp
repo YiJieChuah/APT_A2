@@ -49,3 +49,8 @@ LinkedList *TileBag::getTiles()
 {
     return tiles;
 }
+
+void TileBag::setTiles(LinkedList *tiles)
+{
+    this->tiles = tiles;
+}

@@ -84,9 +84,10 @@ void GameView::processMenuSelection(int input)
         fileDirectory = createFileDir();
         SaveLoad *loader = new SaveLoad();
         loader->load(fileDirectory);
-        std::cout << loader->getCurrentPlayer() << std::endl;
-        std::cout << fileDirectory << std::endl;
+        gameModelPtr->addPlayerToGame(loader->getPlayer1().getName());
+        gameModelPtr->addPlayerToGame(loader->getPlayer2().getName());
 
+        // call playerTurn() to start play.
         delete loader;
     }
     else if (input == 3)
