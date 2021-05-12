@@ -82,9 +82,10 @@ void GameView::processMenuSelection(int input)
     }
     else if (input == 2)
     {
-        fileDirectory = createFileDir();
         SaveLoad* loader = new SaveLoad();
-        loader->load(fileDirectory);
+        do {
+            fileDirectory = createFileDir();
+        } while (!loader->load(fileDirectory));
 
         gameModelPtr->addPlayer(new Player(loader->getPlayer1()));
         gameModelPtr->addPlayer(new Player(loader->getPlayer2()));
@@ -251,12 +252,6 @@ std::string GameView::processGameInput(Player* player)
                 inputValid = true;
             }
 
-            if (tokens[0] == "quit")
-            {
-                quit();
-                inputValid = true;
-            }
-
             if (validateSave(tokens))
             {
                 SaveLoad* saver = new SaveLoad();
@@ -264,6 +259,13 @@ std::string GameView::processGameInput(Player* player)
                 delete saver;
                 inputValid = true;
             }
+
+            if (tokens[0] == "quit")
+            {
+                quit();
+                inputValid = true;
+            }
+
 
             if (!inputValid)
             {

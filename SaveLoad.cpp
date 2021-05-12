@@ -66,10 +66,13 @@ bool SaveLoad::save(Board board, std::string fileName, Player* player1, Player* 
             saveFile.close();
             saved = true;
         }
+        else {
+            throw "Error saving file!";
+        }
     }
-    catch (const std::exception& e)
+    catch (const char* msg)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << msg << '\n';
     }
 
     return saved;
@@ -82,131 +85,132 @@ bool SaveLoad::load(std::string fileName)
     {
         std::string line;
         std::ifstream saveFile("saves/" + fileName + ".save");
+        if (saveFile) {
+            // Board and tile bag.
+            std::string boardDimensions;
 
-        // Board and tile bag.
-        std::string boardDimensions;
+            std::string boardState;
+            std::string tileBagContents;
 
-        std::string boardState;
-        std::string tileBagContents;
+            int lineNum = 0;
 
-        int lineNum = 0;
-
-        while (getline(saveFile, line))
-        {
-            if (lineNum == 0)
+            while (getline(saveFile, line))
             {
-                loadedPlayer1->setName(line);
-            }
-            else if (lineNum == 1)
-            {
-                loadedPlayer1->setScore(stoi(line));
-            }
-            else if (lineNum == 2)
-            {
-                // Creating player1 hand.
-                unsigned int i = 0;
-                while (i < line.length())
+                if (lineNum == 0)
                 {
-
-                    char color = line.at(i);
-                    std::string strShape(1, line.at(i + 1));
-                    int shape = stoi(strShape);
-                    loadedPlayer1->addTileToHand(new Tile(color, shape));
-                    i += 3;
+                    loadedPlayer1->setName(line);
                 }
-            }
-            else if (lineNum == 3)
-            {
-                loadedPlayer2->setName(line);
-            }
-            else if (lineNum == 4)
-            {
-                loadedPlayer2->setScore(stoi(line));
-            }
-            else if (lineNum == 5)
-            {
-                // Creatig player2 hand.
-                unsigned int i = 0;
-                while (i < line.length())
+                else if (lineNum == 1)
                 {
-                    char color = line.at(i);
-                    std::string strShape(1, line.at(i + 1));
-                    int shape = stoi(strShape);
-                    loadedPlayer2->addTileToHand(new Tile(color, shape));
-
-                    i += 3;
+                    loadedPlayer1->setScore(stoi(line));
                 }
-            }
-            else if (lineNum == 6)
-            {
-                boardDimensions = line.at(0);
-            }
-            else if (lineNum == 7)
-            {
-                unsigned int i = 0;
-                while (i < line.length())
+                else if (lineNum == 2)
                 {
-
-                    // I got frustrated trying to solve a probelm and so this is my temp solution.
-                    char letters[BOARD_DIMENSIONS] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-                    char color = line.at(i);
-                    std::string strShape(1, line.at(i + 1));
-                    int shape = stoi(strShape);
-
-                    // Getting the x position.
-                    char charPositionX = tolower(line.at(i + 3));
-                    int positionX = 0;
-                    for (int i = 0; i < BOARD_DIMENSIONS; i++)
+                    // Creating player1 hand.
+                    unsigned int i = 0;
+                    while (i < line.length())
                     {
-                        if (charPositionX == letters[i])
-                        {
-                            positionX = i;
-                            i = BOARD_DIMENSIONS;
-                        }
+
+                        char color = line.at(i);
+                        std::string strShape(1, line.at(i + 1));
+                        int shape = stoi(strShape);
+                        loadedPlayer1->addTileToHand(new Tile(color, shape));
+                        i += 3;
                     }
-
-                    std::string strPositionY(1, line.at(i + 4));
-                    int positionY = stoi(strPositionY);
-
-                    Tile* tile = new Tile(color, shape);
-
-                    board->addTileForLoad(*tile, positionX, positionY);
-                    delete tile;
-
-                    i += 7;
                 }
-            }
-            else if (lineNum == 8)
-            {
-                // Creating tile bag.
-                unsigned int i = 0;
-                while (i < line.length())
+                else if (lineNum == 3)
                 {
-                    char color = line.at(i);
-                    std::string strShape(1, line.at(i + 1));
-                    int shape = stoi(strShape);
-                    loadedTileBag->add_back(new Tile(color, shape));
-
-                    i += 3;
+                    loadedPlayer2->setName(line);
                 }
-            }
-            else if (lineNum == 9)
-            {
-                currentPlayer = line;
-            }
+                else if (lineNum == 4)
+                {
+                    loadedPlayer2->setScore(stoi(line));
+                }
+                else if (lineNum == 5)
+                {
+                    // Creatig player2 hand.
+                    unsigned int i = 0;
+                    while (i < line.length())
+                    {
+                        char color = line.at(i);
+                        std::string strShape(1, line.at(i + 1));
+                        int shape = stoi(strShape);
+                        loadedPlayer2->addTileToHand(new Tile(color, shape));
 
-            lineNum++;
+                        i += 3;
+                    }
+                }
+                else if (lineNum == 6)
+                {
+                    boardDimensions = line.at(0);
+                }
+                else if (lineNum == 7)
+                {
+                    unsigned int i = 0;
+                    while (i < line.length())
+                    {
+
+                        // I got frustrated trying to solve a probelm and so this is my temp solution.
+                        char letters[BOARD_DIMENSIONS] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+                        char color = line.at(i);
+                        std::string strShape(1, line.at(i + 1));
+                        int shape = stoi(strShape);
+
+                        // Getting the x position.
+                        char charPositionX = tolower(line.at(i + 3));
+                        int positionX = 0;
+                        for (int i = 0; i < BOARD_DIMENSIONS; i++)
+                        {
+                            if (charPositionX == letters[i])
+                            {
+                                positionX = i;
+                                i = BOARD_DIMENSIONS;
+                            }
+                        }
+
+                        std::string strPositionY(1, line.at(i + 4));
+                        int positionY = stoi(strPositionY);
+
+                        Tile* tile = new Tile(color, shape);
+
+                        board->addTileForLoad(*tile, positionX, positionY);
+                        delete tile;
+
+                        i += 7;
+                    }
+                }
+                else if (lineNum == 8)
+                {
+                    // Creating tile bag.
+                    unsigned int i = 0;
+                    while (i < line.length())
+                    {
+                        char color = line.at(i);
+                        std::string strShape(1, line.at(i + 1));
+                        int shape = stoi(strShape);
+                        loadedTileBag->add_back(new Tile(color, shape));
+
+                        i += 3;
+                    }
+                }
+                else if (lineNum == 9)
+                {
+                    currentPlayer = line;
+                }
+
+                lineNum++;
+            }
+            saveFile.close();
+            loaded = true;
         }
-
-        saveFile.close();
-
-        loaded = true;
+        else {
+            throw "No such file.";
+        }
     }
-    catch (const std::exception& e)
+    catch (const char* msg)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << msg << '\n';
     }
-
     return loaded;
 }
 
