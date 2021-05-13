@@ -173,7 +173,17 @@ bool SaveLoad::load(std::string fileName)
                             }
                         }
 
-                        if (line.at(i + 5) != ',')
+                        int position;
+                        if (i + 5 < line.length())
+                        {
+                            position = i + 5;
+                        }
+                        else
+                        {
+                            position = i - 2;
+                        }
+
+                        if (line.at(position) != ',')
                         {
                             std::string strPositionY1(1, line.at(i + 4));
                             std::string strPositionY2(1, line.at(i + 5));
