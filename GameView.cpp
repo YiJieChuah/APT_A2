@@ -87,8 +87,8 @@ void GameView::processMenuSelection(int input)
             fileDirectory = createFileDir();
         } while (!loader->load(fileDirectory));
 
-        delete loader;
         startGame();
+        delete loader;
     }
     else if (input == 3)
     {
@@ -108,9 +108,6 @@ void GameView::startGame()
     std::cout << "\nQwirkle game successfully loaded" << std::endl;
 
     std::vector<Player*> players = gameModelPtr->getPlayers();
-
-    // For when we take input for the first iteration later
-    std::cin.ignore();
     while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
     {
         for (Player* player : players)
