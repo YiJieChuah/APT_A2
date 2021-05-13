@@ -87,11 +87,6 @@ void GameView::processMenuSelection(int input)
             fileDirectory = createFileDir();
         } while (!loader->load(fileDirectory));
 
-        gameModelPtr->addPlayer(new Player(loader->getPlayer1()));
-        gameModelPtr->addPlayer(new Player(loader->getPlayer2()));
-        gameModelPtr->setBoard(new Board(loader->getLoadedBoard()));
-        gameModelPtr->setTileBag(new LinkedList(loader->getLoadedTileBag()));
-        gameModelPtr->setCurrentPlayer(loader->getCurrentPlayer());
         delete loader;
         startGame();
     }
@@ -494,9 +489,9 @@ std::string GameView::createFileDir()
 {
     std::cout << "Enter a filename from which load a game" << std::endl;
     std::cout << "> ";
-    std::string input;
-    std::cin >> input;
-    return input;
+    std::string file = "";
+    std::cin >> file;
+    return "saves/" + file + ".save";
 }
 
 void GameView::printCredits()

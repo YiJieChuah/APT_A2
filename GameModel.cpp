@@ -23,16 +23,17 @@ GameModel::~GameModel()
 
 void GameModel::addPlayerToGame(std::string name)
 {
-    Player* playerToAdd = new Player(players.size(), name);
+    Player* playerToAdd = new Player(name);
     playerToAdd->draw(tileBag);
     players.push_back(playerToAdd);
 }
 
-//TODO: Could get rid of this
-Player* GameModel::getPlayer(int playerID)
+void GameModel::addPlayerToGame(std::string name, int score, LinkedList* hand)
 {
-    return players[playerID];
-};
+    Player* playerToAdd = new Player(name, score, hand);
+    players.push_back(playerToAdd);
+}
+
 
 std::vector<Player*> GameModel::getPlayers()
 {

@@ -6,21 +6,24 @@
 
 #define HAND_SIZE 6
 
-Player::Player()
-{
-}
+Player::Player() {}
 
-Player::Player(int id, std::string name)
+Player::Player(std::string name)
 {
-    this->id = id;
     this->name = name;
     this->score = 0;
     this->hand = new LinkedList();
 }
 
+Player::Player(std::string name, int score, LinkedList* hand)
+{
+    this->name = name;
+    this->score = score;
+    this->hand = hand;
+}
+
 Player::Player(const Player& other)
 {
-    this->id = other.id;
     this->name = other.name;
     this->score = other.score;
     this->hand = new LinkedList(*other.hand);
@@ -83,11 +86,6 @@ int Player::findTileInHand(Tile tile)
     }
     return idx;
 }
-
-int Player::getPlayerID()
-{
-    return this->id;
-};
 
 std::string Player::getName()
 {

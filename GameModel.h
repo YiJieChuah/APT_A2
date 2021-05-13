@@ -15,6 +15,8 @@ public:
     ~GameModel();
 
     void addPlayerToGame(std::string name);
+    void addPlayerToGame(std::string name, int score, LinkedList* hand);
+
     unsigned int getNumPlayers();
     Player* getPlayer(int playerID);
     std::vector<Player*> getPlayers();
