@@ -1,15 +1,19 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cctype>
 
 #include "GameView.h"
 #include "Tile.h"
+#include "SaveLoad.h"
 
 /**
  * Present the user with the iterface. Also process user input here?
  */
-GameView::GameView(GameModel* gameModelPtr) {
+GameView::GameView(GameModel* gameModelPtr)
+{
     this->gameModelPtr = gameModelPtr;
+    gameOver = false;
 }
 GameView::~GameView() {}
 
@@ -31,7 +35,8 @@ void GameView::init()
     processMenuSelection(selection);
 }
 
-int GameView::getValidMenuSelection() {
+int GameView::getValidMenuSelection()
+{
     bool inputValid = false;
     int selection;
     do
@@ -41,7 +46,8 @@ int GameView::getValidMenuSelection() {
 
         try
         {
-            if (!std::cin.good()) {
+            if (!std::cin.good())
+            {
                 //Resets cin flags for next input attempt
                 std::cin.clear();
                 std::cin.ignore();
@@ -66,7 +72,8 @@ int GameView::getValidMenuSelection() {
     return selection;
 };
 
-void GameView::processMenuSelection(int input) {
+void GameView::processMenuSelection(int input)
+{
     std::string fileDirectory;
 
     if (input == 1)
@@ -75,9 +82,18 @@ void GameView::processMenuSelection(int input) {
     }
     else if (input == 2)
     {
-        fileDirectory = createFileDir();
-        // FOR TESTING ONLY!
-        std::cout << fileDirectory << std::endl;
+        SaveLoad* loader = new SaveLoad();
+        do {
+            fileDirectory = createFileDir();
+        } while (!loader->load(fileDirectory));
+
+        gameModelPtr->addPlayer(new Player(loader->getPlayer1()));
+        gameModelPtr->addPlayer(new Player(loader->getPlayer2()));
+        gameModelPtr->setBoard(new Board(loader->getLoadedBoard()));
+        gameModelPtr->setTileBag(new LinkedList(loader->getLoadedTileBag()));
+        gameModelPtr->setCurrentPlayer(loader->getCurrentPlayer());
+        delete loader;
+        startGame();
     }
     else if (input == 3)
     {
@@ -87,12 +103,37 @@ void GameView::processMenuSelection(int input) {
     }
     else if (input == 4)
     {
-        // MAJOR FUNCTIONALITY MISSING! NEED TO CLEAR MEMORY HERE!!!!
-        std::cout << "\nGoodbye" << std::endl;
+        quit();
     }
 }
 
-void GameView::startNewGame() {
+void GameView::startGame()
+{
+    bool firstIteration = true;
+    std::cout << "\nQwirkle game successfully loaded" << std::endl;
+
+    std::vector<Player*> players = gameModelPtr->getPlayers();
+
+    // For when we take input for the first iteration later
+    std::cin.ignore();
+    while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
+    {
+        for (Player* player : players)
+        {
+            if (!gameOver) {
+                if (!firstIteration)
+                {
+                    gameModelPtr->setCurrentPlayer(player->getName());
+                    firstIteration = false;
+                }
+                playerTurn(player);
+            }
+        }
+    }
+}
+
+void GameView::startNewGame()
+{
     std::cout << "Starting a New Game" << std::endl;
 
     //Setup 2 players
@@ -102,18 +143,20 @@ void GameView::startNewGame() {
     std::cout << "\nLet's Play!\n"
         << std::endl;
 
-    //TODO: temp for testing
     std::vector<Player*> players = gameModelPtr->getPlayers();
 
     // For when we take input for the first iteration later
     std::cin.ignore();
-    while (gameModelPtr->getTileBag()->numTilesLeft() > 0)
+    while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
     {
-        for (Player* player : players) {
-            playerTurn(player);
+        for (Player* player : players)
+        {
+            if (!gameOver) {
+                gameModelPtr->setCurrentPlayer(player->getName());
+                playerTurn(player);
+            }
         }
     }
-
 }
 
 /**
@@ -128,29 +171,31 @@ void GameView::newPlayer()
         << std::endl;
 
     bool nameIsValid = false;
-    do {
+    do
+    {
         std::cout << "\n> ";
         std::cin >> playerName;
         nameIsValid = validatePlayerName(playerName);
-        if (!nameIsValid) {
+        if (!nameIsValid)
+        {
             std::cerr << "Invalid Input" << std::endl;
         }
     } while (!nameIsValid);
     gameModelPtr->addPlayerToGame(playerName);
-
 }
 
-bool GameView::validatePlayerName(std::string name) {
+bool GameView::validatePlayerName(std::string name)
+{
     bool isValid = true;
     std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (unsigned int i = 0; i < name.size(); i++)
     {
-        if (allowedChars.find(name[i]) == std::string::npos) {
+        if (allowedChars.find(name[i]) == std::string::npos)
+        {
             isValid = false;
         }
     }
     return isValid;
-
 }
 
 void GameView::playerTurn(Player* player)
@@ -164,7 +209,8 @@ void GameView::playerTurn(Player* player)
     std::cout << std::endl;
 }
 
-std::string GameView::processGameInput(Player* player) {
+std::string GameView::processGameInput(Player* player)
+{
 
     std::string cmd;
     bool inputValid = false;
@@ -177,12 +223,15 @@ std::string GameView::processGameInput(Player* player) {
         std::getline(std::cin, token);
         std::istringstream iss(token);
 
-        while (iss >> token) {
+        while (iss >> token)
+        {
             tokens.push_back(token);
         }
+
         try
         {
-            if (validatePlaceCmd(tokens)) {
+            if (validatePlaceCmd(tokens))
+            {
                 std::string tileStr = tokens[1];
                 Tile tile = convertStrToTile(tileStr);
 
@@ -194,31 +243,52 @@ std::string GameView::processGameInput(Player* player) {
                     posX, posY);
                 inputValid = true;
             }
-            if (validateReplaceCmd(tokens)) {
+
+            if (validateReplaceCmd(tokens))
+            {
                 std::string tileStr = tokens[1];
                 Tile tile = convertStrToTile(tileStr);
                 player->replace(tile, gameModelPtr->getTileBag());
                 inputValid = true;
             }
-            if (!inputValid) {
-                throw "Invalid Input";
+
+            if (validateSave(tokens))
+            {
+                SaveLoad* saver = new SaveLoad();
+                saver->save(*gameModelPtr->getBoard(), tokens[1], gameModelPtr->getPlayers()[0], gameModelPtr->getPlayers()[1], gameModelPtr->getTileBag(), gameModelPtr->getCurrentPlayer());
+                delete saver;
+                inputValid = true;
             }
 
+            if (tokens[0] == "quit")
+            {
+                quit();
+                inputValid = true;
+            }
+
+
+            if (!inputValid)
+            {
+                throw "Invalid Input";
+            }
         }
         catch (const char* msg)
         {
             std::cerr << msg << std::endl;
         }
 
-    } while (!inputValid);
+    } while (!inputValid && !gameOver);
 
     return cmd;
 }
 
-bool GameView::validatePlaceCmd(std::vector <std::string> tokens) {
+bool GameView::validatePlaceCmd(std::vector<std::string> tokens)
+{
     bool isValid = true;
-    if (tokens.size() == 4) {
-        if (tokens[0] != "place" && tokens[2] != "at") {
+    if (tokens.size() == 4)
+    {
+        if (tokens[0] != "place" && tokens[2] != "at")
+        {
             isValid = false;
         }
         if (!validateTile(tokens[1]))
@@ -230,30 +300,57 @@ bool GameView::validatePlaceCmd(std::vector <std::string> tokens) {
             isValid = false;
         }
     }
-    else {
+    else
+    {
         isValid = false;
     }
     return isValid;
 };
 
-bool GameView::validateReplaceCmd(std::vector <std::string> tokens) {
+bool GameView::validateReplaceCmd(std::vector<std::string> tokens)
+{
     bool isValid = true;
-    if (tokens.size() == 2) {
-        if (tokens[0] != "replace") {
-            isValid = false;
-        }
-        if (!validateTile(tokens[1])) {
+    if (tokens.size() == 2 && tokens[0] == "replace")
+    {
+
+        if (!validateTile(tokens[1]))
+        {
             isValid = false;
         }
     }
-    else {
+    else
+    {
         isValid = false;
     }
 
     return isValid;
 };
 
-bool GameView::validateTile(std::string tileStr) {
+bool GameView::validateSave(std::vector<std::string> tokens)
+{
+    bool isValid = true;
+    if (tokens.size() == 2 && tokens[0] == "save")
+    {
+        std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+        for (char& c : tokens[1])
+        {
+            if (allowedChars.find((char)toupper(c)) == std::string::npos)
+            {
+                isValid = false;
+            }
+        }
+    }
+    else
+    {
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+bool GameView::validateTile(std::string tileStr)
+{
     bool isValid = false;
     char allColours[6]{ 'R', 'O', 'Y', 'G', 'B', 'P' };
 
@@ -266,7 +363,8 @@ bool GameView::validateTile(std::string tileStr) {
     bool colourIsValid = false;
     for (char colour : allColours)
     {
-        if (inputColour == colour) {
+        if (inputColour == colour)
+        {
             colourIsValid = true;
         }
     }
@@ -280,14 +378,15 @@ bool GameView::validateTile(std::string tileStr) {
         shapeIsValid = true;
     }
 
-    if (colourIsValid && shapeIsValid) {
+    if (colourIsValid && shapeIsValid)
+    {
         isValid = true;
     }
     return isValid;
-
 };
 
-Tile GameView::convertStrToTile(std::string tileStr) {
+Tile GameView::convertStrToTile(std::string tileStr)
+{
     Colour colour = convertCharToColour(tileStr[0]);
     std::string shapeStr = tileStr.substr(1, tileStr.size());
     Shape shape = convertIntToShape(std::stoi(shapeStr));
@@ -295,7 +394,8 @@ Tile GameView::convertStrToTile(std::string tileStr) {
     return Tile(colour, shape);
 }
 
-bool GameView::validateCoord(std::string coord) {
+bool GameView::validateCoord(std::string coord)
+{
     bool isValid = false;
     char baseAlph = 'A';
     int yVal = coord[0];
@@ -304,71 +404,87 @@ bool GameView::validateCoord(std::string coord) {
     for (int offset = 0; offset < NUM_ALPHABETS; offset++)
     {
         // Uses char addition to check if yVal is in the alphabet
-        if (yVal == baseAlph + offset) {
+        if (yVal == baseAlph + offset)
+        {
             isValid = true;
         };
-        if (xVal >= 0 || xVal < NUM_ALPHABETS) {
+        if (xVal >= 0 || xVal < NUM_ALPHABETS)
+        {
             isValid = true;
         }
     }
     return isValid;
 };
 
-Colour GameView::convertCharToColour(char colour) {
+Colour GameView::convertCharToColour(char colour)
+{
     Colour returnColour = EMPTY_COLOR;
-    if (colour == 'R') {
+    if (colour == 'R')
+    {
         returnColour = RED;
     }
-    else if (colour == 'O') {
+    else if (colour == 'O')
+    {
         returnColour = ORANGE;
     }
-    else if (colour == 'Y') {
+    else if (colour == 'Y')
+    {
         returnColour = YELLOW;
     }
-    else if (colour == 'G') {
+    else if (colour == 'G')
+    {
         returnColour = GREEN;
     }
-    else if (colour == 'B') {
+    else if (colour == 'B')
+    {
         returnColour = BLUE;
     }
-    else if (colour == 'P') {
+    else if (colour == 'P')
+    {
         returnColour = PURPLE;
     }
     return returnColour;
 }
 
-Shape GameView::convertIntToShape(int shape) {
+Shape GameView::convertIntToShape(int shape)
+{
     Shape returnShape = EMPTY_SHAPE;
-    if (shape == 1) {
+    if (shape == 1)
+    {
         returnShape = CIRCLE;
     }
-    else if (shape == 2) {
+    else if (shape == 2)
+    {
         returnShape = STAR_4;
     }
-    else if (shape == 3) {
+    else if (shape == 3)
+    {
         returnShape = DIAMOND;
     }
-    else if (shape == 4) {
+    else if (shape == 4)
+    {
         returnShape = SQUARE;
     }
-    else if (shape == 5) {
+    else if (shape == 5)
+    {
         returnShape = STAR_6;
     }
-    else if (shape == 6) {
+    else if (shape == 6)
+    {
         returnShape = CLOVER;
     }
     return returnShape;
 }
 
-
-void GameView::printScores() {
+void GameView::printScores()
+{
     std::vector<Player*> players = gameModelPtr->getPlayers();
-    for (Player* player : players) {
+    for (Player* player : players)
+    {
         std::cout << "Score for " << player->getName() << ": "
             << player->getScore() << std::endl;
     }
 }
-
 
 /**
  * Difficult to check if file exists with current config. Maybe return
@@ -378,11 +494,9 @@ std::string GameView::createFileDir()
 {
     std::cout << "Enter a filename from which load a game" << std::endl;
     std::cout << "> ";
-    std::string fileDirectory = "saves/";
     std::string input;
     std::cin >> input;
-    fileDirectory += input;
-    return fileDirectory;
+    return input;
 }
 
 void GameView::printCredits()
@@ -409,4 +523,10 @@ void GameView::printCredits()
     }
     std::cout << "-----------------------------------\n"
         << std::endl;
+}
+
+void GameView::quit()
+{
+    std::cout << "\nGoodbye" << std::endl;
+    this->gameOver = true;
 }

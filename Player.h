@@ -9,11 +9,11 @@ class Player
 public:
     Player();
     Player(int id, std::string name);
-    Player(const Player& other);
+    Player(const Player &other);
     ~Player();
-    void draw(TileBag* bag);
-    void play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY);
-    void replace(Tile tile, TileBag* tileBag);
+    void draw(TileBag *bag);
+    void play(Tile tile, TileBag *tileBag, Board *board, int posX, int posY);
+    void replace(Tile tile, TileBag *tileBag);
 
     /**
      * @return -1 if no such tile is found and the index of the tile in the hand
@@ -23,7 +23,7 @@ public:
 
     int getPlayerID();
     std::string getName();
-    LinkedList getHand();
+    LinkedList *getHand();
     std::string handToString();
     int getScore();
 
@@ -31,10 +31,12 @@ public:
     void setHand(LinkedList hand);
     void setScore(int score);
 
+    void addTileToHand(Tile *tile);
+
 private:
+    LinkedList *hand;
     int id;
     std::string name;
-    LinkedList* hand;
     int score;
 };
 

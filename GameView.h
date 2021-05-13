@@ -13,13 +13,16 @@
 class GameView
 {
 private:
-    GameModel* gameModelPtr;
+    GameModel *gameModelPtr;
+    bool gameOver;
 
-    bool validatePlaceCmd(std::vector <std::string> tokens);
-    bool validateReplaceCmd(std::vector <std::string> tokens);
+    bool validatePlaceCmd(std::vector<std::string> tokens);
+    bool validateReplaceCmd(std::vector<std::string> tokens);
     bool validateCoord(std::string coord);
     bool validateTile(std::string tile);
     bool validatePlayerName(std::string name);
+    bool validateSave(std::vector<std::string> tokens);
+
     /**
      * Assumes that the char passed in is valid
      * @return colour typedef value matching the char
@@ -36,19 +39,21 @@ private:
 
     int getValidMenuSelection();
     void processMenuSelection(int input);
+    void startGame();
     void startNewGame();
-    void playerTurn(Player* player);
-    std::string processGameInput(Player* player);
+    void playerTurn(Player *player);
+    std::string processGameInput(Player *player);
     void printScores();
     void newPlayer();
     std::string createFileDir();
     void printCredits();
+
 public:
-    GameView(GameModel* gameModelPtr);
+    GameView(GameModel *gameModelPtr);
     ~GameView();
     void init();
 
-
+    void quit();
 };
 
 #endif // ASSIGN2_GAMEVIEW_H
