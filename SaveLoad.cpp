@@ -14,7 +14,8 @@ SaveLoad::SaveLoad()
     board = new Board();
 }
 
-SaveLoad::~SaveLoad() {
+SaveLoad::~SaveLoad()
+{
     delete loadedPlayer1;
     delete loadedPlayer2;
     delete loadedTileBag;
@@ -25,7 +26,7 @@ SaveLoad::~SaveLoad() {
  * Takes input from vaious places and puts it all into one .save file.
  * @return True if save was successful, otherwise false.
  */
-bool SaveLoad::save(Board board, std::string fileName, Player* player1, Player* player2, TileBag* tileBag, std::string currentPLayer)
+bool SaveLoad::save(Board board, std::string fileName, Player *player1, Player *player2, TileBag *tileBag, std::string currentPLayer)
 {
     bool saved = false;
     try
@@ -66,11 +67,12 @@ bool SaveLoad::save(Board board, std::string fileName, Player* player1, Player* 
             saveFile.close();
             saved = true;
         }
-        else {
+        else
+        {
             throw "Error saving file!";
         }
     }
-    catch (const char* msg)
+    catch (const char *msg)
     {
         std::cerr << msg << '\n';
     }
@@ -85,7 +87,8 @@ bool SaveLoad::load(std::string fileName)
     {
         std::string line = "";
         std::ifstream saveFile("saves/" + fileName + ".save");
-        if (saveFile) {
+        if (saveFile)
+        {
             // Board and tile bag.
             std::string boardDimensions = "";
 
@@ -149,13 +152,16 @@ bool SaveLoad::load(std::string fileName)
                     unsigned int i = 0;
                     while (i < line.length())
                     {
-
+                        std::cout << "CHECK_01" << std::endl;
+                        if (line.at(i) == ' ')
+                        {
+                            i++;
+                        }
                         // I got frustrated trying to solve a probelm and so this is my temp solution.
-                        char letters[BOARD_DIMENSIONS] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+                        char letters[BOARD_DIMENSIONS] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
                         char color = line.at(i);
                         std::string strShape(1, line.at(i + 1));
                         int shape = stoi(strShape);
-
                         // Getting the x position.
                         char charPositionX = tolower(line.at(i + 3));
                         int positionX = 0;
@@ -168,13 +174,26 @@ bool SaveLoad::load(std::string fileName)
                             }
                         }
 
-                        std::string strPositionY(1, line.at(i + 4));
-                        int positionY = stoi(strPositionY);
+                        if (line.at(i + 5) != ',')
+                        {
+                            std::string strPositionY1(1, line.at(i + 4));
+                            std::string strPositionY2(1, line.at(i + 5));
+                            std::string strPositionY = strPositionY1 + strPositionY2;
+                            int positionY = stoi(strPositionY);
+                            Tile *tile = new Tile(color, shape);
 
-                        Tile* tile = new Tile(color, shape);
+                            board->addTileForLoad(*tile, positionX, positionY);
+                            delete tile;
+                        }
+                        else
+                        {
+                            std::string strPositionY(1, line.at(i + 4));
+                            int positionY = stoi(strPositionY);
+                            Tile *tile = new Tile(color, shape);
 
-                        board->addTileForLoad(*tile, positionX, positionY);
-                        delete tile;
+                            board->addTileForLoad(*tile, positionX, positionY);
+                            delete tile;
+                        }
 
                         i += 7;
                     }
@@ -203,11 +222,12 @@ bool SaveLoad::load(std::string fileName)
             saveFile.close();
             loaded = true;
         }
-        else {
+        else
+        {
             throw "No such file.";
         }
     }
-    catch (const char* msg)
+    catch (const char *msg)
     {
         std::cerr << msg << '\n';
     }
