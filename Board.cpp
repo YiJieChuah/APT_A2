@@ -340,9 +340,9 @@ int Board::getBoardDimensions()
     return BOARD_DIMENSIONS;
 }
 
-bool Board::addTileForLoad(Tile tile, int positionX, int positionY)
+bool Board::addTileForLoad(Tile tile, int posX, int posY)
 {
-    board[positionX][positionY] = tile;
+    board[posY][posX] = tile;
     return false;
 }
 
@@ -363,7 +363,7 @@ bool Board::isEmpty() {
 
 bool Board::tileHasNeighbour(int posX, int posY) {
     bool hasNeighbour = false;
-    for (int direction = NORTH; direction != WEST; direction++)
+    for (int direction = NORTH; direction != LAST; direction++)
     {
         Direction castDir = static_cast<Direction>(direction);
         if (!getTileNeighbour(posX, posY, castDir).isEmpty()) {

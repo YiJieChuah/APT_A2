@@ -13,7 +13,9 @@ enum Direction
     NORTH,
     EAST,
     SOUTH,
-    WEST
+    WEST,
+    // LAST enum is for iteration
+    LAST
 };
 
 class Board

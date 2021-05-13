@@ -82,7 +82,7 @@ void GameView::processMenuSelection(int input)
     }
     else if (input == 2)
     {
-        SaveLoad* loader = new SaveLoad();
+        SaveLoad* loader = new SaveLoad(gameModelPtr);
         do {
             fileDirectory = createFileDir();
         } while (!loader->load(fileDirectory));
@@ -146,8 +146,7 @@ void GameView::startNewGame()
     {
         for (Player* player : players)
         {
-            if (!gameOver) {
-                gameModelPtr->setCurrentPlayer(player->getName());
+            if (!gameOver && player->getName() == gameModelPtr->getCurrentPlayerName()) {
                 playerTurn(player);
             }
         }
@@ -195,6 +194,7 @@ bool GameView::validatePlayerName(std::string name)
 
 void GameView::playerTurn(Player* player)
 {
+    gameModelPtr->setCurrentPlayer(player->getName());
     std::cout << player->getName() << ", it's your turn" << std::endl;
     printScores();
     gameModelPtr->getBoard()->printBoard();
@@ -249,8 +249,9 @@ std::string GameView::processGameInput(Player* player)
 
             if (validateSave(tokens))
             {
-                SaveLoad* saver = new SaveLoad();
-                saver->save(*gameModelPtr->getBoard(), tokens[1], gameModelPtr->getPlayers()[0], gameModelPtr->getPlayers()[1], gameModelPtr->getTileBag(), gameModelPtr->getCurrentPlayer());
+                SaveLoad* saver = new SaveLoad(gameModelPtr);
+                saver->save(*gameModelPtr->getBoard(), tokens[1], gameModelPtr->getPlayers()[0], gameModelPtr->getPlayers()[1],
+                    gameModelPtr->getTileBag(), gameModelPtr->getCurrentPlayerName());
                 delete saver;
                 inputValid = true;
             }
@@ -382,9 +383,9 @@ bool GameView::validateTile(std::string tileStr)
 
 Tile GameView::convertStrToTile(std::string tileStr)
 {
-    Colour colour = convertCharToColour(tileStr[0]);
+    Colour colour = tileStr[0];
     std::string shapeStr = tileStr.substr(1, tileStr.size());
-    Shape shape = convertIntToShape(std::stoi(shapeStr));
+    Shape shape = std::stoi(shapeStr);
 
     return Tile(colour, shape);
 }
@@ -410,66 +411,6 @@ bool GameView::validateCoord(std::string coord)
     }
     return isValid;
 };
-
-Colour GameView::convertCharToColour(char colour)
-{
-    Colour returnColour = EMPTY_COLOR;
-    if (colour == 'R')
-    {
-        returnColour = RED;
-    }
-    else if (colour == 'O')
-    {
-        returnColour = ORANGE;
-    }
-    else if (colour == 'Y')
-    {
-        returnColour = YELLOW;
-    }
-    else if (colour == 'G')
-    {
-        returnColour = GREEN;
-    }
-    else if (colour == 'B')
-    {
-        returnColour = BLUE;
-    }
-    else if (colour == 'P')
-    {
-        returnColour = PURPLE;
-    }
-    return returnColour;
-}
-
-Shape GameView::convertIntToShape(int shape)
-{
-    Shape returnShape = EMPTY_SHAPE;
-    if (shape == 1)
-    {
-        returnShape = CIRCLE;
-    }
-    else if (shape == 2)
-    {
-        returnShape = STAR_4;
-    }
-    else if (shape == 3)
-    {
-        returnShape = DIAMOND;
-    }
-    else if (shape == 4)
-    {
-        returnShape = SQUARE;
-    }
-    else if (shape == 5)
-    {
-        returnShape = STAR_6;
-    }
-    else if (shape == 6)
-    {
-        returnShape = CLOVER;
-    }
-    return returnShape;
-}
 
 void GameView::printScores()
 {

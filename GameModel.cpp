@@ -26,14 +26,17 @@ void GameModel::addPlayerToGame(std::string name)
     Player* playerToAdd = new Player(name);
     playerToAdd->draw(tileBag);
     players.push_back(playerToAdd);
+
+    //Set the first player added as current player.
+    if (players.size() == 1) {
+        setCurrentPlayer(playerToAdd->getName());
+    }
 }
 
-void GameModel::addPlayerToGame(std::string name, int score, LinkedList* hand)
+void GameModel::addPlayerToGame(Player* player)
 {
-    Player* playerToAdd = new Player(name, score, hand);
-    players.push_back(playerToAdd);
+    players.push_back(player);
 }
-
 
 std::vector<Player*> GameModel::getPlayers()
 {
@@ -55,24 +58,21 @@ unsigned int GameModel::getNumPlayers()
     return players.size();
 }
 
-std::string GameModel::getCurrentPlayer()
+std::string GameModel::getCurrentPlayerName()
 {
-    return currentPlayer;
-}
-void GameModel::setCurrentPlayer(std::string name)
-{
-    this->currentPlayer = name;
+    return currentPlayerName;
 }
 
-void GameModel::addPlayer(Player* player)
+void GameModel::setCurrentPlayer(std::string currPlayerName)
 {
-    players.push_back(player);
+    this->currentPlayerName = currPlayerName;
 }
+
 void GameModel::setBoard(Board* board)
 {
     this->board = board;
 }
-void GameModel::setTileBag(LinkedList* tileBag)
+void GameModel::setTileBag(LinkedList* tiles)
 {
-    this->tileBag->setTiles(tileBag);
+    this->tileBag->setTiles(tiles);
 }

@@ -21,7 +21,6 @@ public:
 
    Tile();
    Tile(Colour colour, Shape shape);
-   //Constructor which auto-converts the colour and int
    Tile(const Tile& other);
    ~Tile();
    std::string toString();

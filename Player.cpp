@@ -6,7 +6,10 @@
 
 #define HAND_SIZE 6
 
-Player::Player() {}
+Player::Player() {
+    this->score = 0;
+    this->hand = new LinkedList();
+}
 
 Player::Player(std::string name)
 {
@@ -100,6 +103,11 @@ void Player::setName(std::string name)
 LinkedList* Player::getHand()
 {
     return this->hand;
+}
+
+void Player::setHand(LinkedList* hand)
+{
+    this->hand = hand;
 }
 
 std::string Player::handToString()

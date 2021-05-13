@@ -15,28 +15,27 @@ public:
     ~GameModel();
 
     void addPlayerToGame(std::string name);
-    void addPlayerToGame(std::string name, int score, LinkedList* hand);
+    void addPlayerToGame(Player* player);
 
     unsigned int getNumPlayers();
-    Player* getPlayer(int playerID);
     std::vector<Player*> getPlayers();
     Board* getBoard();
     TileBag* getTileBag();
-    std::string getCurrentPlayer();
 
-    void setCurrentPlayer(std::string name);
+    std::string getCurrentPlayerName();
+    void setCurrentPlayer(std::string currPlayerName);
 
     // Need to add.
     void addPlayer(Player* player);
     void setBoard(Board* board);
-    void setTileBag(LinkedList* tileBag);
+    void setTileBag(LinkedList* tiles);
 
 private:
     std::vector<Player*> players;
 
     TileBag* tileBag;
     Board* board;
-    std::string currentPlayer;
+    std::string currentPlayerName;
 };
 
 #endif // ASSIGN2_GAMEMODEL_H

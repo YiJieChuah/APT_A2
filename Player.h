@@ -29,7 +29,7 @@ public:
     int getScore();
 
     void setName(std::string name);
-    void setHand(LinkedList hand);
+    void setHand(LinkedList* hand);
     void setScore(int score);
 
     void addTileToHand(Tile* tile);
