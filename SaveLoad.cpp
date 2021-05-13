@@ -152,7 +152,6 @@ bool SaveLoad::load(std::string fileName)
                     unsigned int i = 0;
                     while (i < line.length())
                     {
-                        std::cout << "CHECK_01" << std::endl;
                         if (line.at(i) == ' ')
                         {
                             i++;
