@@ -118,16 +118,23 @@ void GameView::startLoadedGame()
     std::cout << "\nQwirkle game successfully loaded" << std::endl;
 
     std::vector<Player*> players = gameModelPtr->getPlayers();
+    bool firstIter = true;
     while (!gameOver)
     {
         for (Player* player : players)
         {
-            if (!gameOver)
-            {
-                // Assumes that all players have unique names
-                // Searches for the right player before gicing them the turn
-                if (player->getName() == gameModelPtr->getCurrentPlayerName()) {
+            if (!firstIter) {
+                gameModelPtr->setCurrentPlayer(player->getName());
+            }
+
+            std::string currPlayerName = gameModelPtr->getCurrentPlayerName();
+            std::string loopName = player->getName();
+
+            if (!gameOver) {
+                if (currPlayerName == player->getName()) {
                     playerTurn(player);
+                    firstIter = false;
+
                 }
             }
         }
@@ -154,6 +161,7 @@ void GameView::startNewGame()
         for (Player* player : players)
         {
             if (!gameOver) {
+                gameModelPtr->setCurrentPlayer(player->getName());
                 playerTurn(player);
             }
         }
@@ -206,7 +214,6 @@ bool GameView::validatePlayerName(std::string name)
 
 void GameView::playerTurn(Player* player)
 {
-    gameModelPtr->setCurrentPlayer(player->getName());
     std::cout << player->getName() << ", it's your turn" << std::endl;
     printScores();
     gameModelPtr->getBoard()->printBoard();
