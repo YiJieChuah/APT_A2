@@ -168,7 +168,6 @@ bool SaveLoad::loadFile(std::ifstream& input) {
         }
         ++lineNum;
     }
-
     return loaded;
 }
 
