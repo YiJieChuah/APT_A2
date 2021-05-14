@@ -1,7 +1,7 @@
 2
-normalGame1
+normalGame
 place R2 at J11
-replace Y4
+replace Y3
 place R3 at K11
 place O3 at K10
 place O4 at L10
@@ -9,5 +9,5 @@ place Y3 at K9
 place Y2 at J9
 place Y5 at I9
 place Y4 at H9
-place Y5 at H10
+place Y6 at H10
 quit
