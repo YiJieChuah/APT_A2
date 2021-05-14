@@ -39,7 +39,7 @@ Player::~Player()
 
 void Player::draw(TileBag* bag)
 {
-    while (hand->size() < HAND_SIZE)
+    while (hand->size() < HAND_SIZE && bag->numTilesLeft() > 0)
     {
         this->hand->add_back(bag->pop());
     }

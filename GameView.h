@@ -47,6 +47,7 @@ private:
     void newPlayer();
     std::string createFileDir();
     void printCredits();
+    void gameOverScene();
 
 public:
     GameView(GameModel* gameModelPtr);

@@ -77,3 +77,29 @@ void GameModel::setTileBag(LinkedList* tiles)
 {
     this->tileBag->setTiles(tiles);
 }
+
+std::string GameModel::getGameOutcome() {
+    std::string retStr = "";
+    bool drawOccured = false;
+    Player* currMaxPtsPlayer = players[0];
+    //start from second player
+    for (unsigned int i = 1; i < players.size(); i++) {
+        if (currMaxPtsPlayer->getScore() < players[i]->getScore()) {
+            currMaxPtsPlayer = players[i];
+            drawOccured = false;
+        }
+        if (currMaxPtsPlayer->getScore() == players[i]->getScore()) {
+            currMaxPtsPlayer = players[i];
+            drawOccured = true;
+        }
+    }
+    if (!drawOccured) {
+        retStr += "Player " + currMaxPtsPlayer->getName() + " won!";
+    }
+    else {
+        retStr += "Draw!";
+    }
+    currMaxPtsPlayer = nullptr;
+
+    return retStr;
+}

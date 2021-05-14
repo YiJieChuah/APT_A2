@@ -30,6 +30,8 @@ public:
     void setBoard(Board* board);
     void setTileBag(LinkedList* tiles);
 
+    std::string getGameOutcome();
+
 private:
     std::vector<Player*> players;
 

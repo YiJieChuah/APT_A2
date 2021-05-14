@@ -118,7 +118,7 @@ void GameView::startLoadedGame()
     std::cout << "\nQwirkle game successfully loaded" << std::endl;
 
     std::vector<Player*> players = gameModelPtr->getPlayers();
-    while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
+    while (!gameOver)
     {
         for (Player* player : players)
         {
@@ -252,6 +252,11 @@ void GameView::processGameInput(Player* player)
 
                 player->play(tile, gameModelPtr->getTileBag(), gameModelPtr->getBoard(),
                     posX, posY);
+                if (player->getHand()->size() == 0 &&
+                    gameModelPtr->getTileBag()->numTilesLeft() == 0) {
+                    gameOverScene();
+                    quit();
+                }
                 inputValid = true;
             }
 
@@ -474,6 +479,12 @@ void GameView::printCredits()
     }
     std::cout << "-----------------------------------\n"
         << std::endl;
+}
+
+void GameView::gameOverScene() {
+    std::cout << "Game over" << std::endl;
+    printScores();
+    std::cout << gameModelPtr->getGameOutcome() << std::endl;
 }
 
 void GameView::quit()
