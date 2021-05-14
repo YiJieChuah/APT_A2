@@ -82,7 +82,9 @@ bool SaveLoad::load(std::string filePath)
     std::cin.ignore();
 
     if (!file) {
-        std::cout << "No Such File." << std::endl;
+        if (!std::cin.eof()) {
+            std::cout << "No Such File." << std::endl;
+        }
     }
     else {
         if (loadFile(file)) {
@@ -162,6 +164,7 @@ bool SaveLoad::loadFile(std::ifstream& input) {
         else if (lineNum == 8) {
             std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
             gameModelPtr->setTileBag(initTiles(tilesStr));
+
         }
         else if (lineNum == 9)
         {

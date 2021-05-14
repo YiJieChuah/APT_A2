@@ -1,5 +1,7 @@
 2
 normalGame
-place R2 at J11
-place R3 at K11
-place R3 at I11
+place O4 at J11
+replace Y4
+place O5 at K11
+place O3 at L11
+place O4 at M11

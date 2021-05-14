@@ -95,9 +95,14 @@ void GameView::processMenuSelection(int input)
         SaveLoad* loader = new SaveLoad(gameModelPtr);
         do {
             fileDirectory = createFileDir();
-        } while (!loader->load(fileDirectory));
+        } while (!loader->load(fileDirectory) && !std::cin.eof());
 
-        startLoadedGame();
+        if (!std::cin.eof()) {
+            startLoadedGame();
+        }
+        else {
+            quit();
+        }
         delete loader;
     }
     else if (input == 3)
