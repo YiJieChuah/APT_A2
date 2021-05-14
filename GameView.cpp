@@ -138,12 +138,12 @@ void GameView::startNewGame()
     newPlayer();
     newPlayer();
 
-    std::cout << "\nLet's Play!\n"
-        << std::endl;
-
+    if (!gameOver) {
+        std::cout << "\nLet's Play!\n" << std::endl;
+    }
     std::vector<Player*> players = gameModelPtr->getPlayers();
 
-    // For when we take input for the first iteration later
+    // Ignores \n char to avoid instant input termination
     std::cin.ignore();
     while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
     {
@@ -172,12 +172,17 @@ void GameView::newPlayer()
     {
         std::cout << "\n> ";
         std::cin >> playerName;
-        nameIsValid = validatePlayerName(playerName);
-        if (!nameIsValid)
-        {
-            std::cout << "Invalid Input" << std::endl;
+        if (std::cin.eof()) {
+            quit();
         }
-    } while (!nameIsValid);
+        else {
+            nameIsValid = validatePlayerName(playerName);
+            if (!nameIsValid)
+            {
+                std::cout << "Invalid Input" << std::endl;
+            }
+        }
+    } while (!nameIsValid && !gameOver);
     gameModelPtr->addPlayerToGame(playerName);
 }
 
@@ -207,7 +212,7 @@ void GameView::playerTurn(Player* player)
     std::cout << std::endl;
 }
 
-std::string GameView::processGameInput(Player* player)
+void GameView::processGameInput(Player* player)
 {
 
     std::string cmd;
@@ -219,11 +224,15 @@ std::string GameView::processGameInput(Player* player)
         std::vector<std::string> tokens;
         std::string token;
         std::getline(std::cin, token);
-        std::istringstream iss(token);
-
-        while (iss >> token)
-        {
-            tokens.push_back(token);
+        if (std::cin.eof()) {
+            tokens.push_back("quit");
+        }
+        else {
+            std::istringstream iss(token);
+            while (iss >> token)
+            {
+                tokens.push_back(token);
+            }
         }
 
         try
@@ -276,8 +285,6 @@ std::string GameView::processGameInput(Player* player)
         }
 
     } while (!inputValid && !gameOver);
-
-    return cmd;
 }
 
 bool GameView::validatePlaceCmd(std::vector<std::string> tokens)

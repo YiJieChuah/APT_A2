@@ -42,7 +42,7 @@ private:
     void startLoadedGame();
     void startNewGame();
     void playerTurn(Player* player);
-    std::string processGameInput(Player* player);
+    void processGameInput(Player* player);
     void printScores();
     void newPlayer();
     std::string createFileDir();
