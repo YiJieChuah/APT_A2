@@ -38,7 +38,8 @@ void GameView::init()
 int GameView::getValidMenuSelection()
 {
     bool inputValid = false;
-    int selection;
+    //Init with dummy value
+    int selection = -1;
     do
     {
         std::cout << "\n> ";
@@ -46,16 +47,21 @@ int GameView::getValidMenuSelection()
 
         try
         {
-            // Checks for not a number
-            if (!std::cin.good())
-            {
-                //Resets cin flags for next input attempt
-                std::cin.clear();
-                throw std::domain_error("Invalid Input");
+            if (std::cin.eof()) {
+                quit();
             }
-            if (selection <= 0 || selection > 4)
-            {
-                throw std::out_of_range("Invalid Input");
+            else {
+                // Checks for not a number
+                if (!std::cin.good())
+                {
+                    //Resets cin flags for next input attempt
+                    std::cin.clear();
+                    throw std::domain_error("Invalid Input");
+                }
+                if (selection <= 0 || selection > 4)
+                {
+                    throw std::out_of_range("Invalid Input");
+                }
             }
             inputValid = true;
         }
@@ -67,7 +73,7 @@ int GameView::getValidMenuSelection()
         {
             std::cout << e.what() << std::endl;
         }
-    } while (!inputValid || !std::cin.good());
+    } while ((!inputValid || !std::cin.good()) && !gameOver);
 
     return selection;
 };

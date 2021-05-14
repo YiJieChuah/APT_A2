@@ -4,7 +4,6 @@ place R2 at A26
 place R2 at I11
 place B1 at H4
 place B1 at J10
-replace Y4
 place R3 at J10
 place R3 at J11
 quit
