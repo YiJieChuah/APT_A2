@@ -1,7 +1,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <cctype>
+// #include <cctype>
+#include <ios>
+#include <limits>
 
 #include "GameView.h"
 #include "Tile.h"
@@ -47,21 +49,23 @@ int GameView::getValidMenuSelection()
 
         try
         {
-            if (std::cin.eof()) {
-                quit();
-            }
-            else {
+            if (!std::cin.eof()) {
                 // Checks for not a number
-                if (!std::cin.good())
+                if (!std::cin.good() && !gameOver)
                 {
-                    //Resets cin flags for next input attempt
+                    //Resets cin flags and clear buffer for next input attempt
                     std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
+                        '\n');
                     throw std::domain_error("Invalid Input");
                 }
                 if (selection <= 0 || selection > 4)
                 {
                     throw std::out_of_range("Invalid Input");
                 }
+            }
+            else {
+                quit();
             }
             inputValid = true;
         }
