@@ -157,14 +157,16 @@ bool SaveLoad::loadFile(std::ifstream& input) {
                 Tile* tile = strToTile(tileStr);
                 gameModelPtr->getBoard()->addTileForLoad(*tile, posX, posY);
                 delete tile;
-
             }
-            loaded = true;
         }
         else if (lineNum == 8) {
             std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
             gameModelPtr->setTileBag(initTiles(tilesStr));
-
+        }
+        else if (lineNum == 9)
+        {
+            gameModelPtr->setCurrentPlayer(line);
+            loaded = true;
         }
         ++lineNum;
     }

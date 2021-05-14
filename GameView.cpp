@@ -87,7 +87,7 @@ void GameView::processMenuSelection(int input)
             fileDirectory = createFileDir();
         } while (!loader->load(fileDirectory));
 
-        startGame();
+        startLoadedGame();
         delete loader;
     }
     else if (input == 3)
@@ -102,9 +102,9 @@ void GameView::processMenuSelection(int input)
     }
 }
 
-void GameView::startGame()
+void GameView::startLoadedGame()
 {
-    bool firstIteration = true;
+    // bool firstIteration = true;
     std::cout << "\nQwirkle game successfully loaded" << std::endl;
 
     std::vector<Player*> players = gameModelPtr->getPlayers();
@@ -114,12 +114,11 @@ void GameView::startGame()
         {
             if (!gameOver)
             {
-                if (!firstIteration)
-                {
-                    gameModelPtr->setCurrentPlayer(player->getName());
-                    firstIteration = false;
+                // Assumes that all players have unique names
+                // Searches for the right player before gicing them the turn
+                if (player->getName() == gameModelPtr->getCurrentPlayerName()) {
+                    playerTurn(player);
                 }
-                playerTurn(player);
             }
         }
     }
@@ -144,7 +143,7 @@ void GameView::startNewGame()
     {
         for (Player* player : players)
         {
-            if (!gameOver && player->getName() == gameModelPtr->getCurrentPlayerName()) {
+            if (!gameOver) {
                 playerTurn(player);
             }
         }

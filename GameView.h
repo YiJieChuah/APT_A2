@@ -13,7 +13,7 @@
 class GameView
 {
 private:
-    GameModel *gameModelPtr;
+    GameModel* gameModelPtr;
     bool gameOver;
 
     bool validatePlaceCmd(std::vector<std::string> tokens);
@@ -39,17 +39,17 @@ private:
 
     int getValidMenuSelection();
     void processMenuSelection(int input);
-    void startGame();
+    void startLoadedGame();
     void startNewGame();
-    void playerTurn(Player *player);
-    std::string processGameInput(Player *player);
+    void playerTurn(Player* player);
+    std::string processGameInput(Player* player);
     void printScores();
     void newPlayer();
     std::string createFileDir();
     void printCredits();
 
 public:
-    GameView(GameModel *gameModelPtr);
+    GameView(GameModel* gameModelPtr);
     ~GameView();
     void init();
 

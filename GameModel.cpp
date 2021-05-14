@@ -72,6 +72,7 @@ void GameModel::setBoard(Board* board)
 {
     this->board = board;
 }
+
 void GameModel::setTileBag(LinkedList* tiles)
 {
     this->tileBag->setTiles(tiles);

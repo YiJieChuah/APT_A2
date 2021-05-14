@@ -28,6 +28,12 @@ bool Board::addTile(Tile tile, int posX, int posY)
     {
         board[posY][posX] = tile;
         validAdd = true;
+        if (getLine(posX, posY, false).size() == 6 ||
+            getLine(posX, posY, true).size() == 6)
+        {
+            std::cout << std::endl;
+            std::cout << "QWIRKLE!!!" << std::endl;
+        }
     }
     else
     {
