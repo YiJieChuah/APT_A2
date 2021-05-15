@@ -295,7 +295,7 @@ void Board::printBoard()
         std::cout << alphabet++ << " |";
         for (int j = 0; j < BOARD_DIMENSIONS; j++)
         {
-            // If the tile is a exists, print it, otherwise print an empty space.
+            // If the tile is a exists, print it, otherwise print an empty space
             if (!board[i][j].isEmpty())
             {
                 std::cout << board[i][j].toString() << "|";
@@ -309,7 +309,6 @@ void Board::printBoard()
     }
 }
 
-// EVERYTHING BELOW THIS LINE SETH HAS JUST ADDED ------------------------------
 std::string Board::getSaveFormat()
 {
     char alphabet = 'A';
@@ -325,14 +324,16 @@ std::string Board::getSaveFormat()
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string xPosition(1, alphabet);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + shape + "@" + xPosition + std::to_string(y));
+                saveString.append(colour + shape + "@" +
+                    xPosition + std::to_string(y));
             }
             else if (board.at(x).at(y).colour != 'Z')
             {
                 std::string colour(1, board.at(x).at(y).colour);
                 std::string xPosition(1, alphabet);
                 std::string shape = std::to_string(board.at(x).at(y).shape);
-                saveString.append(colour + shape + "@" + xPosition + std::to_string(y));
+                saveString.append(colour + shape + "@" +
+                    xPosition + std::to_string(y));
                 firstLoop = false;
             }
         }

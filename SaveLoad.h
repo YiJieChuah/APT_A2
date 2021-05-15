@@ -12,7 +12,8 @@ class SaveLoad
 private:
     GameModel* gameModelPtr;
 
-    std::vector<std::string> splitByDelimiter(const std::string& line, char delimiter);
+    std::vector<std::string> splitByDelimiter(const std::string& line,
+        char delimiter);
 
 public:
     SaveLoad(GameModel* gameModelPtr);

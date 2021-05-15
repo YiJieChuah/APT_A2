@@ -176,7 +176,9 @@ bool SaveLoad::loadFile(std::ifstream& input) {
     return loaded;
 }
 
-std::vector<std::string> SaveLoad::splitByDelimiter(const std::string& line, char delimiter) {
+std::vector<std::string> SaveLoad::splitByDelimiter(const std::string& line,
+    char delimiter)
+{
     std::vector<std::string> tokens;
     std::string token;
     std::istringstream iss(line);

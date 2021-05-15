@@ -24,10 +24,6 @@ public:
 
     std::string getCurrentPlayerName();
     void setCurrentPlayer(std::string currPlayerName);
-
-    // Need to add.
-    void addPlayer(Player* player);
-    void setBoard(Board* board);
     void setTileBag(LinkedList* tiles);
 
     std::string getGameOutcome();

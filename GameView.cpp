@@ -181,8 +181,7 @@ void GameView::newPlayer()
     std::string playerName;
     std::cout << "\nEnter a name for player"
         << gameModelPtr->getNumPlayers() + 1
-        << "(uppercase characters only)"
-        << std::endl;
+        << "(uppercase characters only)";
 
     bool nameIsValid = false;
     do
@@ -262,8 +261,8 @@ void GameView::processGameInput(Player* player)
                 int posX = std::stoi(coords.substr(1, coords.size()));
                 int posY = coords[0] - 'A';
 
-                player->play(tile, gameModelPtr->getTileBag(), gameModelPtr->getBoard(),
-                    posX, posY);
+                player->play(tile, gameModelPtr->getTileBag(),
+                    gameModelPtr->getBoard(), posX, posY);
                 if (player->getHand()->size() == 0 &&
                     gameModelPtr->getTileBag()->numTilesLeft() == 0) {
                     gameOverScene();
@@ -283,8 +282,12 @@ void GameView::processGameInput(Player* player)
             if (validateSave(tokens))
             {
                 SaveLoad* saver = new SaveLoad(gameModelPtr);
-                saver->save(*gameModelPtr->getBoard(), tokens[1], gameModelPtr->getPlayers()[0], gameModelPtr->getPlayers()[1],
-                    gameModelPtr->getTileBag(), gameModelPtr->getCurrentPlayerName());
+                saver->save(*gameModelPtr->getBoard(), tokens[1],
+                    gameModelPtr->getPlayers()[0],
+                    gameModelPtr->getPlayers()[1],
+                    gameModelPtr->getTileBag(),
+                    gameModelPtr->getCurrentPlayerName()
+                );
                 delete saver;
                 inputValid = true;
             }
@@ -470,9 +473,13 @@ std::string GameView::createFileDir()
 void GameView::printCredits()
 {
 
-    std::string names[4] = { "Seth Danford", "Simon Dean", "Jeremy West", "Yi Jie Chuah" };
-    std::string studentIDs[4] = { "s3845408", "s3599190", "s3869546", "s3847905" };
-    std::string emails[4] = { "s3845408@student.rmit.edu.au", "s3599190@student.rmit.edu.au", "s3869546@student.rmit.edu.au", "s3847905@student.rmit.edu.au" };
+    std::string names[4] =
+    { "Seth Danford", "Simon Dean", "Jeremy West", "Yi Jie Chuah" };
+    std::string studentIDs[4] =
+    { "s3845408", "s3599190", "s3869546", "s3847905" };
+    std::string emails[4] =
+    { "s3845408@student.rmit.edu.au", "s3599190@student.rmit.edu.au",
+    "s3869546@student.rmit.edu.au", "s3847905@student.rmit.edu.au" };
 
     std::cout << "-----------------------------------" << std::endl;
     for (int i = 0; i < 4; i++)

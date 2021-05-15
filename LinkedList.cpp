@@ -134,8 +134,12 @@ void LinkedList::clear() {
 }
 
 void LinkedList::shuffle() {
-   //Static seed set for testing
+   // IMPORTANT NOTE FOR MARKER:
+   // Static seed set for reliably testing save methods that don't load files
    srand(RAND_SEED);
+   // Switch to actual randomness by uncommenting line below, comment line above
+   // and recompile
+   // srand(time(NULL));
    for (int i = 0; i < currSize; i++)
    {
       int randNum = std::rand() % currSize;
