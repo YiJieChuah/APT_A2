@@ -40,7 +40,7 @@ private:
     int getValidMenuSelection();
     void processMenuSelection(int input);
     void startLoadedGame();
-    void startNewGame();
+    void startNewGame(int players);
     void playerTurn(Player* player);
     void processGameInput(Player* player);
     void printScores();

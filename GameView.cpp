@@ -28,10 +28,11 @@ void GameView::init()
     // Presenting the menu.
     std::cout << "Menu" << std::endl;
     std::cout << "----" << std::endl;
-    std::cout << "1. New Game" << std::endl;
-    std::cout << "2. Load Game" << std::endl;
-    std::cout << "3. Credits (Show student information)" << std::endl;
-    std::cout << "4. Quit" << std::endl;
+    std::cout << "1. New Game 2 player" << std::endl;
+    std::cout << "2. New Game 4 player" << std::endl;
+    std::cout << "3. Load Game" << std::endl;
+    std::cout << "4. Credits (Show student information)" << std::endl;
+    std::cout << "5. Quit" << std::endl;
 
     int selection = getValidMenuSelection();
     processMenuSelection(selection);
@@ -59,7 +60,7 @@ int GameView::getValidMenuSelection()
                         '\n');
                     throw std::domain_error("Invalid Input");
                 }
-                if (selection <= 0 || selection > 4)
+                if (selection <= 0 || selection > 5)
                 {
                     throw std::out_of_range("Invalid Input");
                 }
@@ -88,9 +89,13 @@ void GameView::processMenuSelection(int input)
 
     if (input == 1)
     {
-        startNewGame();
+        startNewGame(2);
     }
-    else if (input == 2)
+    if (input == 2)
+    {
+        startNewGame(4);
+    }
+    else if (input == 3)
     {
         SaveLoad* loader = new SaveLoad(gameModelPtr);
         do {
@@ -105,13 +110,13 @@ void GameView::processMenuSelection(int input)
         }
         delete loader;
     }
-    else if (input == 3)
+    else if (input == 4)
     {
         printCredits();
         //restart
         init();
     }
-    else if (input == 4)
+    else if (input == 5)
     {
         quit();
     }
@@ -146,13 +151,14 @@ void GameView::startLoadedGame()
     }
 }
 
-void GameView::startNewGame()
+void GameView::startNewGame(int numPlayers)
 {
     std::cout << "Starting a New Game" << std::endl;
 
     //Setup 2 players
-    newPlayer();
-    newPlayer();
+    for (int i = 0; i < numPlayers; i ++){
+        newPlayer();
+    }
 
     if (!gameOver) {
         std::cout << "\nLet's Play!\n" << std::endl;
