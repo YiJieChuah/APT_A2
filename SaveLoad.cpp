@@ -95,47 +95,58 @@ bool SaveLoad::load(std::string filePath)
 
 bool SaveLoad::loadFile(std::ifstream& input) {
     bool loaded = false;
-    std::string line;
-    int lineNum = 0;
-    Player player1;
-    Player player2;
 
+    std::string line;
+    int readIdx = 0;
+    int numPlayers = 0;
+
+    //Reading in first line for number of players
+    if (!getline(input, line).eof()) {
+        try {
+            numPlayers = std::stoi(line);
+        }
+        catch (std::invalid_argument& e) {
+            // if no conversion could be done
+            std::cout << e.what() << std::endl;
+        }
+        catch (...) {
+            std::cout << "Error occured while reading in number of players"
+                << std::endl;
+        }
+        ++readIdx;
+    }
+
+    for (int i = 0; i < numPlayers; i++)
+    {
+        Player player;
+        int playerLineRead = 0;
+        while (playerLineRead <= 2) {
+            getline(input, line);
+            if (playerLineRead == 0) {
+                player.setName(line);
+            }
+            else if (playerLineRead == 1) {
+                player.setScore(stoi(line));
+            }
+            else {
+                std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
+                player.setHand(initTiles(tilesStr));
+                gameModelPtr->addPlayerToGame(new Player(player));
+            }
+            ++playerLineRead;
+        }
+        // Increments everytime a player is added to the game
+        ++readIdx;
+    }
+
+    // Reading the rest of the file
     while (!getline(input, line).eof())
     {
-        //Player 1 Load
-        if (lineNum == 0) {
-            player1.setName(line);
-        }
-        else if (lineNum == 1) {
-            player1.setScore(stoi(line));
-        }
-        else if (lineNum == 2) {
-            std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
-            player1.setHand(initTiles(tilesStr));
-            gameModelPtr->addPlayerToGame(new Player(player1));
-        }
-
-        //Player 2 Load
-        else if (lineNum == 3) {
-            player2.setName(line);
-        }
-        else if (lineNum == 4) {
-            player2.setScore(stoi(line));
-        }
-        else if (lineNum == 5) {
-            std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
-            // LinkedList* hand = initHand(tilesStr);
-            player2.setHand(initTiles(tilesStr));
-            // hand = nullptr;
-
-            gameModelPtr->addPlayerToGame(new Player(player2));
-        }
-
-        else if (lineNum == 6) {
+        if (readIdx == 1 + numPlayers) {
             //Supposed to handle board dimensions
             //They are fixed at 26 for base gameplay so placeholder for now
         }
-        else if (lineNum == 7) {
+        else if (readIdx == 2 + numPlayers) {
             std::vector<std::string> tokens = splitByDelimiter(line, ',');
 
             for (std::string token : tokens) {
@@ -154,17 +165,17 @@ bool SaveLoad::loadFile(std::ifstream& input) {
                 delete tile;
             }
         }
-        else if (lineNum == 8) {
+        else if (readIdx == 3 + numPlayers) {
             std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
             gameModelPtr->setTileBag(initTiles(tilesStr));
 
         }
-        else if (lineNum == 9)
+        else if (readIdx == 4 + numPlayers)
         {
             gameModelPtr->setCurrentPlayer(line);
             loaded = true;
         }
-        ++lineNum;
+        ++readIdx;
     }
     return loaded;
 }
