@@ -59,11 +59,11 @@ int GameView::getValidMenuSelection()
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
                         '\n');
-                    throw std::domain_error("Invalid Input");
+                    throw std::domain_error("Input was not a number!");
                 }
                 if (selection <= 0 || selection > 4)
                 {
-                    throw std::out_of_range("Invalid Input");
+                    throw std::out_of_range("Make sure your input is between 1 and 4!");
                 }
             }
             else {
@@ -197,7 +197,7 @@ void GameView::newPlayer()
             nameIsValid = validatePlayerName(playerName);
             if (!nameIsValid)
             {
-                std::cout << "Invalid Input" << std::endl;
+                std::cout << "Invalid name. Make sure you include only uppercase alphanumerics!" << std::endl;
             }
         }
     } while (!nameIsValid && !gameOver);
@@ -258,7 +258,6 @@ void GameView::processGameInput(Player* player)
 
         try
         {
-
             if (validatePlaceCmd(tokens))
             {
                 std::string tileStr = tokens[1];
@@ -314,7 +313,7 @@ void GameView::processGameInput(Player* player)
 
             if (!inputValid && isNormalInput)
             {
-                throw "Invalid Input";
+                throw "No Such Command. Type 'help' for the list of commands";
             }
         }
         catch (const char* msg)
