@@ -229,13 +229,14 @@ void GameView::playerTurn(Player* player)
     std::cout << std::endl;
 }
 
+// TODO: Change this into an int return maybe?
 void GameView::processGameInput(Player* player)
 {
 
     std::string cmd;
     bool inputValid = false;
-
     bool isNormalInput = true;
+
     do
     {
         inputValid = false;
