@@ -3,6 +3,8 @@
 
 #define NUM_ALPHABETS 26
 #define MAX_CMD_LEN 4
+#define COL_LEN 14
+#define DIVIDER_LEN 35
 
 #include <iostream>
 #include <string>
@@ -48,8 +50,9 @@ private:
     std::string createFileDir();
     void printCredits();
     void gameOverScene();
-    
+
     void helpManual();
+    void printCharNumTimes(int numPrints, char character);
 
 public:
     GameView(GameModel* gameModelPtr);

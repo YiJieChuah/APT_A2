@@ -5,6 +5,7 @@
 #include <map>
 #include <ios>
 #include <limits>
+#include <iomanip>
 
 #include "GameView.h"
 #include "Tile.h"
@@ -234,8 +235,12 @@ void GameView::processGameInput(Player* player)
     std::string cmd;
     bool inputValid = false;
 
+    bool isNormalInput = true;
     do
     {
+        inputValid = false;
+        isNormalInput = true;
+
         std::cout << "\n> ";
         std::vector<std::string> tokens;
         std::string token;
@@ -253,6 +258,7 @@ void GameView::processGameInput(Player* player)
 
         try
         {
+
             if (validatePlaceCmd(tokens))
             {
                 std::string tileStr = tokens[1];
@@ -303,9 +309,10 @@ void GameView::processGameInput(Player* player)
             {
                 helpManual();
                 inputValid = true;
+                isNormalInput = false;
             }
 
-            if (!inputValid)
+            if (!inputValid && isNormalInput)
             {
                 throw "Invalid Input";
             }
@@ -315,7 +322,7 @@ void GameView::processGameInput(Player* player)
             std::cout << msg << std::endl;
         }
 
-    } while (!inputValid && !gameOver);
+    } while (!(inputValid && isNormalInput));
 }
 
 bool GameView::validatePlaceCmd(std::vector<std::string> tokens)
@@ -488,7 +495,7 @@ void GameView::printCredits()
     { "s3845408@student.rmit.edu.au", "s3599190@student.rmit.edu.au",
     "s3869546@student.rmit.edu.au", "s3847905@student.rmit.edu.au" };
 
-    std::cout << "-----------------------------------" << std::endl;
+    printCharNumTimes(DIVIDER_LEN, '-');
     for (int i = 0; i < 4; i++)
     {
         std::cout << "Name: " + names[i] << std::endl;
@@ -503,8 +510,8 @@ void GameView::printCredits()
             std::cout << "Email: " + emails[i] << std::endl;
         }
     }
-    std::cout << "-----------------------------------\n"
-        << std::endl;
+    printCharNumTimes(DIVIDER_LEN, '-');
+    std::cout << std::endl;
 }
 
 void GameView::gameOverScene() {
@@ -521,28 +528,67 @@ void GameView::quit()
 
 void GameView::helpManual()
 {
-    std::map<char, std::string> colours = {
+    std::map<char, std::string> colourMap = {
         {RED, "Red"},
         {ORANGE, "Orange"},
         {YELLOW, "Yellow"},
         {GREEN, "Green"},
         {BLUE, "Blue"},
-        {PURPLE, "Purple"}      
+        {PURPLE, "Purple"}
     };
 
-    std::string shapes[6] = {
+    std::string shapeNames[6] = {
         "Circle", "4-Star", "Diamond", "Square", "6-Star", "Clover"
-        };
+    };
 
-    std::cout << "NEED HELP?" << std::endl;
-    std::cout << "*************************" << std::endl;
+    std::cout << "***************HELP***************" << std::endl;
+
     std::cout << "There are 4 commands you can do in-game:" << std::endl;
     std::cout << "1. place <tilecode> at <coordinates>" << std::endl;
-    std::cout << "\t Tilecodes are as follows:" << std::endl;
-    
-
-
     std::cout << "2. replacing tiles (note that this will replace the first tile which matches from the left) - replace <tile>" << std::endl;
     std::cout << "3. save <filename> - will save the current game as a '.save' file under the 'saves' directory. " << std::endl;
     std::cout << "4. quit - will exit the game without saving it. So make sure you save first!" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Tile shape and colour code are as follows:" << std::endl;
+
+    printCharNumTimes(COL_LEN * 4 + 5, '-');
+
+    std::cout << '|';
+    std::cout << std::setw(COL_LEN);
+    std::cout << "Colour Code" << '|';
+    std::cout << std::setw(COL_LEN);
+    std::cout << "Colour" << '|';
+    std::cout << std::setw(COL_LEN);
+    std::cout << "Shape Code" << '|';
+    std::cout << std::setw(COL_LEN);
+    std::cout << "Shape";
+    std::cout << '|' << std::endl;
+
+    printCharNumTimes(COL_LEN * 4 + 5, '-');
+
+    int iter = 0;
+    for (auto const& colour : colourMap)
+    {
+        std::cout << '|';
+        std::cout << std::setw(COL_LEN);
+        std::cout << colour.first << '|';
+        std::cout << std::setw(COL_LEN);
+        std::cout << colour.second << '|';
+        std::cout << std::setw(COL_LEN);
+        std::cout << shapeNames[iter] << '|';
+        std::cout << std::setw(COL_LEN);
+        std::cout << ++iter;
+        std::cout << '|' << std::endl;
+    }
+    printCharNumTimes(COL_LEN * 4 + 5, '-');
+    std::cout << "*************END HELP*************" << std::endl;
+
 }
+
+void GameView::printCharNumTimes(int numPrints, char character) {
+    for (int i = 0; i < numPrints; i++)
+    {
+        std::cout << character;
+    }
+    std::cout << std::endl;
+};
