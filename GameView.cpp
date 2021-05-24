@@ -119,6 +119,34 @@ void GameView::processMenuSelection(int input)
     }
 }
 
+
+void GameView::startNewGame()
+{
+    std::cout << "Starting a New Game" << std::endl;
+
+    int numPlayers = getNumPlayers();
+    std::cout << "Setting up " << numPlayers << "-player game" << std::endl;
+
+    for (int i = 0; i < numPlayers; i++)
+    {
+        newPlayer();
+    }
+
+    std::cout << "\nLet's Play!\n" << std::endl;
+    // Ignores \n char to avoid instant input termination
+    std::cin.ignore();
+    while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver) {
+
+        for (Player* player : gameModelPtr->getPlayers())
+        {
+            gameModelPtr->setCurrentPlayer(player->getName());
+            playerTurn(player);
+        }
+    }
+
+
+}
+
 void GameView::startLoadedGame()
 {
     // bool firstIteration = true;
@@ -148,36 +176,50 @@ void GameView::startLoadedGame()
     }
 }
 
-void GameView::startNewGame()
+int GameView::getNumPlayers()
 {
-    std::cout << "Starting a New Game" << std::endl;
+    int numPlayers = 0;
+    bool inputValid = false;
 
-    //Setup 2 players
-    newPlayer();
-    newPlayer();
+    std::cout << "Enter the number of players (minimum 2, maximum 4)";
 
-    if (!gameOver) {
-        std::cout << "\nLet's Play!\n" << std::endl;
-    }
-    std::vector<Player*> players = gameModelPtr->getPlayers();
+    do {
+        std::cout << "\n> ";
+        std::cin >> numPlayers;
+        try {
+            if (!std::cin.eof()) {
+                if (!std::cin.good() && !gameOver) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
+                        '\n');
+                    throw std::domain_error("Input was not a number!");
+                }
 
-    // Ignores \n char to avoid instant input termination
-    std::cin.ignore();
-    while (gameModelPtr->getTileBag()->numTilesLeft() > 0 && !gameOver)
-    {
-        for (Player* player : players)
-        {
-            if (!gameOver) {
-                gameModelPtr->setCurrentPlayer(player->getName());
-                playerTurn(player);
+                if (numPlayers < 2 || numPlayers > 4)
+                {
+                    throw std::out_of_range("Only 2-4 players allowed!");
+                }
             }
+            else {
+                quit();
+            }
+
+            inputValid = true;
         }
-    }
+        catch (std::out_of_range& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+        catch (std::domain_error& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    } while (!inputValid);
+
+    return numPlayers;
 }
 
-/**
- * @return a player's username.
- */
+
 void GameView::newPlayer()
 {
     std::string playerName;
@@ -220,13 +262,16 @@ bool GameView::validatePlayerName(std::string name)
 
 void GameView::playerTurn(Player* player)
 {
-    std::cout << player->getName() << ", it's your turn" << std::endl;
-    printScores();
-    gameModelPtr->getBoard()->printBoard();
-    std::cout << "Your hand is" << std::endl;
-    std::cout << player->handToString() << std::endl;
-    processGameInput(player);
-    std::cout << std::endl;
+    if (!gameOver) //necessary in order to break out of loop
+    {
+        std::cout << player->getName() << ", it's your turn" << std::endl;
+        printScores();
+        gameModelPtr->getBoard()->printBoard();
+        std::cout << "Your hand is" << std::endl;
+        std::cout << player->handToString() << std::endl;
+        processGameInput(player);
+        std::cout << std::endl;
+    }
 }
 
 // TODO: Change this into an int return maybe?

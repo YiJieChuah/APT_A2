@@ -18,6 +18,15 @@ private:
     GameModel* gameModelPtr;
     bool gameOver;
 
+    int getValidMenuSelection();
+    void processMenuSelection(int input);
+
+    void startNewGame();
+    void startLoadedGame();
+
+    int getNumPlayers();
+
+    //validation methods
     bool validatePlaceCmd(std::vector<std::string> tokens);
     bool validateReplaceCmd(std::vector<std::string> tokens);
     bool validateCoord(std::string coord);
@@ -39,18 +48,15 @@ private:
 
     Tile convertStrToTile(std::string tileStr);
 
-    int getValidMenuSelection();
-    void processMenuSelection(int input);
-    void startLoadedGame();
-    void startNewGame();
+
     void playerTurn(Player* player);
     void processGameInput(Player* player);
+
     void printScores();
     void newPlayer();
     std::string createFileDir();
     void printCredits();
     void gameOverScene();
-
     void helpManual();
     void printCharNumTimes(int numPrints, char character);
 
@@ -58,7 +64,6 @@ public:
     GameView(GameModel* gameModelPtr);
     ~GameView();
     void init();
-
     void quit();
 };
 

@@ -23,12 +23,12 @@ public:
    Tile(Colour colour, Shape shape);
    Tile(const Tile& other);
    ~Tile();
+
+
    std::string toString();
    bool isEmpty();
    bool equals(Tile& other);
    bool hasMatchingAttribute(Tile& other);
-
-
 };
 
 #endif // ASSIGN2_TILE_H
