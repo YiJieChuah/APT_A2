@@ -19,57 +19,50 @@ SaveLoad::~SaveLoad() {}
  * Takes input from vaious places and puts it all into one .save file.
  * @return True if save was successful, otherwise false.
  */
-bool SaveLoad::save(Board board, std::string fileName, Player* player1,
-    Player* player2, TileBag* tileBag, std::string currPlayerName)
+bool SaveLoad::save(std::string fileName)
 {
     bool saved = false;
-    try
+    // Opens or creates the file.
+    std::ofstream saveFile("saves/" + fileName + ".save");
+
+    // Checking if the file was opened.
+    if (saveFile.is_open())
     {
+        // First line will indicate number of players
+        saveFile << gameModelPtr->getNumPlayers() << std::endl;
 
-        // Opens or creates the file.
-        std::ofstream saveFile("saves/" + fileName + ".save");
+        // Inserting player details.
+        for (Player* player : gameModelPtr->getPlayers()) {
+            saveFile << player->getName() << std::endl;
+            saveFile << player->getScore() << std::endl;
+            saveFile << player->handToString() << std::endl;
+        }
 
-        // Checking if the file was opened.
-        if (saveFile.is_open())
+        // Inserting board details.
+        Board* board = gameModelPtr->getBoard();
+        saveFile << board->getBoardDimensions() << "," << board->getBoardDimensions() << std::endl;
+        saveFile << board->getSaveFormat() << std::endl;
+        board = nullptr;
+
+        TileBag* tileBag = gameModelPtr->getTileBag();
+        for (int i = 0; i < tileBag->getTiles()->size(); i++)
         {
-            // Inserting player details.
-            saveFile << player1->getName() << std::endl;
-            saveFile << player1->getScore() << std::endl;
-            saveFile << player1->handToString() << std::endl;
-
-            saveFile << player2->getName() << std::endl;
-            saveFile << player2->getScore() << std::endl;
-            saveFile << player2->handToString() << std::endl;
-
-            // Inserting board details.
-            saveFile << board.getBoardDimensions() << "," << board.getBoardDimensions() << std::endl;
-            saveFile << board.getSaveFormat() << std::endl;
-
-            for (int i = 0; i < tileBag->getTiles()->size(); i++)
+            saveFile << tileBag->getTiles()->get(i)->colour;
+            saveFile << tileBag->getTiles()->get(i)->shape;
+            if (i != tileBag->getTiles()->size() - 1)
             {
-                saveFile << tileBag->getTiles()->get(i)->colour;
-                saveFile << tileBag->getTiles()->get(i)->shape;
-                if (i != tileBag->getTiles()->size() - 1)
-                {
-                    saveFile << ",";
-                }
+                saveFile << ",";
             }
-
-            saveFile << std::endl;
-
-            saveFile << gameModelPtr->getCurrentPlayerName() << std::endl;
-            saveFile.close();
-            saved = true;
         }
-        else
-        {
-            throw "Error saving file!";
-        }
+        tileBag = nullptr;
+
+        saveFile << std::endl;
+
+        saveFile << gameModelPtr->getCurrentPlayerName() << std::endl;
+        saveFile.close();
+        saved = true;
     }
-    catch (const char* msg)
-    {
-        std::cerr << msg << '\n';
-    }
+
 
     return saved;
 }

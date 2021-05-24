@@ -334,14 +334,14 @@ void GameView::processGameInput(Player* player)
             if (validateSave(tokens))
             {
                 SaveLoad* saver = new SaveLoad(gameModelPtr);
-                saver->save(*gameModelPtr->getBoard(), tokens[1],
-                    gameModelPtr->getPlayers()[0],
-                    gameModelPtr->getPlayers()[1],
-                    gameModelPtr->getTileBag(),
-                    gameModelPtr->getCurrentPlayerName()
-                );
-                delete saver;
+                if (saver->save(tokens[1])) {
+                    std::cout << "File Saved!" << std::endl;
+                }
+                else {
+                    std::cout << "Error occured while saving!" << std::endl;
+                };
                 inputValid = true;
+                delete saver;
             }
 
             if (tokens[0] == "quit")
@@ -516,10 +516,6 @@ void GameView::printScores()
     }
 }
 
-/**
- * Difficult to check if file exists with current config. Maybe return
- * actual file instead?
- */
 std::string GameView::createFileDir()
 {
     std::cout << "Enter a filename from which load a game" << std::endl;
