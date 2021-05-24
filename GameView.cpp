@@ -1,7 +1,8 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-// #include <cctype>
+
+#include <map>
 #include <ios>
 #include <limits>
 
@@ -298,6 +299,12 @@ void GameView::processGameInput(Player* player)
                 inputValid = true;
             }
 
+            if (tokens[0] == "help")
+            {
+                helpManual();
+                inputValid = true;
+            }
+
             if (!inputValid)
             {
                 throw "Invalid Input";
@@ -510,4 +517,32 @@ void GameView::quit()
 {
     std::cout << "\nGoodbye" << std::endl;
     this->gameOver = true;
+}
+
+void GameView::helpManual()
+{
+    std::map<char, std::string> colours = {
+        {RED, "Red"},
+        {ORANGE, "Orange"},
+        {YELLOW, "Yellow"},
+        {GREEN, "Green"},
+        {BLUE, "Blue"},
+        {PURPLE, "Purple"}      
+    };
+
+    std::string shapes[6] = {
+        "Circle", "4-Star", "Diamond", "Square", "6-Star", "Clover"
+        };
+
+    std::cout << "NEED HELP?" << std::endl;
+    std::cout << "*************************" << std::endl;
+    std::cout << "There are 4 commands you can do in-game:" << std::endl;
+    std::cout << "1. place <tilecode> at <coordinates>" << std::endl;
+    std::cout << "\t Tilecodes are as follows:" << std::endl;
+    
+
+
+    std::cout << "2. replacing tiles (note that this will replace the first tile which matches from the left) - replace <tile>" << std::endl;
+    std::cout << "3. save <filename> - will save the current game as a '.save' file under the 'saves' directory. " << std::endl;
+    std::cout << "4. quit - will exit the game without saving it. So make sure you save first!" << std::endl;
 }
