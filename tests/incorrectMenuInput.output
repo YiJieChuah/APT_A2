@@ -5,11 +5,11 @@ Menu
 3. Credits (Show student information)
 4. Quit
 
-> Invalid Input
+> Make sure your input is between 1 and 4!
 
-> Invalid Input
+> Make sure your input is between 1 and 4!
 
-> Invalid Input
+> Input was not a number!
 
 > 
 Goodbye
