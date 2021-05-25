@@ -25,11 +25,17 @@ private:
     std::vector<std::vector<Tile> > board;
     Tile potentialCombos[4][6];
 
-    /**
-     * Returns a vector of the tile's 4 nearest neighbours.
-     * Vector is sequenced NORTH, EAST, SOUTH, WEST (clockwise)
-     */
     bool tileIsValid(Tile tileToAdd, int posX, int posY);
+
+    /**
+     * Works on the logic the first tile in tileStrList should have all other
+     * tiles in its getLine() list
+     *
+     *  @return true if the coordinates of multiple tile placement is valid
+     */
+    bool multTileCoordsIsValid(std::vector<std::string> tileStrList);
+
+
     /**
      * Expects a value defined by the enum Direction for dir
      */

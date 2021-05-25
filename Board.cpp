@@ -101,6 +101,21 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY)
     return isValid;
 }
 
+//TODO: Should I be doing this??
+bool Board::multTileCoordsIsValid(std::vector<std::string> coordStrList) {
+    bool isValid = false;
+
+    //Retrieve first tile to be placed
+    std::string coords = coordStrList[1];
+    int posX = std::stoi(coords.substr(1, coords.size()));
+    int posY = coords[0] - 'A';
+
+    while (!getTileNeighbour(posX, posY, NORTH).isEmpty()) {
+
+    }
+
+};
+
 Tile Board::getTileNeighbour(int posX, int posY, Direction dir)
 {
     Tile neighbour;

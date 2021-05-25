@@ -462,6 +462,9 @@ bool GameView::validatePlaceMultCmd(std::vector<std::string> tokens)
         }
 
     }
+    else {
+        isValid = false;
+    }
     return isValid;
 }
 
