@@ -28,6 +28,7 @@ private:
 
     //validation methods
     bool validatePlaceCmd(std::vector<std::string> tokens);
+    bool validatePlaceMultCmd(std::vector<std::string> tokens);
     bool validateReplaceCmd(std::vector<std::string> tokens);
     bool validateCoord(std::string coord);
     bool validateTile(std::string tile);
@@ -47,7 +48,7 @@ private:
     Shape convertIntToShape(int shape);
 
     Tile convertStrToTile(std::string tileStr);
-
+    std::vector<std::string> splitByComma(const std::string& list);
 
     void playerTurn(Player* player);
     void processGameInput(Player* player);
@@ -59,6 +60,8 @@ private:
     void gameOverScene();
     void helpManual();
     void printCharNumTimes(int numPrints, char character);
+
+    int findFinalScored(std::vector<int> possibleScored);
 
 public:
     GameView(GameModel* gameModelPtr);

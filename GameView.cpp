@@ -315,12 +315,54 @@ void GameView::processGameInput(Player* player)
 
                 player->play(tile, gameModelPtr->getTileBag(),
                     gameModelPtr->getBoard(), posX, posY);
+                player->updateScore(
+                    gameModelPtr->getBoard()->calculateScore(posX, posY));
+
                 if (player->getHand()->size() == 0 &&
                     gameModelPtr->getTileBag()->numTilesLeft() == 0) {
                     gameOverScene();
                     quit();
                 }
                 inputValid = true;
+            }
+
+            if (validatePlaceMultCmd(tokens))
+            {
+                std::vector<std::string> tileStrList = splitByComma(tokens[1]);
+                std::vector<std::string> coordStrList = splitByComma(tokens[3]);
+                std::vector<int> possibleScored;
+
+                for (unsigned int i = 0; i < tileStrList.size(); i++)
+                {
+                    Tile tile = convertStrToTile(tileStrList[i]);
+                    std::string coords = coordStrList[i];
+                    int posX = std::stoi(coords.substr(1, coords.size()));
+                    int posY = coords[0] - 'A';
+
+                    player->play(tile, gameModelPtr->getTileBag(),
+                        gameModelPtr->getBoard(), posX, posY);
+
+                    if (player->getHand()->size() == 0 &&
+                        gameModelPtr->getTileBag()->numTilesLeft() == 0) {
+                        gameOverScene();
+                        quit();
+                    }
+                }
+                // Determine which is the final scored points
+                for (std::string coords : coordStrList) {
+                    int posX = std::stoi(coords.substr(1, coords.size()));
+                    int posY = coords[0] - 'A';
+                    possibleScored.push_back(
+                        gameModelPtr->getBoard()->calculateScore(posX, posY)
+                    );
+                }
+                player->updateScore(findFinalScored(possibleScored));
+
+
+                inputValid = true;
+
+                //TODO: check for same line by checking coordStr
+                //TODO: Maybe score should be added and calculated after play()
             }
 
             if (validateReplaceCmd(tokens))
@@ -393,6 +435,47 @@ bool GameView::validatePlaceCmd(std::vector<std::string> tokens)
         isValid = false;
     }
     return isValid;
+};
+
+bool GameView::validatePlaceMultCmd(std::vector<std::string> tokens)
+{
+    bool isValid = true;
+    if (tokens.size() == 4)
+    {
+        if (tokens[0] != "place-m" && tokens[2] != "at") {
+            isValid = false;
+        }
+
+        std::vector<std::string> tileStrList = splitByComma(tokens[1]);
+        std::vector<std::string> coordStrList = splitByComma(tokens[3]);
+
+        for (std::string tileStr : tileStrList) {
+            if (!validateTile(tileStr)) {
+                isValid = false;
+            }
+        }
+
+        for (std::string coordStr : coordStrList) {
+            if (!validateCoord(coordStr)) {
+                isValid = false;
+            }
+        }
+
+    }
+    return isValid;
+}
+
+int GameView::findFinalScored(std::vector<int> possibleScored) {
+    int largestScore = possibleScored[0];
+    for (unsigned int i = 0; i < possibleScored.size(); i++)
+    {
+        if (possibleScored[i] > largestScore)
+        {
+            largestScore = possibleScored[i];
+        }
+    }
+    return largestScore;
+
 };
 
 bool GameView::validateReplaceCmd(std::vector<std::string> tokens)
@@ -482,6 +565,19 @@ Tile GameView::convertStrToTile(std::string tileStr)
     Shape shape = std::stoi(shapeStr);
 
     return Tile(colour, shape);
+}
+
+std::vector<std::string> GameView::splitByComma(const std::string& line)
+{
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream iss(line);
+
+    while (std::getline(iss, token, ',')) {
+        tokens.push_back(token);
+    }
+
+    return tokens;
 }
 
 bool GameView::validateCoord(std::string coord)

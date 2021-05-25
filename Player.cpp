@@ -53,7 +53,7 @@ void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
         if (board->addTile(tile, posX, posY))
         {
             hand->remove(tileIdx);
-            score += board->calculateScore(posX, posY);
+            // score += board->calculateScore(posX, posY);
             draw(tileBag);
         }
     }
@@ -61,6 +61,10 @@ void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
     {
         throw "Invalid Input";
     }
+}
+
+void Player::updateScore(int scored) {
+    score += scored;
 }
 
 void Player::replace(Tile tile, TileBag* tileBag)

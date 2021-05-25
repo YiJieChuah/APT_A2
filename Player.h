@@ -14,6 +14,8 @@ public:
     ~Player();
     void draw(TileBag* bag);
     void play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY);
+    // void updateScore(int posX, int posY, Board* board);
+    void updateScore(int scored);
     void replace(Tile tile, TileBag* tileBag);
 
     /**
