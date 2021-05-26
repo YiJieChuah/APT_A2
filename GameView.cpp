@@ -417,7 +417,7 @@ bool GameView::validatePlaceCmd(std::vector<std::string> tokens)
     bool isValid = true;
     if (tokens.size() == 4)
     {
-        if (tokens[0] != "place" && tokens[2] != "at")
+        if (tokens[0] != "place" || tokens[2] != "at")
         {
             isValid = false;
         }
@@ -442,7 +442,7 @@ bool GameView::validatePlaceMultCmd(std::vector<std::string> tokens)
     bool isValid = true;
     if (tokens.size() == 4)
     {
-        if (tokens[0] != "place-m" && tokens[2] != "at") {
+        if (tokens[0] != "place-m" || tokens[2] != "at") {
             isValid = false;
         }
 

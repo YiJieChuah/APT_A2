@@ -19,14 +19,16 @@ public:
     SaveLoad(GameModel* gameModelPtr);
     ~SaveLoad();
 
-    // bool save(Board board, std::string fileName, Player* player1,
-    //     Player* player2, TileBag* tileBag, std::string currPlayerName);
     bool save(std::string fileName);
+    bool newSave(std::string fileName);
+    bool oldSave(std::string fileName);
 
     LinkedList* initTiles(std::vector<std::string> tilesStr);
     Tile* strToTile(std::string tile);
 
     bool load(std::string filePath);
-    bool loadFile(std::ifstream& input);
+
+    bool newLoadFile(std::ifstream& input);
+    bool oldLoadFile(std::ifstream& input, std::string firstLine);
 
 };
