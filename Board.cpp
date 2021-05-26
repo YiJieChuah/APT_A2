@@ -114,6 +114,8 @@ bool Board::multTileCoordsIsValid(std::vector<std::string> coordStrList) {
 
     }
 
+    return isValid;
+
 };
 
 Tile Board::getTileNeighbour(int posX, int posY, Direction dir)
