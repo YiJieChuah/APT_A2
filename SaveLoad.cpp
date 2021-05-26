@@ -19,8 +19,7 @@ SaveLoad::~SaveLoad() {}
  * Takes input from vaious places and puts it all into one .save file.
  * @return True if save was successful, otherwise false.
  */
-bool SaveLoad::save(Board board, std::string fileName, Player* player1,
-    Player* player2, TileBag* tileBag, std::string currPlayerName)
+bool SaveLoad::save(Board board, std::string fileName, std::vector<Player*> players, TileBag* tileBag, std::string currPlayerName)
 {
     bool saved = false;
     try
@@ -32,14 +31,20 @@ bool SaveLoad::save(Board board, std::string fileName, Player* player1,
         // Checking if the file was opened.
         if (saveFile.is_open())
         {
-            // Inserting player details.
-            saveFile << player1->getName() << std::endl;
-            saveFile << player1->getScore() << std::endl;
-            saveFile << player1->handToString() << std::endl;
+            saveFile << players.size() << std::endl;
+            for(Player* p : players){
+                saveFile << p->getName() << std::endl;
+                saveFile << p->getScore() << std::endl;
+                saveFile << p->handToString() << std::endl;
+            }
+            // // Inserting player details.
+            // saveFile << player1->getName() << std::endl;
+            // saveFile << player1->getScore() << std::endl;
+            // saveFile << player1->handToString() << std::endl;
 
-            saveFile << player2->getName() << std::endl;
-            saveFile << player2->getScore() << std::endl;
-            saveFile << player2->handToString() << std::endl;
+            // saveFile << player2->getName() << std::endl;
+            // saveFile << player2->getScore() << std::endl;
+            // saveFile << player2->handToString() << std::endl;
 
             // Inserting board details.
             saveFile << board.getBoardDimensions() << "," << board.getBoardDimensions() << std::endl;
@@ -104,41 +109,71 @@ bool SaveLoad::loadFile(std::ifstream& input) {
     bool loaded = false;
     std::string line;
     int lineNum = 0;
+    int numberPlayers = 0;
     Player player1;
     Player player2;
+    Player player3;
+    Player player4;
+    Player players [4] = {player1, player2, player3, player4};
 
+
+    //gotta work of this 
     while (!getline(input, line).eof())
     {
+        
         //Player 1 Load
         if (lineNum == 0) {
-            player1.setName(line);
+            if(std::stoi(line) == 2){
+                numberPlayers = 2;
+            }
+            else if(std::stoi(line) == 3){
+                numberPlayers = 3;
+            }
+            else if(std::stoi(line) == 4){
+                numberPlayers = 4;
+            }
         }
-        else if (lineNum == 1) {
-            player1.setScore(stoi(line));
-        }
-        else if (lineNum == 2) {
+
+
+        for(int x = 0; x < numberPlayers; x++){
+            lineNum++;
+            players[x].setName(line);
+            lineNum++;
+            players[x].setScore(stoi(line));
+            lineNum++;
             std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
-            player1.setHand(initTiles(tilesStr));
-            gameModelPtr->addPlayerToGame(new Player(player1));
+            players[x].setHand(initTiles(tilesStr));
+            gameModelPtr->addPlayerToGame(new Player(players[x]));
         }
+        
 
-        //Player 2 Load
-        else if (lineNum == 3) {
-            player2.setName(line);
-        }
-        else if (lineNum == 4) {
-            player2.setScore(stoi(line));
-        }
-        else if (lineNum == 5) {
-            std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
-            // LinkedList* hand = initHand(tilesStr);
-            player2.setHand(initTiles(tilesStr));
-            // hand = nullptr;
+        // else if (lineNum == 3) {
+        //     player2.setName(line);
+        // }
+        // else if (lineNum == 1) {
+        //     player1.setScore(stoi(line));
+        // }
+        // else if (lineNum == 2) {
+        //     std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
+        //     player1.setHand(initTiles(tilesStr));
+        //     gameModelPtr->addPlayerToGame(new Player(player1));
+        // }
 
-            gameModelPtr->addPlayerToGame(new Player(player2));
-        }
+        // //Player 2 Load
+        // else if (lineNum == 3) {
+        //     player2.setName(line);
+        // }
+        // else if (lineNum == 4) {
+        //     player2.setScore(stoi(line));
+        // }
+        // else if (lineNum == 5) {
+        //     std::vector<std::string> tilesStr = splitByDelimiter(line, ',');
+        //     player2.setHand(initTiles(tilesStr));
 
-        else if (lineNum == 6) {
+        //     gameModelPtr->addPlayerToGame(new Player(player2));
+        // }
+
+        if (lineNum == 6) {
             //Supposed to handle board dimensions
             //They are fixed at 26 for base gameplay so placeholder for now
         }

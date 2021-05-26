@@ -21,7 +21,26 @@ Tile::Tile(const Tile& other) {
 Tile::~Tile() {}
 
 std::string Tile::toString() {
-    return colour + std::to_string(shape);
+    std::string output = colour + std::to_string(shape);
+    if(colour == 'R'){
+        output = "\e[0;31m" + output + "\033[m";
+    }
+    else if(colour == 'O'){
+        output = "\e[38;5;215m" + output + "\033[m";
+    }
+    else if(colour == 'Y'){
+        output = "\e[0;33m" + output + "\033[m";
+    }
+    else if(colour == 'G'){
+        output = "\e[0;92m" + output + "\033[m";
+    }
+    else if(colour == 'B'){
+        output = "\e[0;34m" + output + "\033[m";
+    }
+    else if(colour == 'P'){
+        output = "\e[0;35m" + output + "\033[m";
+    }
+    return output;
 };
 
 bool Tile::isEmpty() {

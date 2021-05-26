@@ -48,6 +48,7 @@ private:
     std::string createFileDir();
     void printCredits();
     void gameOverScene();
+    void help(int local);
 
 public:
     GameView(GameModel* gameModelPtr);

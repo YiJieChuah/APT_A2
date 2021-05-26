@@ -150,9 +150,37 @@ void GameView::startNewGame()
 {
     std::cout << "Starting a New Game" << std::endl;
 
-    //Setup 2 players
-    newPlayer();
-    newPlayer();
+    std::cout << "How many players?" << std::endl;
+
+    std::string numberOfPlayers;
+    std::cout << "\n> ";
+    std::cin >> numberOfPlayers;
+    if (std::cin.eof()) {
+        quit();
+    }
+
+    if(numberOfPlayers == "help"){
+        help(3);
+        startNewGame();
+    }
+    else if(std::stoi(numberOfPlayers) == 2){
+        newPlayer();
+        newPlayer();
+    }
+    else if(std::stoi(numberOfPlayers) == 3){
+        newPlayer();
+        newPlayer();
+        newPlayer();
+    }
+    else if(std::stoi(numberOfPlayers) == 4){
+        newPlayer();
+        newPlayer();
+        newPlayer();
+        newPlayer();
+    }
+    else{
+        startNewGame();
+    }
 
     if (!gameOver) {
         std::cout << "\nLet's Play!\n" << std::endl;
@@ -199,6 +227,7 @@ void GameView::newPlayer()
             }
         }
     } while (!nameIsValid && !gameOver);
+
     gameModelPtr->addPlayerToGame(playerName);
 }
 
@@ -206,8 +235,11 @@ bool GameView::validatePlayerName(std::string name)
 {
     bool isValid = true;
     std::string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if(name == "help"){
+            help(4);
+    }
     for (unsigned int i = 0; i < name.size(); i++)
-    {
+    {   
         if (allowedChars.find(name[i]) == std::string::npos)
         {
             isValid = false;
@@ -283,8 +315,7 @@ void GameView::processGameInput(Player* player)
             {
                 SaveLoad* saver = new SaveLoad(gameModelPtr);
                 saver->save(*gameModelPtr->getBoard(), tokens[1],
-                    gameModelPtr->getPlayers()[0],
-                    gameModelPtr->getPlayers()[1],
+                    gameModelPtr->getPlayers(),
                     gameModelPtr->getTileBag(),
                     gameModelPtr->getCurrentPlayerName()
                 );
@@ -302,6 +333,13 @@ void GameView::processGameInput(Player* player)
             {
                 throw "Invalid Input";
             }
+
+            if (tokens[0] == "help")
+            {
+                help(0);
+                inputValid = true;
+            }
+
         }
         catch (const char* msg)
         {
@@ -510,4 +548,26 @@ void GameView::quit()
 {
     std::cout << "\nGoodbye" << std::endl;
     this->gameOver = true;
+}
+//0 for during gameplay, 1 during menu, 2 during load, 
+void GameView::help(int local){
+    if(local == 0){
+        std::cout << "Game Help!" << std::endl;
+        std::cout << "----------" << std::endl;
+        std::cout << "To place a tile type command - place (tile eg. R3) at (location eg. A2)" << std::endl;
+        std::cout << "If no available moves, you can replace any tile by typing command - replace (tile)" << std::endl;
+        std::cout << "type command - quit to exit application." << std::endl;
+    }
+    else if(local == 3){
+        std::cout << "Help!" << std::endl;
+        std::cout << "----------" << std::endl;
+        std::cout << "Make sure you pick a number between 2 and 4, input as numbers..." << std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
+    }
+    else if(local == 4){
+        std::cout << "Help!" << std::endl;
+        std::cout << "----------" << std::endl;
+        std::cout << "Make sure you name is only letter and is in uppercase!" << std::endl;
+    }
 }

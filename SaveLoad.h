@@ -19,8 +19,7 @@ public:
     SaveLoad(GameModel* gameModelPtr);
     ~SaveLoad();
 
-    bool save(Board board, std::string fileName, Player* player1,
-        Player* player2, TileBag* tileBag, std::string currPlayerName);
+    bool save(Board board, std::string fileName, std::vector<Player*> players, TileBag* tileBag, std::string currPlayerName);
 
     LinkedList* initTiles(std::vector<std::string> tilesStr);
     Tile* strToTile(std::string tile);
