@@ -356,13 +356,11 @@ void GameView::processGameInput(Player* player)
                         gameModelPtr->getBoard()->calculateScore(posX, posY)
                     );
                 }
+
                 player->updateScore(findFinalScored(possibleScored));
 
 
                 inputValid = true;
-
-                //TODO: check for same line by checking coordStr
-                //TODO: Maybe score should be added and calculated after play()
             }
 
             if (validateReplaceCmd(tokens))
