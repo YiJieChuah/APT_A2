@@ -34,7 +34,7 @@ private:
      *  @return true if the coordinates of multiple tile placement is valid
      */
     bool multTileCoordsIsValid(std::vector<std::string> tileStrList);
-
+    std::string getPosNeighbour(int posX, int posY, Direction dir);
 
     /**
      * Expects a value defined by the enum Direction for dir

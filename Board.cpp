@@ -102,21 +102,35 @@ bool Board::tileIsValid(Tile tileToAdd, int posX, int posY)
     return isValid;
 }
 
-//TODO: Should I be doing this??
 bool Board::multTileCoordsIsValid(std::vector<std::string> coordStrList) {
-    bool isValid = false;
+    std::vector<std::string> foundCoords;
+    bool isValid = true;
+    bool matchX = true;
+    bool matchY = true;
 
-    //Retrieve first tile to be placed
-    std::string coords = coordStrList[1];
-    int posX = std::stoi(coords.substr(1, coords.size()));
-    int posY = coords[0] - 'A';
+    //retrive first coord
+    int currPosX = std::stoi(coordStrList[0].substr(1, coordStrList[0].size()));
+    int currPosY = coordStrList[0][0] - 'A';
 
-    while (!getTileNeighbour(posX, posY, NORTH).isEmpty()) {
-
+    for (std::string coord : coordStrList)
+    {
+        int posX = std::stoi(coord.substr(1, coord.size()));
+        if (posX != currPosX) {
+            matchX = false;
+        }
+        currPosX = posX;
     }
 
-    return isValid;
+    for (std::string coord : coordStrList)
+    {
+        int posY = coord[0] - 'A';
+        if (posY != currPosY) {
+            matchY = false;
+        }
+        currPosY = posY;
+    }
 
+    return (matchX || matchY);
 };
 
 Tile Board::getTileNeighbour(int posX, int posY, Direction dir)
@@ -141,6 +155,39 @@ Tile Board::getTileNeighbour(int posX, int posY, Direction dir)
     }
 
     return neighbour;
+}
+
+std::string Board::getPosNeighbour(int posX, int posY, Direction dir)
+{
+    std::string posNeighbour = "";
+    int neighbourPosX = 0;
+    int neighbourPosY = 0;
+
+    if ((dir == NORTH) && (posY != 0))
+    {
+        neighbourPosX = posX;
+        neighbourPosY = posY - 1;
+    }
+    else if ((dir == EAST) && (posX != BOARD_DIMENSIONS - 1))
+    {
+        neighbourPosX = posX + 1;
+        neighbourPosY = posY;
+    }
+    else if ((dir == SOUTH) && (posY != BOARD_DIMENSIONS - 1))
+    {
+        neighbourPosX = posX;
+        neighbourPosY = posY + 1;
+    }
+    else if ((dir == WEST) && (posX != 0))
+    {
+        neighbourPosX = posX - 1;
+        neighbourPosY = posY;
+    }
+
+    char posYChar = static_cast<char>(posY + 'A');
+    posNeighbour += posYChar;
+    posNeighbour += std::to_string(posX);
+    return posNeighbour;
 }
 
 std::vector<Tile> Board::getLine(int posX, int posY, bool checkVert)
