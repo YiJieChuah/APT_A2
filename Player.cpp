@@ -77,7 +77,7 @@ void Player::replace(Tile tile, TileBag* tileBag)
     }
     else
     {
-        throw "Invalid Input";
+        throw "No such tile.";
     }
 }
 

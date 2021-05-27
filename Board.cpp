@@ -34,10 +34,11 @@ bool Board::addTile(Tile tile, int posX, int posY)
             std::cout << std::endl;
             std::cout << "QWIRKLE!!!" << std::endl;
         }
+        validAdd = true;
     }
     else
     {
-        throw "Invalid Input";
+        throw "Invalid Tile Placement.";
     }
     return validAdd;
 }

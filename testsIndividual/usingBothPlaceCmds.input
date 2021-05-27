@@ -1,0 +1,5 @@
+2
+newFileFormat
+place-m R1,R3 at A0,A1
+place Y3 at B1
+place-m O3,O4 at C1,C2
