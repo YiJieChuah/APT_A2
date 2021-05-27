@@ -324,14 +324,13 @@ void GameView::processGameInput(Player* player)
                 quit();
                 inputValid = true;
             }
-
+            
             if (tokens[0] == "help")
             {
                 help(0);
-                processGameInput(player);
             }
 
-            if (!inputValid)
+            if (!inputValid && tokens[0] != "help")
             {
                 throw "Invalid Input";
             }
