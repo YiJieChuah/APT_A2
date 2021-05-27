@@ -459,9 +459,12 @@ bool GameView::validatePlaceMultCmd(std::vector<std::string> tokens)
             }
         }
 
-        // tiles on the same line should be on the same axis
-        if (!checkOnSameAxis(coordStrList)) {
-            isValid = false;
+        //if checks have passed so far, carry on with this check
+        if (isValid) {
+            // tiles on the same line should be on the same axis
+            if (!checkOnSameAxis(coordStrList)) {
+                isValid = false;
+            }
         }
     }
     else {
