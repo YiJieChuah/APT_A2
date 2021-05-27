@@ -23,7 +23,6 @@ class Board
 private:
     //2D Vector
     std::vector<std::vector<Tile> > board;
-    Tile potentialCombos[4][6];
 
     bool tileIsValid(Tile tileToAdd, int posX, int posY);
 

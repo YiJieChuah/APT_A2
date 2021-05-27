@@ -53,6 +53,7 @@ void Player::play(Tile tile, TileBag* tileBag, Board* board, int posX, int posY)
         if (board->addTile(tile, posX, posY))
         {
             hand->remove(tileIdx);
+            // old: calculating score now done outside of the play method
             // score += board->calculateScore(posX, posY);
             draw(tileBag);
         }
