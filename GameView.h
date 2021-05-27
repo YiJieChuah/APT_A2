@@ -29,6 +29,7 @@ private:
     //validation methods
     bool validatePlaceCmd(std::vector<std::string> tokens);
     bool validatePlaceMultCmd(std::vector<std::string> tokens);
+    bool checkOnSameAxis(std::vector<std::string> coordStrList);
     bool validateReplaceCmd(std::vector<std::string> tokens);
     bool validateCoord(std::string coord);
     bool validateTile(std::string tile);

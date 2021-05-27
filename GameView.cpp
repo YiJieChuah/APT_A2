@@ -399,7 +399,7 @@ void GameView::processGameInput(Player* player)
 
             if (!inputValid && isNormalInput)
             {
-                throw "No Such Command. Type 'help' for the list of commands";
+                throw "Invalid Command. Try typing 'help'!";
             }
         }
         catch (const char* msg)
@@ -459,12 +459,46 @@ bool GameView::validatePlaceMultCmd(std::vector<std::string> tokens)
             }
         }
 
+        // tiles on the same line should be on the same axis
+        if (!checkOnSameAxis(coordStrList)) {
+            isValid = false;
+        }
     }
     else {
         isValid = false;
     }
     return isValid;
 }
+
+bool GameView::checkOnSameAxis(std::vector<std::string> coordStrList) {
+    std::vector<std::string> foundCoords;
+    bool matchX = true;
+    bool matchY = true;
+
+    //retrive first coord
+    int currPosX = std::stoi(coordStrList[0].substr(1, coordStrList[0].size()));
+    int currPosY = coordStrList[0][0] - 'A';
+
+    for (std::string coord : coordStrList)
+    {
+        int posX = std::stoi(coord.substr(1, coord.size()));
+        if (posX != currPosX) {
+            matchX = false;
+        }
+        currPosX = posX;
+    }
+
+    for (std::string coord : coordStrList)
+    {
+        int posY = coord[0] - 'A';
+        if (posY != currPosY) {
+            matchY = false;
+        }
+        currPosY = posY;
+    }
+
+    return (matchX || matchY);
+};
 
 int GameView::findFinalScored(std::vector<int> possibleScored) {
     int largestScore = possibleScored[0];
@@ -683,9 +717,18 @@ void GameView::helpManual()
 
     std::cout << "There are 4 commands you can do in-game:" << std::endl;
     std::cout << "1. place <tilecode> at <coordinates>" << std::endl;
-    std::cout << "2. replacing tiles (note that this will replace the first tile which matches from the left) - replace <tile>" << std::endl;
-    std::cout << "3. save <filename> - will save the current game as a '.save' file under the 'saves' directory. " << std::endl;
-    std::cout << "4. quit - will exit the game without saving it. So make sure you save first!" << std::endl;
+    std::cout <<
+        "2. replacing tiles (note that this will replace the first tile which"
+        << "matches from the left) - replace <tile>"
+        << std::endl;
+    std::cout << "3. save <filename> - will save the current game as a '.save'"
+        << "file under the 'saves' directory. " << std::endl;
+    std::cout << "4. quit - will exit the game without saving it."
+        << "So make sure you save first!" << std::endl;
+    std::cout << "5. place-m <tilecodes in sequence or placement seperated by "
+        << "commas> at <corresponding coordinates seperate by commas>"
+        << " - places multiple tiles on the specified locations."
+        << std::endl;
     std::cout << std::endl;
     std::cout << "Tile shape and colour code are as follows:" << std::endl;
 
@@ -719,6 +762,22 @@ void GameView::helpManual()
         std::cout << '|' << std::endl;
     }
     printCharNumTimes(COL_LEN * 4 + 5, '-');
+
+    std::cout << "Some basic rules to get you started:" << std::endl;
+    std::cout << "1. Place tiles with matching colour or shape to score points."
+        << std::endl;
+    std::cout << "2.The more you can string in a row, the more points you get."
+        << std::endl;
+    std::cout << "3. You cannot place a duplicate tile on the same line."
+        << std::endl;
+    std::cout <<
+        "4. You are only allowed to place multiple tiles on the same line."
+        << std::endl;
+    std::cout <<
+        "5. The game ends when there are no tiles left in the bag" <<
+        " and one of the players has ran out of tiles."
+        << std::endl;
+
     std::cout << "*************END HELP*************" << std::endl;
 
 }

@@ -28,15 +28,6 @@ private:
     bool tileIsValid(Tile tileToAdd, int posX, int posY);
 
     /**
-     * Works on the logic the first tile in tileStrList should have all other
-     * tiles in its getLine() list
-     *
-     *  @return true if the coordinates of multiple tile placement is valid
-     */
-    bool multTileCoordsIsValid(std::vector<std::string> tileStrList);
-    std::string getPosNeighbour(int posX, int posY, Direction dir);
-
-    /**
      * Expects a value defined by the enum Direction for dir
      */
     std::vector<Tile> getCombo(int posX, int posY, bool comboIsVertical);
