@@ -1,0 +1,75 @@
+Menu
+----
+1. New Game
+2. Load Game
+3. Credits (Show student information)
+4. Quit
+
+> Enter a filename from which load a game
+> File Loaded!
+
+Qwirkle game successfully loaded
+PLAYERONE, it's your turn
+Score for PLAYERONE: 0
+Score for PLAYERTWO: 0
+   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 
+  -------------------------------------------------------------------------------
+A |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+B |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+C |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+D |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+E |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+F |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+G |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+H |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+I |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+J |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+K |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+L |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+M |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+N |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+O |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+P |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+Q |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+R |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+S |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+U |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+V |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+W |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+Y |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+Your hand is
+R2,R3,O4,O5,Y2,Y3
+
+> ***************HELP***************
+There are 4 commands you can do in-game:
+1. place <tilecode> at <coordinates>
+2. replacing tiles (note that this will replace the first tile whichmatches from the left) - replace <tile>
+3. save <filename> - will save the current game as a '.save'file under the 'saves' directory. 
+4. quit - will exit the game without saving it.So make sure you save first!
+5. place-m <tilecodes in sequence or placement seperated by commas> at <corresponding coordinates seperate by commas> - places multiple tiles on the specified locations.
+
+Tile shape and colour code are as follows:
+-------------------------------------------------------------
+|   Colour Code|        Colour|    Shape Code|         Shape|
+-------------------------------------------------------------
+|             B|          Blue|        Circle|             1|
+|             G|         Green|        4-Star|             2|
+|             O|        Orange|       Diamond|             3|
+|             P|        Purple|        Square|             4|
+|             R|           Red|        6-Star|             5|
+|             Y|        Yellow|        Clover|             6|
+-------------------------------------------------------------
+Some basic rules to get you started:
+1. Place tiles with matching colour or shape to score points.
+2.The more you can string in a row, the more points you get.
+3. You cannot place a duplicate tile on the same line.
+4. You are only allowed to place multiple tiles on the same line.
+5. The game ends when there are no tiles left in the bag and one of the players has ran out of tiles.
+*************END HELP*************
+
+> 
+Goodbye
+
