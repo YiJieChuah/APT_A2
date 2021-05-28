@@ -1,0 +1,14 @@
+Menu
+----
+1. New Game
+2. Load Game
+3. Credits (Show student information)
+4. Quit
+
+> Enter a filename from which load a game
+> saves/thisDoesNotExist.save
+No Such File.
+Enter a filename from which load a game
+> saves/.save
+
+Goodbye
