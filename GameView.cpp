@@ -63,7 +63,8 @@ int GameView::getValidMenuSelection()
                 }
                 if (selection <= 0 || selection > 4)
                 {
-                    throw std::out_of_range("Make sure your input is between 1 and 4!");
+                    throw std::out_of_range("Make sure your input is between"
+                        " 1 and 4!");
                 }
             }
             else {
@@ -239,7 +240,8 @@ void GameView::newPlayer()
             nameIsValid = validatePlayerName(playerName);
             if (!nameIsValid)
             {
-                std::cout << "Invalid name. Make sure you include only uppercase alphanumerics!" << std::endl;
+                std::cout << "Invalid name. Make sure you include only"
+                    " uppercase alphanumerics!" << std::endl;
             }
         }
     } while (!nameIsValid && !gameOver);
